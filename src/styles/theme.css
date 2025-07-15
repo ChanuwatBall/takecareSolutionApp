@@ -1,0 +1,26 @@
+:root {
+  /* Base Colors */
+  --color-primary: #0041C4;           /* น้ำเงินเข้ม */
+  --color-primary-light: #0062FF;     /* น้ำเงินสว่าง */
+  --color-secondary: #FFCC00;         /* เหลือง */
+  --color-accent: #00C2FF;            /* ฟ้าสว่าง ใช้ในกรณีเน้น */
+
+  /* Gradient */
+  --gradient-primary: linear-gradient(90deg, #0062FF 0%, #0041C4 100%);
+  --gradient-button: linear-gradient(90deg, #00B2FF 0%, #0046BB 100%);
+  --gradient-secondary: linear-gradient(180deg, #FFE000, #FFC300);
+
+  /* Text */
+  --color-text-default: #0F172A;      /* ดำเทา */
+  --color-text-light: #FFFFFF;        /* ขาว */
+
+  /* Backgrounds */
+  --bg-default: #FFFFFF;
+  --bg-section: #F1F5F9;
+  --bg-header: #E0E7FF;
+  --bg-footer: #0041C4;
+
+  /* Border/Shadow */
+  --shadow-card: 0px 4px 12px rgba(0, 0, 0, 0.08);
+  --border-radius: 12px;
+}

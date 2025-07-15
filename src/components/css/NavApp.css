@@ -1,0 +1,98 @@
+ 
+/* styles.css */
+.bottom-nav {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, #007BFF, #003399);
+  color: white;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 94%;
+  max-width: 800px;
+  /* padding: 12px 8px; */
+  border-radius: 20px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  height: 4rem;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; 
+  text-align: center;
+  flex: 1;
+   padding:  8px; 
+}
+.center-circle{ 
+    position: absolute;
+  display: flex;
+    font-size: 1.2rem;
+    bottom: 0px; 
+    /* width: 8.5rem; */
+    width: 33%;
+    height: 105%;  
+    padding: .5rem;
+    /* height: 3.5rem;  */
+    border-radius: 10rem 10rem 0 0;
+    flex-direction: column;
+    justify-content: flex-end;
+    line-height: 1.1rem; 
+    background:  var(--gradient-primary);
+}
+ 
+.wrapper-bottom-nav{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.left-wrapper-bottom-nav ,
+.right-wrapper-bottom-nav {
+    display: flex;
+    flex-direction: row;
+    width: 33%;
+    font-size: .5em;
+}
+.left-wrapper-bottom-nav .nav-item  span,
+.right-wrapper-bottom-nav .nav-item  span{
+    font-size: .65em;
+    line-height: .8rem;
+}
+.nav-item img {
+  width: 24px;
+  height: 24px;
+  margin-bottom: 4px;
+}
+
+.nav-item.center {
+  flex: 1.5;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.center-text {
+  text-align: center;
+}
+
+.highlight {
+  background: linear-gradient(180deg, #FFE000, #FFC300);
+  padding: 8px 6px;
+  border-radius: 12px;
+  color: var(--color-primary);
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.highlight img {
+  width: 24px;
+  height: 24px;
+  margin-bottom: 4px;
+}
