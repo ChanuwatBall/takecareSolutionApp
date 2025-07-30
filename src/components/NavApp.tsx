@@ -20,7 +20,8 @@ const NavApp=()=>{
             <img src="https://img.icons8.com/ios-filled/50/ffffff/user-male-circle.png" alt="Profile" />
             <span>Profile</span>
         </div>
-        <div className="nav-item" style={{width:"50%"}}>
+        <div className="nav-item" style={{width:"50%"}} 
+         onClick={()=>{ navigate('/complaint');}} > 
             <img src="https://img.icons8.com/ios-filled/50/ffffff/megaphone.png" alt="แจ้งเรื่อง" />
             <span>แจ้งเรื่องร้องทุกข์</span>
         </div> 
@@ -37,7 +38,7 @@ const NavApp=()=>{
         </div>
     </div>
    </div>
-   <div className="nav-item center-circle   " >
+   <div   onClick={()=>{ navigate('/');}} className={`nav-item center-circle ${window.location.pathname === "/" ? "active" :"deactive"}  `} >
        เทศบาลตำบล  บางหมาก
    </div>
 </div>

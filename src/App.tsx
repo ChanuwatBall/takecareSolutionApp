@@ -10,23 +10,24 @@ import NavApp from './components/NavApp';
 
 import "./styles/theme.css"
 import PageHeader from './components/PageHeader';
+import Complaint from './pages/Complaint';
 
 function App() {
   const [count, setCount] = useState(0)
-  useEffect(() => {
-    liff.init({ liffId: "2001116231-q0zBmZEw" })
-      .then(async () => {
-        console.log('LIFF init success');
-        if (!liff.isLoggedIn()) {
-          liff.login(); 
-        }
-        console.log("liff token ", liff.getAccessToken())
-        console.log("liff profile ",await liff.getProfile())
-      })
-      .catch((err) => {
-        console.error('LIFF init failed', err);
-      });
-  }, []);
+  // useEffect(() => {
+  //   liff.init({ liffId: "2001116231-q0zBmZEw" })
+  //     .then(async () => {
+  //       console.log('LIFF init success');
+  //       if (!liff.isLoggedIn()) {
+  //         liff.login(); 
+  //       }
+  //       console.log("liff token ", liff.getAccessToken())
+  //       console.log("liff profile ",await liff.getProfile())
+  //     })
+  //     .catch((err) => {
+  //       console.error('LIFF init failed', err);
+  //     });
+  // }, []);
 
 
   return ( 
@@ -37,6 +38,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/profile" element={<Profile />} /> 
+        <Route path="/complaint" element={<Complaint />} /> 
       </Routes>
     </div>
   )

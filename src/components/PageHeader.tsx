@@ -8,7 +8,7 @@ const PageHeader:React.FC=()=>{
 
     return(<div className="page-header" >
         <div className="tumbon-name" >
-            <p className="name" >{tumbon}</p>
+            <p className="name" ><label>{tumbon}</label></p>
             <div className="address">{address}</div>
         </div>
         <div className="tumbon-logo" >
