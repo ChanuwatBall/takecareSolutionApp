@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+ 
 import { useNavigate } from 'react-router-dom';
 import "./css/NavApp.css"
 import { useEffect } from "react";
@@ -11,35 +11,35 @@ const NavApp=()=>{
    },[ window.location.pathname])
     
     return( 
-<div className="set-center bottom-nav " >
-   <div className="wrapper-bottom-nav set-center" >
+<div className="set-column bottom-nav " >
+   <div className="wrapper-bottom-nav set-column" >
     <div className="left-wrapper-bottom-nav" >
         <div 
          className={ window.location.pathname.match("/profile") ? "highlight nav-item ":"nav-item" }
-         onClick={()=>{ navigate('/profile');}} style={{width:"50%"}} >
+         onClick={()=>{ navigate('/profile');}} style={{width:"50%"}}  aria-valuetext="profile" >
             <img src="https://img.icons8.com/ios-filled/50/ffffff/user-male-circle.png" alt="Profile" />
-            <span>Profile</span>
+            <span className="text-xs">Profile</span>
         </div>
-        <div className="nav-item" style={{width:"50%"}} 
-         onClick={()=>{ navigate('/complaint');}} > 
+        <div className={`nav-item ${window.location.pathname.indexOf("/complaint") > -1 ?"highlight":""}`} style={{width:"50%"}} 
+         onClick={()=>{ navigate('/complaint');}} aria-valuetext="complaint" > 
             <img src="https://img.icons8.com/ios-filled/50/ffffff/megaphone.png" alt="แจ้งเรื่อง" />
             <span>แจ้งเรื่องร้องทุกข์</span>
         </div> 
     </div>
     <div className="right-wrapper-bottom-nav" >
-        <div className="nav-item" style={{width:"50%"}}> 
+        <div className="nav-item" aria-valuetext="place" style={{width:"50%"}}> 
             <img src="https://img.icons8.com/ios-filled/50/ffffff/calendar.png" alt="กิจกรรม" />
             <span>สถานที่ท่องเที่ยว<br/>และกิจกรรม</span>
            
         </div>
-        <div className="nav-item" style={{width:"50%"}}>
+        <div className="nav-item" aria-valuetext="setting" style={{width:"50%"}}>
             <img src="https://img.icons8.com/ios-filled/50/ffffff/menu.png" alt="ตั้งค่า" />
             <span>ตั้งค่า</span>
         </div>
     </div>
    </div>
    <div   onClick={()=>{ navigate('/');}} className={`nav-item center-circle ${window.location.pathname === "/" ? "active" :"deactive"}  `} >
-       เทศบาลตำบล  บางหมาก
+      <label> เทศบาลตำบล  บางหมาก</label>
    </div>
 </div>
 

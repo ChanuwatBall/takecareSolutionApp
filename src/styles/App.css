@@ -56,10 +56,3 @@
 .items-center{ align-items: center; }
 .items-end{ align-items: flex-end; }
 
-.set-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-}
-

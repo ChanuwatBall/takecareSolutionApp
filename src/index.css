@@ -73,4 +73,5 @@ button:focus-visible {
   display:inline;
   justify-content: flex-start; */
   padding: 1rem;
+  padding-bottom: 3rem !important;
 }

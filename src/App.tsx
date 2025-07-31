@@ -11,6 +11,7 @@ import NavApp from './components/NavApp';
 import "./styles/theme.css"
 import PageHeader from './components/PageHeader';
 import Complaint from './pages/Complaint';
+import ComplaintForm from './pages/ComplaintForm';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -39,6 +40,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/profile" element={<Profile />} /> 
         <Route path="/complaint" element={<Complaint />} /> 
+        <Route path="/complaint/add" element={<ComplaintForm />} /> 
       </Routes>
     </div>
   )

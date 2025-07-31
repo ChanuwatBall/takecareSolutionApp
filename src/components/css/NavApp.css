@@ -32,18 +32,19 @@
 .center-circle{ 
     position: absolute;
     display: flex;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     bottom: 0px; 
     /* width: 8.5rem; */
     width: 33%;
-    height: 105%;  
+    height: 117%;  
     padding: .5rem;
     /* height: 3.5rem;  */
+    top: -.7rem !important;
     border-radius: 10rem 10rem 0 0;
     flex-direction: column;
     justify-content: flex-end;
     line-height: 1.1rem; 
-    background:  var(--gradient-primary);
+    background:  linear-gradient(360deg, #0055EF 0%, #003491 100%);
 }
 .center-circle.active{ 
     background:  var(--gradient-secondary);
@@ -65,7 +66,7 @@
 }
 .left-wrapper-bottom-nav .nav-item  span,
 .right-wrapper-bottom-nav .nav-item  span{
-    font-size: .55em;
+    /* font-size: .4em !important; */
     line-height: .8rem;
     font-weight: 400;
   font-family: "Kanit", sans-serif !important;
@@ -96,12 +97,25 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-radius: 22px ;
+  border-radius: 16px ;
+  height: 75%;
+   flex: 1;
+  /* width: 100%; */
+  margin-top: 7%;
+}
+.nav-item[aria-valuetext="place"]{
+  flex: 3;
+}
+.highlight[aria-valuetext="profile"]{ 
+   flex: 1;
+}
+.highlight[aria-valuetext="complaint"]{ 
+   flex: 4;
 }
 
 .highlight img {
-  width: 24px;
-  height: 24px;
+  width: 23px;
+  height: 23px;
   margin-bottom: 4px;
 }
 
