@@ -18,20 +18,21 @@ let L = window?.leaflet
  var map:any = null
 const ComplaintForm=()=>{
     const [topic,setTopic] = useState("")
+    const [subtitle,setSupTitle] = useState("")
+    const [phone,setPhone] = useState("")
+    const [detail,setDetail] = useState("")
+    const [images , setImages] = useState([])
+
     const navigate = useNavigate();
     const [swiperref , setSwiperRef ] = useState<SwiperType|any>(null)
+    const [ openmodal ,setOpen] = useState(false)
 
     const userlocation=async()=>{
        const location=await map?.locate({setView: true })
         .on('locationfound', function(e:any){
-            var marker = L.marker([e.latitude, e.longitude]).bindPopup('Your are here :)');
+            var marker = L.marker([e.latitude, e.longitude]).bindPopup('ตำแหน่งของคุณ)');
             map.setView([e.latitude, e.longitude],16)
-            // var circle = L.circle([e.latitude, e.longitude], e.accuracy/2, {
-            //     weight: 1,
-            //     color: 'blue',
-            //     fillColor: '#cacaca',
-            //     fillOpacity: 0.2
-            // });
+           
             map.addLayer(marker);
             // map.addLayer(circle);
         })
@@ -42,8 +43,19 @@ const ComplaintForm=()=>{
        console.log("location ",location)
     }
 
+    const confirmComplaint=()=>{
+        // navigate("/complaint")
+        setOpen(true)
+
+    }
+
     return(
-        <div className="page  " >
+        <div className="page  " style={{position:"relative"}} >
+        {/* {openmodal && <div className="backdrop"></div> } */}
+        <ModalDialog 
+         open={openmodal} setOpen={(e:any)=>{setOpen(e)}}
+         complaint={ {topic, subtitle , phone, detail, images} }
+        />
         <div className="title-row set-row" style={{flexDirection:"row-reverse"}} >
             <div className="complaint-button-title" style={{justifyContent:"center"}}>
                 {/* <div className="wrap-img" >
@@ -65,21 +77,21 @@ const ComplaintForm=()=>{
                     <div className="row-input row" >
                             <label className="title" >หัวข้อเรื่อง: </label>
                             <div className="input" >
-                                <input placeholder="หัวข้อเรื่อง" value={topic} onChange={(e)=>{setTopic("")}}>
+                                <input placeholder="หัวข้อเรื่อง" value={topic} onChange={(e)=>{setTopic(e.target.value)}}>
                                 </input>
                             </div>
                         </div>
                         <div className="row-input flex column " style={{alignItems:"flex-start"}} >
                             <label className="title" >หัวข้อเรื่องย่อย* </label>
                             <div className="input" >
-                                <input placeholder="โปรดเลือก" value={topic} onChange={(e)=>{setTopic("")}}>
+                                <input placeholder="โปรดเลือก" value={subtitle} onChange={(e)=>{setSupTitle(e.target.value)}}>
                                 </input>
                             </div>
                         </div>
                         <div className="row-input row" >
                             <label className="title" >เบอร์โทรที่สามารถติดต่อได้: </label>
                             <div className="input" >
-                                <input placeholder="090-000-000" value={topic} onChange={(e)=>{setTopic("")}}>
+                                <input placeholder="090-000-000" value={phone} onChange={(e)=>{setPhone(e.target.value)}}>
                                 </input>
                             </div>
                         </div>
@@ -87,7 +99,7 @@ const ComplaintForm=()=>{
                         <div className="row-input flex column " style={{alignItems:"flex-start"}} >
                             <label className="title" >รายละเอียด (ระบุชื่อซอย,ถนน) </label>
                             <div className="input" >
-                                <textarea  value={topic} onChange={(e)=>{setTopic("")}}>
+                                <textarea  value={detail} onChange={(e)=>{setDetail(e.target.value)}}>
                                 </textarea>
                             </div>
                         </div>
@@ -123,17 +135,18 @@ const ComplaintForm=()=>{
                         <button className="back" onClick={()=>{swiperref?.slidePrev() }} >
                             <label>ย้อนกลับ</label>
                         </button>
-                        <button className="next" onClick={()=>{swiperref?.slideNext() }} >
+                        <button className="next"  type="button"
+                        data-dialog-target="modal"
+                        onClick={()=>{confirmComplaint()}} >
                             <label>ถัดไป</label>
                         </button>
+                        
                     </div>
                 </SwiperSlide>  
             </Swiper>
-        </div>
-            
- 
-
-        </div>
+        </div> 
+    
+    </div>
     )
 }
 
@@ -145,15 +158,18 @@ const MapPosition=()=>{
         createMap()
     },[])
 
-    const createMap=()=>{
-        const mapel: Element | any = document.querySelector('#mapposition')
-            console.log("mapel ",mapel.innerHTML)
+    const createMap=async ()=>{
+        const mapel: Element | any = document.querySelector('#mapposition') 
         if(mapel != null && mapel?.innerHTML.length < 1){
             map = L.map(mapel, {
                 center: [51.505, -0.09],
                 zoom: 13
-            });
-            console.log("map ",map)
+            }); 
+            //  var marker = L.marker([e.latitude, e.longitude]).bindPopup('Your are here :)');
+            await map?.locate({setView: true })
+                .on('locationfound', function(e:any){
+                    map.setView([e.latitude, e.longitude],16)
+                })
             L.tileLayer('https://longdomap.attg.cc/mmmap/img.php?zoom={z}&x={x}&y={y}', {  attribution: '© Longdo Map'}).addTo(map);
         }
     }
@@ -163,4 +179,62 @@ const MapPosition=()=>{
     <div id="mapposition"  >
                     
     </div>)
+}
+
+
+const ModalDialog=({open,setOpen ,complaint} :any)=>{
+    console.log(open,setOpen)
+    return(
+    open && <div  className="backdrop flex " style={{ justifyContent:"center", alignItems:"center"}}
+      >
+        <div className=" flex items-center justify-between p-4 md:p-5 border-b rounded-t   dark:border-gray-600 border-gray-200" > 
+          <div className="relative bg-white rounded-lg shadow-sm dark:bg-gray-700" style={{minHeight:"70vh",width:"90vw",padding:"1rem"}}>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                 Static modal
+             </h3>
+
+             <div>
+                <div className="row-input row" >
+                    <label className="title" >หัวข้อเรื่อง: </label>
+                    <div className="input" >
+                        {complaint?.topic}
+                    </div>
+                </div>
+
+                <div className="row-input row" >
+                    <label className="title" >หัวข้อเรื่องย่อย: </label>
+                     <div className="input" >
+                        {complaint?.subtitle}
+                    </div>
+                </div>
+                <div className="row-input row" >
+                    <label className="title" >เบอร์โทรที่สามารถติดต่อได้: </label>
+                     <div className="input" >
+                        {complaint?.phone}
+                    </div>
+                </div>
+                <div className=" p-4 md:p-5 border-t border-gray-200 " ></div>
+                {complaint?.images.map((e:any)=>
+                  e?.file && <img src={e?.file} />
+                )}
+
+             </div>
+ 
+            <div className="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                <button   
+                type="button" 
+                onClick={()=>{setOpen(false)}}className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    I accept
+                </button>
+                <button  
+                type="button" 
+                onClick={()=>{setOpen(false)}}
+                className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                    Decline
+                </button>
+            </div>
+            </div>
+        </div>
+     </div>  
+    )
 }
