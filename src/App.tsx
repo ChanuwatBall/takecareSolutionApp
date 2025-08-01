@@ -32,7 +32,7 @@ function App() {
 
 
   return ( 
-    <div> 
+    <div style={{background:"#FFF"}} > 
       <PageHeader />
       <NavApp />
 

@@ -4,7 +4,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Swiper ,SwiperSlide } from 'swiper/react';  
-  
+import { Camera, CameraResultType, type GalleryPhotos, type Photo } from '@capacitor/camera';
+
+
 import "./css/Complaint.css"
 import "./css/ComplaintForm.css" 
 //@ts-ignore
@@ -21,7 +23,8 @@ const ComplaintForm=()=>{
     const [subtitle,setSupTitle] = useState("")
     const [phone,setPhone] = useState("")
     const [detail,setDetail] = useState("")
-    const [images , setImages] = useState([])
+    const [images , setImages] = useState<any[]>([])
+    const maxLengthImage = 5;
 
     const navigate = useNavigate();
     const [swiperref , setSwiperRef ] = useState<SwiperType|any>(null)
@@ -47,6 +50,45 @@ const ComplaintForm=()=>{
         // navigate("/complaint")
         setOpen(true)
 
+    }
+
+
+    const takePicture = async () => {
+        if(images.length < maxLengthImage){
+            const image:Photo = await Camera.getPhoto({
+                quality: 70,
+                allowEditing: true,
+                resultType: CameraResultType.Uri
+            });
+
+            // image.webPath will contain a path that can be set as an image src.
+            // You can access the original file using image.path, which can be
+            // passed to the Filesystem API to read the raw data of the image,
+            // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
+            let imageUrl = image.webPath;
+            console.log("imageUrl ",imageUrl)
+            setImages([images ,  imageUrl ])
+            // Can be set to the src of an image now
+            // imageElement.src = imageUrl;
+        }else{
+
+        }
+    };
+
+    const pickImages=async ()=>{
+         if(images.length < maxLengthImage){
+            const image:GalleryPhotos    = await Camera.pickImages({
+                quality: 70,  
+                presentationStyle: 'fullscreen' ,
+                limit: maxLengthImage - images.length
+            })
+            let imageUrl:any[] = []
+            image?.photos.map((p)=>{
+                imageUrl = [...imageUrl , p?.webPath]
+            }) 
+            console.log("imageUrl ",imageUrl)
+            setImages( [...images , ...imageUrl ]  )
+        }
     }
 
     return(
@@ -104,13 +146,16 @@ const ComplaintForm=()=>{
                             </div>
                         </div>
                         <div className="row-input flex row " >
-                            <label className="title" > แนบรูป (ไม่เกิน 5 รูป)</label>
-                            <button >
+                            <label className="title" > 
+                                แนบรูป (ไม่เกิน 5 รูป) <span><br/>อัพโหลดแล้ว&nbsp; {images.length}/{maxLengthImage} </span>
+                                
+                            </label>
+                            <button onClick={()=>{takePicture()}} >
                                 <img src="../assets/images/camera.png"  />
                                 <label>ถ่ายรูป</label>
                             </button>
                             
-                            <button>
+                            <button onClick={()=>{pickImages()}} >
                                 <img src="../assets/images/picture.png"  />
                                 <label>แนบรูป</label>
                             </button>
@@ -153,8 +198,7 @@ const ComplaintForm=()=>{
 export default ComplaintForm;
 
 const MapPosition=()=>{
-    useEffect(()=>{ 
-        console.log("lmap ",L)
+    useEffect(()=>{  
         createMap()
     },[])
 
@@ -183,7 +227,9 @@ const MapPosition=()=>{
 
 
 const ModalDialog=({open,setOpen ,complaint} :any)=>{
-    console.log(open,setOpen)
+    useEffect(()=>{ 
+        console.log("complaint  ",complaint)
+    },[])
     return(
     open && <div  className="backdrop flex " style={{ justifyContent:"center", alignItems:"center"}}
       >
@@ -214,10 +260,12 @@ const ModalDialog=({open,setOpen ,complaint} :any)=>{
                     </div>
                 </div>
                 <div className=" p-4 md:p-5 border-t border-gray-200 " ></div>
-                {complaint?.images.map((e:any)=>
-                  e?.file && <img src={e?.file} />
-                )}
-
+                <div className="columns-3 ">
+                    {complaint?.images.map((e:any)=>
+                     e && <img className="aspect-3/2" src={e} />
+                    )} 
+                </div>
+              
              </div>
  
             <div className="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">

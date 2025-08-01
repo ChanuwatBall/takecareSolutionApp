@@ -4,6 +4,9 @@ import { BrowserRouter } from 'react-router-dom';
 import './index.css'
 import App from './App.tsx'
 
+import { defineCustomElements } from '@ionic/pwa-elements/loader';
+
+defineCustomElements(window);
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter> 
