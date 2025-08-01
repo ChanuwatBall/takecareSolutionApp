@@ -4,6 +4,7 @@
     justify-content: space-between;
     align-items: center;
     margin: 1rem 0 1rem;
+    font-size: .9em;
 }
 .row{ 
     flex-direction: row;
@@ -58,7 +59,7 @@
     border: none;
     color: #FFF;
     padding-top: .7rem;
-    padding-bottom: .7rem;
+    padding-bottom: .7rem; 
 }
 button.back{ 
     background: var(  --gradient-secondary);
@@ -68,4 +69,24 @@ button.next{
     box-shadow: 0px 9px 19px -5px rgba(0,0,0,0.53);
 -webkit-box-shadow: 0px 9px 19px -5px rgba(0,0,0,0.53);
 -moz-box-shadow: 0px 9px 19px -5px rgba(0,0,0,0.53);
+}
+
+#mapposition{
+    width: 100%;
+    height: 35vh !important;
+    border-radius: var(--border-radius) !important;
+}
+.find-my-loaction{
+    width: 100%;
+     border-radius: 1rem !important;
+     border: 1px solid var(--color-primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem 0 2rem;
+    height: 3.2em;
+    }
+.find-my-loaction img{
+    width: .8rem;
+    margin-right: 1rem;
 }

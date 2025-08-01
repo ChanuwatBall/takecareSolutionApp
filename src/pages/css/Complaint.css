@@ -25,7 +25,7 @@
 }
 .wrap-img img{ width: 100%;}
 .complaint-button-title label{
-    font-size: 1.6em;
+    font-size: 1.4em;
     margin: .3rem;
     color: #FFF;
 }
@@ -43,7 +43,7 @@
     width: 27%;
     border-radius: var(--border-radius);
     background-color: #F7F6F9;
-    height:  7rem;
+    height:  50%;
     position: absolute;
     right: 1rem;
     z-index: -1;
