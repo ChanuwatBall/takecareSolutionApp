@@ -16,6 +16,12 @@ const Profile:React.FC=()=>{
         done: 1
     })
 
+    const [complaints , setComplaints] = useState([
+        { topic:"ถนน" ,admin:"โยธาธิการ" , status: "กำลังดำเนินการ" },
+        { topic:"ประปา" ,admin:"โยธาธิการ" , status: "กำลังดำเนินการ" },
+        { topic:"ขยะ" ,admin:"เทศกิจ" , status: "กำลังดำเนินการ" },
+    ])
+
     return(
     <div className="page">
         <div className="card-profile  flex items-center ">
@@ -61,22 +67,43 @@ const Profile:React.FC=()=>{
              </div>
              <div className="grid grid-cols-4  " >
                 <div className="col-span-3 grid grid-cols-3  ">
-                   <div className=" text-center flex  items-center justify-center">
+                   <div className="text-center flex  items-center justify-center">
                      0
                    </div>
-                   <div className=" text-center  flex  items-center justify-center">
+                   <div className="text-center  flex  items-center justify-center">
                      1
                    </div>
-                   <div className="  text-center flex  items-center justify-center">
+                   <div className="text-center flex  items-center justify-center">
                      1
                    </div>
                 </div>
                 <div  style={{margin:"0px",paddingLeft:".3rem"}}>
-                    <div className=" text-centers" style={{padding:".67rem 0 .67rem",margin:"0"}}>
+                    <div className="text-center" style={{padding:".67rem 0 .67rem",margin:"0"}}>
                         1
                     </div> 
                 </div>
              </div>
+        </div><br/>
+
+        <div className="card-complaint-status" >
+            <div className="grid grid-cols-3  gradient-primary rounded-md py-1" >
+                <div className="complaint-status-name flex  items-center justify-center">หัวข้อเรื่อง</div>
+                <div className="complaint-status-name flex  items-center justify-center">ผู้ดูแล</div>
+                <div className="complaint-status-name flex  items-center justify-center">สถานะ</div>
+            </div>
+             {
+                complaints.map((e)=>
+                <div className="grid grid-cols-3  py-1" >
+                    <div>{e?.topic}</div>
+                    <div>{e?.admin}</div>
+                    <div>{e?.status}</div>
+                </div>
+               )
+           }
+
+            
+
+            
         </div>
 
 
