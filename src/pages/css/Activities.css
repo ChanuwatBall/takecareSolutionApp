@@ -1,0 +1,48 @@
+
+.card-activity {
+    margin: .5rem 0 .5rem;
+    border-radius: 1rem;
+}
+.card-activity  .act-img {
+    border-radius: 1rem !important; 
+    width: 8rem ;
+    height: 8rem ;
+    background-size: cover;
+
+}
+.card-activity.left{
+    background: var(--gradient-secondary);
+    color: var(--color-primary);
+}
+.card-activity.right{
+    background: var(--gradient-primary);
+    color: white;
+}
+/* .card-activity.right .act-img {
+    margin-right: .5rem;
+} */
+ .date{
+    font-size: 1.2em;
+    font-weight: 500;
+ }
+ .description{
+    font-size: 1em;
+    line-height: 1.2em;
+ }
+
+ .card-activity{
+    width: 100%;
+    min-height: 10rem;
+    border-radius: var(--border-radius);
+    background: var(--gradient-primary);
+    color: #FFF;
+    padding: 1rem;
+ }
+ .card-activity h5{
+    font-size: larger;
+    font-weight: 500;
+    margin-bottom: .5rem;
+ }
+ .card-activity p{
+    font-size: small;
+ }

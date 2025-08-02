@@ -17,7 +17,7 @@
 }
 .tumbon-name{
     float: left;
-    width: 85%;
+    width: 75%;
     text-align: center; 
     justify-content: center;
     display: flex;
@@ -29,7 +29,7 @@
   font-weight: 450;
 }
 .tumbon-name .name{
-    font-size: 2.4em;
+    font-size: 3em;
     margin: 0px;
     line-height: 2.5rem;
     color: var(--color-primary);

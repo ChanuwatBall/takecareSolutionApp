@@ -13,6 +13,8 @@ import PageHeader from './components/PageHeader';
 import Complaint from './pages/Complaint';
 import ComplaintForm from './pages/ComplaintForm';
 import Setting from './pages/Setting';
+import Activities from './pages/Activities';
+import ActivitieDetail from './pages/ActivitieDetail';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -43,6 +45,8 @@ function App() {
         <Route path="/complaint" element={<Complaint />} /> 
         <Route path="/complaint/add" element={<ComplaintForm />} /> 
         <Route path="/setting" element={<Setting />} /> 
+        <Route path="/activities" element={<Activities />} /> 
+        <Route path='/activities/detail' element={<ActivitieDetail/>} />
       </Routes>
     </div>
   )

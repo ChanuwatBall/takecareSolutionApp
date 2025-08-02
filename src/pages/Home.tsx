@@ -41,7 +41,7 @@ const Home:React.FC=()=>{
     <div className="page" style={{paddingTop:"0" }}>
         <div className="card-executive" >
             <div  className="name-container">  
-                <label className="executive-nickname" > {executive?.nickname} </label> 
+                <label className="executive-nickname" > {executive?.nickname} </label> <br/>
                 <label className="full-name" >{executive?.firstName}  {executive?.lastName}</label> 
             </div> 
             <img src={executive?.image} alt="executive-profile" />

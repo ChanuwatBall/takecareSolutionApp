@@ -27,7 +27,9 @@ const NavApp=()=>{
         </div> 
     </div>
     <div className="right-wrapper-bottom-nav" >
-        <div className="nav-item" aria-valuetext="place" style={{width:"50%"}}> 
+        <div className={`nav-item ${window.location.pathname.indexOf("/activities") > -1 ?"highlight":""}`} aria-valuetext="place" style={{width:"50%"}} 
+         onClick={()=>{ navigate('/activities');}} 
+        > 
             <img src="https://img.icons8.com/ios-filled/50/ffffff/calendar.png" alt="กิจกรรม" />
             <span>สถานที่ท่องเที่ยว<br/>และกิจกรรม</span>
            
