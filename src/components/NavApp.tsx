@@ -32,7 +32,9 @@ const NavApp=()=>{
             <span>สถานที่ท่องเที่ยว<br/>และกิจกรรม</span>
            
         </div>
-        <div className="nav-item" aria-valuetext="setting" style={{width:"50%"}}>
+        <div  className={`nav-item ${window.location.pathname.indexOf("/setting") > -1 ?"highlight":""}`}  aria-valuetext="setting" style={{width:"50%"}} 
+         onClick={()=>{ navigate('/setting');}} 
+        >
             <img src="https://img.icons8.com/ios-filled/50/ffffff/menu.png" alt="ตั้งค่า" />
             <span>ตั้งค่า</span>
         </div>

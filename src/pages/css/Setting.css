@@ -1,0 +1,25 @@
+.button-title{
+    width: 100%;
+    text-align: center;
+    background: var(--gradient-primary);
+    padding: 1rem;
+    color: #FFF;
+    border-radius: 1rem;
+}
+
+.setting-menu{
+    width: 100%; 
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 1.2rem 0 1.22rem;
+    border-bottom: 1px solid #CFCED1;
+}
+.setting-menu .icon{
+    width: 1rem;
+    margin: 0 1rem  0;
+}
+.setting-menu .title{
+    font-size: .9em;
+    color: #4A4A4C;
+}

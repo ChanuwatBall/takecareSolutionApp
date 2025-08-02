@@ -1,0 +1,99 @@
+
+.card-executive{
+    width: 100%;
+    height: 8rem;
+    display: flex;
+    flex-direction: row;
+    background: var(--gradient-primary); 
+    color: #FFF;
+    position: relative;
+    padding-left: 1rem;
+    border-radius: var(--border-radius);
+}
+.executive-name{
+    /* padding: 1rem; */
+    /* font-size: 3em; */ 
+}
+.name-container{
+    position: absolute;
+    width: 50%; 
+    padding-top: 8%;
+}
+.executive-nickname{
+    font-size: 3.7em;
+    margin: 0 !important;  
+    line-height: .9em;
+}
+.executive-nickname .full-name{
+    font-size: 1.3em;
+    letter-spacing: 1.1em;
+}
+.executive-name sub{ 
+    top: -1rem !important;
+}
+.card-executive img{
+    height: 125%;
+    bottom: 0;
+    margin-top: -8%; 
+    right: .5rem !important;
+    position: absolute;
+    /* position: absolute;
+    right: 0; */
+}
+.executive-profile{
+
+}
+.card-executive-team{
+    width: 100%;
+    min-height: 8rem; 
+    background: var(--gradient-primary); 
+    color: #FFF;
+    margin: 1rem 0 1rem;
+    border-radius: var(--border-radius);
+    padding: 1rem; 
+}
+.executive-team{
+    width:  95%;
+    height: 100%;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.executive-team-name{ 
+    background: var(--gradient-secondary);
+    color: var(--color-primary);
+    text-align: center;
+    border-radius: 1rem;
+    padding: .2rem 1rem .2rem 1rem;
+    width: 70%;
+    margin-top: .5rem;
+}
+.team-profile{
+    width: 100% ;
+    background-size: cover ;
+    height: 10rem ;
+    background-position: center ;
+    border-radius: 1.5rem  ;
+}
+.card-team-description{
+    background: var(--gradient-primary);
+    border-radius: var(--border-radius);
+    min-height: 5rem;
+    padding: 1rem;
+    color: #FFF;
+    margin-bottom: 5rem;
+    text-align: center;
+}
+.card-team-description h6{
+    font-size: .9em;
+    margin-bottom: .7rem;
+    text-align: center; 
+    line-height: 1.2em;
+}
+.card-team-description p{
+    font-size: .65em;
+    text-align: left;
+    margin-bottom: .5rem ;
+}

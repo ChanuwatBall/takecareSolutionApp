@@ -1,13 +1,13 @@
 
 .page-header{  
   align-items: center;
-  width: 95%;
-  margin-left:2.5%; 
+  width: 94%;
+  margin-left:2.8%; 
   border-bottom-left-radius: 30px;
   border-bottom-right-radius: 30px;
   box-shadow: 0 6px 15px rgba(31, 43, 66, 0.2); 
   margin-top: -5px;
-  min-height: 9rem; 
+   height: 9.5rem; 
   padding: .5rem;
   padding-bottom: 1.5rem;
   background-color: #F7F7F9;
@@ -17,7 +17,7 @@
 }
 .tumbon-name{
     float: left;
-    width: 70%;
+    width: 85%;
     text-align: center; 
     justify-content: center;
     display: flex;
@@ -34,6 +34,8 @@
     line-height: 2.5rem;
     color: var(--color-primary);
     float: left;
+    font-weight: 400;
+
 }
 .tumbon-name .address{
     background: var(--gradient-secondary);
@@ -41,19 +43,21 @@
     width: fit-content;
     border-radius: 5px;
     margin-top: .5rem;
+    font-weight: 400;
+    font-size: .9em;
 }
 
 .tumbon-logo{  
-   width: 10rem;
-  min-height: 9rem; 
+   width: 6rem;
+   height: 9rem; 
    position: relative;
    display: flex;
    justify-content: center;
 }
 .blue-tank{  
-  width: 5rem;
+  width: 4.5rem;
   height: 100%;
-  top: -.3rem;
+  top:  -3%;
   position: absolute;
   background: var(--color-primary);
   border-bottom-left-radius: 3rem;
@@ -61,4 +65,7 @@
   align-items: flex-end;
   justify-content: center;
   display: flex;
+  box-shadow: 1px 6px 21px -3px rgba(16, 46, 122, 0.3);
+-webkit-box-shadow: 1px 6px 21px -3px rgba(16, 46, 12,0.3);
+-moz-box-shadow: 1px 6px 21px -3px rgba(16, 46, 12,0.3);
 }

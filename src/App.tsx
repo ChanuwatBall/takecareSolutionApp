@@ -12,6 +12,7 @@ import "./styles/theme.css"
 import PageHeader from './components/PageHeader';
 import Complaint from './pages/Complaint';
 import ComplaintForm from './pages/ComplaintForm';
+import Setting from './pages/Setting';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -41,6 +42,7 @@ function App() {
         <Route path="/profile" element={<Profile />} /> 
         <Route path="/complaint" element={<Complaint />} /> 
         <Route path="/complaint/add" element={<ComplaintForm />} /> 
+        <Route path="/setting" element={<Setting />} /> 
       </Routes>
     </div>
   )

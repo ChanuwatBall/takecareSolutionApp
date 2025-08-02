@@ -9,6 +9,7 @@
   --gradient-primary: linear-gradient(90deg, #0055EF 0%, #003491 100%);
   --gradient-button: linear-gradient(90deg, #00B2FF 0%, #0046BB 100%);
   --gradient-secondary: linear-gradient(90deg, #E3E837, #E0AD00);
+  --gradient-primary-reverse: linear-gradient(360deg, #0055EF 0%, #003491 100%);
 
   /* Text */
   --color-text-default: #0F172A;      /* ดำเทา */

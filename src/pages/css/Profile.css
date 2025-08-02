@@ -1,0 +1,78 @@
+.card-profile{
+    width: 100%;
+    background: var(--gradient-primary-reverse);
+    border-radius: var(--border-radius);
+    /* min-height: 10rem;   */
+    padding: 1rem ;
+    padding-bottom: 2em;
+    padding-top: 1.5em;
+} 
+.profile-image{ 
+    width: 40%; 
+    padding-right: .5rem;
+}
+.profile-detail{
+    width: 60%;
+}
+.member-profile{ 
+    border: 2px solid ; 
+}
+.wrap-member-profile{
+    border-radius: 50%  ;
+    width: 7.8rem  ;
+    height: 7.8rem ; 
+    background: var(--gradient-primary);
+}
+img[alt="member-profile"]{
+    border-radius: 50%  ;
+    width: 7.4rem  ;
+    height: 7.4rem ;
+}  
+ 
+.profile-member-name{
+    color: #FFF;
+    font-size: 1.4em;
+}
+.chip-profile{
+    border: 1px solid #FFF;
+    font-size: .7em;
+    font-weight: 200;
+    border-radius: 10px;
+    padding: .3em 1rem .3em 1em;
+    border-radius: var(--border-radius);
+    color: #FFF;
+    margin: .3rem 0;
+}
+.card-complaint-count{
+    background: var(--gradient-primary);
+    border-radius:  1rem;
+    padding: 1rem 0 1rem;
+    color: #FFF;
+    margin: 1rem 0 1rem;
+    font-weight: 300;
+}
+.card-complaint-count img{
+    width: 2rem;
+    margin-right: 1rem;
+}
+
+.card-complaint-status{
+    width: 100%;
+    border-radius: 1rem;
+    background-color: #F7F7F9;
+    padding: .5rem;
+}
+.complaint-status-name{
+    padding: .1rem .3rem .1rem;
+    color: #FFF;
+    font-weight: 300;
+    font-size: .6em; 
+    margin: .3rem 0 .3rem 0;
+}
+.gradient-primary{  
+    background: var(--gradient-primary);
+}
+.hilight{  
+    background: var(--gradient-secondary);
+    padding: .1rem .3rem .1rem;
+}
