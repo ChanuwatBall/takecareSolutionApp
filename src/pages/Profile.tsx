@@ -94,9 +94,9 @@ const Profile:React.FC=()=>{
              {
                 complaints.map((e)=>
                 <div className="grid grid-cols-3  py-1" >
-                    <div>{e?.topic}</div>
-                    <div>{e?.admin}</div>
-                    <div>{e?.status}</div>
+                    <div className="text-center text-sm" >{e?.topic}</div>
+                    <div  className="text-center text-sm" >{e?.admin}</div>
+                    <div className="text-center text-sm" >{e?.status}</div>
                 </div>
                )
            }

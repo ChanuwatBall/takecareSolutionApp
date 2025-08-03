@@ -7,7 +7,7 @@ const PageHeader:React.FC=()=>{
     const [tumbon ,setTumbon] = useState("เทศบาลตำบลบางหมาก")
     const [address,setAddress] = useState("อำเภอเมืองชุมพรจังหวัดชุมพร")
 
-    return(<div className="page-header  flex" >
+    return(window.location.pathname.indexOf("register") < 0 &&<div className="page-header  flex" >
         <div className="tumbon-name  " >
             <p className="name" ><label>{tumbon}</label></p>
             <div className="address">{address}</div>

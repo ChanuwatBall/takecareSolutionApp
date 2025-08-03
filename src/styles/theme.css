@@ -1,15 +1,15 @@
 :root {
   /* Base Colors */
   --color-primary: #003491;           /* น้ำเงินเข้ม */
-  --color-primary-light: #0055EF;     /* น้ำเงินสว่าง */
+  --color-primary-light: #2A68E0;     /* น้ำเงินสว่าง */
   --color-secondary: #E0AD00;         /* เหลือง */
   --color-accent: #00C2FF;            /* ฟ้าสว่าง ใช้ในกรณีเน้น */
 
   /* Gradient */
-  --gradient-primary: linear-gradient(90deg, #0055EF 0%, #003491 100%);
+  --gradient-primary: linear-gradient(90deg, #2A68E0 0%, #003491 100%);
   --gradient-button: linear-gradient(90deg, #00B2FF 0%, #0046BB 100%);
   --gradient-secondary: linear-gradient(90deg, #E3E837, #E0AD00);
-  --gradient-primary-reverse: linear-gradient(360deg, #0055EF 0%, #003491 100%);
+  --gradient-primary-reverse: linear-gradient(360deg, #2A68E0 0%, #003491 100%);
 
   /* Text */
   --color-text-default: #0F172A;      /* ดำเทา */
@@ -29,7 +29,19 @@
   font-weight: 400;
   font-style: normal;
 }
+.bg-primary{ 
+  background: var(--gradient-primary);
+}
+.text-primary{
+  color: var(--color-primary);
+}
+.text-primary-light{
+  color: var(--color-primary-light);
+}
 
+.bg-grey{
+  background-color:#B3B3B3 ; 
+}
 /* .set-column {
   display: flex;
   align-items: center;

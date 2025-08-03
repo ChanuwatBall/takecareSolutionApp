@@ -39,12 +39,12 @@ const Activities=()=>{
             กิจกรรม
         </div> 
 
-        <div className="w-100" >
+        <div className="w-100 pb-9" >
             {
                 activities.map((act,inx)=>
                 inx%2==0 ?  <div className={`card-activity ${inx%2==0?"left":"right"} grid grid-cols-3  `}  onClick={()=>{navigate("/activities/detail")}}>
                     <div className="act-img my-1 mx-1" style={{backgroundImage:`url('${act?.image}')`}} ></div>
-                    <div className={`col-span-2 px-2 flex column justify-center`}>
+                    <div className={`col-span-2 px-2 pl-3 flex column justify-center`}>
                         <label className="date">{act?.startDate}</label>
                         <label className="description">{act?.description}</label>
                     </div>

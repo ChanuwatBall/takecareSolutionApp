@@ -11,7 +11,7 @@ const NavApp=()=>{
    },[ window.location.pathname])
     
     return( 
-<div className="set-column bottom-nav " >
+window.location.pathname.indexOf("register") < 0 && <div className="set-column bottom-nav " >
    <div className="wrapper-bottom-nav set-column" >
     <div className="left-wrapper-bottom-nav" >
         <div 

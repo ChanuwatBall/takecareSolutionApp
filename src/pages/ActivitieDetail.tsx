@@ -20,23 +20,23 @@ const ActivitieDetail=()=>{
      
 
     return(
-    <div className="page">   
+    <div className="page mb-6">   
         <div className="button-title" >
             กิจกรรม
         </div> 
 
-        <div className="card-activity" >
+        <div className="card-activity p-0 "  >
             <img src={activity?.cover} alt="activity-cover" className="w-100"   />
             <br/>
             <h5>{activity?.coverTitle}</h5>
             <p>{activity?.description}</p>
 
-            <div className="w-100 grid  grid-cols-2" >
-                <div>
-                    <button  >สถานที่จัด {activity?.location}</button>
+            <div className="  grid  grid-cols-2 my-3 mt-5" >
+                <div className="flex items-center justify-center" >
+                    <button className="bg-hilight  detail-hilight "  >สถานที่จัด {activity?.location}</button>
                 </div>
-                <div>
-                     <button>วันที่ {activity?.startDate}</button>
+                <div className="flex items-center justify-center" >
+                     <button  className="bg-hilight detail-hilight " >วันที่ {activity?.startDate}</button>
                 </div>
             </div>
         </div>
