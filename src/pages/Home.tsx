@@ -5,25 +5,25 @@ import   { SwiperSlide ,Swiper } from "swiper/react";
 
 const Home:React.FC=()=>{
 
-    const [executive,setExecutive] = useState({
+    const [executive] = useState({
         image:"../assets/images/executive-profile.png" ,
         nickname:"นายกตู่" ,
         firstName:"สุรพงษ์" ,
         lastName: "ประสารวุฒิ"
     })
 
-    const [teamleft,setTeamLeft] = useState([
+    const [teamleft] = useState([
         "../assets/images/executive-team-left.jpg",
         "../assets/images/executive-team-left.jpg",
         "../assets/images/executive-team-left.jpg"
     ])
-    const [teamright,setTeamRight] = useState([ 
+    const [teamright] = useState([ 
         "../assets/images/executive-team-right.jpg",
         "../assets/images/executive-team-right.jpg",
         "../assets/images/executive-team-right.jpg"
     ])
 
-    const [companyDetail , setCompanyDetail] = useState({
+    const [companyDetail ] = useState({
         name:"เทศบาลตำบลบางหมาก:" , subtitle:"ท้องถิ่นน่าอยู่ คู่พัฒนาชุมชนเมืองชุมพร" ,
         description:[
             `เทศบาลตำบลบางหมาก ตั้งอยู่ในพื้นที่ตำนลบามหมาก อำเทอเมืองรุมพร จึงหรัดรุงพร

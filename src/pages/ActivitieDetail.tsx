@@ -2,7 +2,7 @@ import { useState } from "react"
 import "./css/Activities.css"
 
 const ActivitieDetail=()=>{
-    const [activity , setActivity] = useState({ 
+    const [activity ] = useState({ 
             startDate:"24-28 เม.ย. 67",
             endDate:"" ,
             description :`ไทยทรงดำ หรือ ไทค่า เป็นกลุ่มชาติพพันธุ์ที่มีที่มีที่นท่าเนิดจากเกล้นสองจ่าย (เมืองแกง

@@ -1,9 +1,9 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import { useEffect } from 'react';
-import liff from '@line/liff';
-import  { Link, Routes, Route } from 'react-router-dom';
+// import { useState } from 'react'
+// import reactLogo from './assets/react.svg'
+// import viteLogo from '/vite.svg'
+// import { useEffect } from 'react';
+// import liff from '@line/liff';
+import  {  Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
 import NavApp from './components/NavApp';
@@ -17,8 +17,7 @@ import Activities from './pages/Activities';
 import ActivitieDetail from './pages/ActivitieDetail';
 import Register from './pages/Register';
 
-function App() {
-  const [count, setCount] = useState(0)
+function App() { 
   // useEffect(() => {
   //   liff.init({ liffId: "2001116231-q0zBmZEw" })
   //     .then(async () => {
@@ -41,7 +40,8 @@ function App() {
       <NavApp />
 
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Register />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<Profile />} /> 
         <Route path="/complaint" element={<Complaint />} /> 
         <Route path="/complaint/add" element={<ComplaintForm />} /> 

@@ -1,6 +1,7 @@
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera"
 import { useState } from "react"
 import { ActionSheet, ActionSheetButtonStyle } from '@capacitor/action-sheet';
+import { useNavigate } from "react-router-dom";
 
 
 type FormData = {
@@ -14,7 +15,8 @@ type FormData = {
   agree: boolean;
 };
 const Register=()=>{
-    const [company,setCompany] = useState({id:1 , name:"เทศบาลตำบลบางหมาก"})
+    const navigate = useNavigate();
+    const [company] = useState({id:1 , name:"เทศบาลตำบลบางหมาก"})
     const [image ,setImage] = useState(false)
     const [formData, setFormData] = useState<FormData>({
     firstName: '',
@@ -75,7 +77,9 @@ const Register=()=>{
                 <label className="block mb-4"><input type="checkbox" name="agree" onChange={handleChange}/> ฉันยินยอมให้ร้านเก็บและใช้ข้อมูลส่วนตัวตามนโยบาย</label>
               
             </div><br/>
-              <button type="submit" className="w-full bg-blue-600 bg-primary text-white py-2 rounded hover:bg-blue-700">สมัครสมาชิก</button>
+              <button type="submit" 
+              onClick={()=>{navigate("/home")}}
+              className="w-full bg-blue-600 bg-primary text-white py-2 rounded hover:bg-blue-700">สมัครสมาชิก</button>
         </div>
     </div>
     )

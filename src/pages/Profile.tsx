@@ -2,21 +2,21 @@ import { useState } from "react";
 import "./css/Profile.css"
 
 const Profile:React.FC=()=>{
-    const  [profile, setProfile]  = useState({
+    const  [profile]  = useState({
         profile: "../assets/images/member-profile.jpg" ,
         first_name:"นพวิชญ์" ,
         last_name:"นาคเพ่งพิศ",
         village:"หมู่ 1",
         familyMember:2 
     })
-    const [complaintStatus , setConmplaiintStatus ] = useState({
+    const [complaintStatus  ] = useState({
         wait: 0 ,
         pending: 1,
         procesing: 1 ,
         done: 1
     })
 
-    const [complaints , setComplaints] = useState([
+    const [complaints ] = useState([
         { topic:"ถนน" ,admin:"โยธาธิการ" , status: "กำลังดำเนินการ" },
         { topic:"ประปา" ,admin:"โยธาธิการ" , status: "กำลังดำเนินการ" },
         { topic:"ขยะ" ,admin:"เทศกิจ" , status: "กำลังดำเนินการ" },
@@ -68,18 +68,18 @@ const Profile:React.FC=()=>{
              <div className="grid grid-cols-4  " >
                 <div className="col-span-3 grid grid-cols-3  ">
                    <div className="text-center flex  items-center justify-center">
-                     0
+                     {complaintStatus?.wait}
                    </div>
                    <div className="text-center  flex  items-center justify-center">
-                     1
+                     {complaintStatus?.pending}
                    </div>
                    <div className="text-center flex  items-center justify-center">
-                     1
+                     {complaintStatus?.procesing}
                    </div>
                 </div>
                 <div  style={{margin:"0px",paddingLeft:".3rem"}}>
                     <div className="text-center" style={{padding:".67rem 0 .67rem",margin:"0"}}>
-                        1
+                        {complaintStatus?.done}
                     </div> 
                 </div>
              </div>

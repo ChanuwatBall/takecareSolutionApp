@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 const Activities=()=>{
      const navigate = useNavigate();
-    const [activities , setActivities] = useState([
+    const [activities ] = useState([
         { 
             startDate:"24-28 เม.ย. 67",
             endDate:"" ,

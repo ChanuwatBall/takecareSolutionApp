@@ -11,7 +11,7 @@ const NavApp=()=>{
    },[ window.location.pathname])
     
     return( 
-window.location.pathname.indexOf("register") < 0 && <div className="set-column bottom-nav " >
+window.location.pathname !== "/"  && <div className="set-column bottom-nav " >
    <div className="wrapper-bottom-nav set-column" >
     <div className="left-wrapper-bottom-nav" >
         <div 
@@ -42,7 +42,7 @@ window.location.pathname.indexOf("register") < 0 && <div className="set-column b
         </div>
     </div>
    </div>
-   <div   onClick={()=>{ navigate('/');}} className={`nav-item center-circle ${window.location.pathname === "/" ? "active" :"deactive"}  `} >
+   <div   onClick={()=>{ navigate('/home');}} className={`nav-item center-circle ${window.location.pathname === "/home" ? "active" :"deactive"}  `} >
       <label> เทศบาลตำบล  บางหมาก</label>
    </div>
 </div>

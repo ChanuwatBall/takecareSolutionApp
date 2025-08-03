@@ -1,13 +1,16 @@
 import type React from "react";
 import "./css/PageHeader.css"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 const apiUrl = import.meta.env.VITE_API;
 
 const PageHeader:React.FC=()=>{
-    const [tumbon ,setTumbon] = useState("เทศบาลตำบลบางหมาก")
-    const [address,setAddress] = useState("อำเภอเมืองชุมพรจังหวัดชุมพร")
+    const [tumbon ] = useState("เทศบาลตำบลบางหมาก")
+    const [address] = useState("อำเภอเมืองชุมพรจังหวัดชุมพร")
+      useEffect(()=>{
+        console.log(" window.location.pathname ", window.location.pathname)
+       },[ window.location.pathname])
 
-    return(window.location.pathname.indexOf("register") < 0 &&<div className="page-header  flex" >
+    return(window.location.pathname !== "/" &&<div className="page-header  flex" >
         <div className="tumbon-name  " >
             <p className="name" ><label>{tumbon}</label></p>
             <div className="address">{address}</div>
