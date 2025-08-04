@@ -42,7 +42,7 @@ const Home:React.FC=()=>{
 
     useEffect(()=>{
        if( isAuthenticated() ){
-         navigate("/register")
+        //  navigate("/register")
        }
     },[])
 

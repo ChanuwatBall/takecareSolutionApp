@@ -45,4 +45,17 @@ export const getDefaultCompay=async()=>{
     })
 }
 
+//userlineid
+export const userLineid=async(lineid:any)=>{
+        console.log("apiUrl   ",apiUrl)
+        console.log("token   ",token) 
+    return await api.post("userlineid",{lineId: lineid}).then((res)=>{
+        console.log("getDefaultCompay res ",res)
+        return res.data
+    }).catch((err)=>{
+        console.log("getDefaultCompay err ",err)
+        return null
+    })
+}
+
 export default {}

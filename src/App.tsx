@@ -4,7 +4,7 @@
 import { useEffect } from 'react';
 import liff from '@line/liff';
 
-import  {  Routes, Route } from 'react-router-dom';
+import  {  Routes, Route, useNavigate } from 'react-router-dom';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
 import NavApp from './components/NavApp';
@@ -18,9 +18,10 @@ import Activities from './pages/Activities';
 import ActivitieDetail from './pages/ActivitieDetail';
 import Register from './pages/Register';
 import { isAuthenticated } from './auth';
-import { getDefaultCompay } from './action';
+import { getDefaultCompay, setCookie, userLineid } from './action';
 
 function App() { 
+  const navigation = useNavigate()
   useEffect(() => {
     const getAppCompany=async ()=>{
       const companyapp = await getDefaultCompay()
@@ -33,8 +34,18 @@ function App() {
           if (!liff.isLoggedIn()) {
             liff.login(); 
           }
+          const profile = await liff.getProfile()
+          localStorage.setItem("token", JSON.stringify(liff.getAccessToken()))
+          setCookie("lineProfile",profile,30)
           console.log("liff token ", liff.getAccessToken())
-          console.log("liff profile ",await liff.getProfile())
+          console.log("liff profile ",profile)
+
+          const usr = await userLineid(profile?.userId)
+          if(usr.result ){
+            navigation("/")
+          }else{ 
+            navigation("/register")
+          }
         })
         .catch((err) => {
           console.error('LIFF init failed', err);
