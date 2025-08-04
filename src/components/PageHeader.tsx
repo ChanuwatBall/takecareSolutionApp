@@ -10,7 +10,7 @@ const PageHeader:React.FC=()=>{
         console.log(" window.location.pathname ", window.location.pathname)
        },[ window.location.pathname])
 
-    return(window.location.pathname !== "/" &&<div className="page-header  flex" >
+    return( <div className="page-header  flex" >
         <div className="tumbon-name  " >
             <p className="name" ><label>{tumbon}</label></p>
             <div className="address">{address}</div>

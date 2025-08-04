@@ -11,7 +11,7 @@ const NavApp=()=>{
    },[ window.location.pathname])
     
     return( 
-window.location.pathname !== "/"  && <div className="set-column bottom-nav " >
+  <div className="set-column bottom-nav " >
    <div className="wrapper-bottom-nav set-column" >
     <div className="left-wrapper-bottom-nav" >
         <div 

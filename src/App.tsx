@@ -1,8 +1,9 @@
 // import { useState } from 'react'
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
-// import { useEffect } from 'react';
-// import liff from '@line/liff';
+import { useEffect } from 'react';
+import liff from '@line/liff';
+
 import  {  Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
@@ -16,32 +17,56 @@ import Setting from './pages/Setting';
 import Activities from './pages/Activities';
 import ActivitieDetail from './pages/ActivitieDetail';
 import Register from './pages/Register';
+import { isAuthenticated } from './auth';
+import { getDefaultCompay } from './action';
 
 function App() { 
-  // useEffect(() => {
-  //   liff.init({ liffId: "2001116231-q0zBmZEw" })
-  //     .then(async () => {
-  //       console.log('LIFF init success');
-  //       if (!liff.isLoggedIn()) {
-  //         liff.login(); 
-  //       }
-  //       console.log("liff token ", liff.getAccessToken())
-  //       console.log("liff profile ",await liff.getProfile())
-  //     })
-  //     .catch((err) => {
-  //       console.error('LIFF init failed', err);
-  //     });
-  // }, []);
+  useEffect(() => {
+    const getAppCompany=async ()=>{
+      const companyapp = await getDefaultCompay()
+
+      console.log("companyapp ",companyapp)
+      if(companyapp && companyapp?.liffId){
+        liff.init({ liffId: companyapp?.liffId })
+        .then(async () => {
+          console.log('LIFF init success');
+          if (!liff.isLoggedIn()) {
+            liff.login(); 
+          }
+          console.log("liff token ", liff.getAccessToken())
+          console.log("liff profile ",await liff.getProfile())
+        })
+        .catch((err) => {
+          console.error('LIFF init failed', err);
+      }); 
+      }
+      // liff.init({ liffId: "2001116231-q0zBmZEw" })
+      //   .then(async () => {
+      //     console.log('LIFF init success');
+      //     if (!liff.isLoggedIn()) {
+      //       liff.login(); 
+      //     }
+      //     console.log("liff token ", liff.getAccessToken())
+      //     console.log("liff profile ",await liff.getProfile())
+      //   })
+      //   .catch((err) => {
+      //     console.error('LIFF init failed', err);
+      // }); 
+    }
+    getAppCompany()
+    
+  }, []);
 
 
   return ( 
     <div style={{background:"#FFF"}} > 
-      <PageHeader />
-      <NavApp />
+      {isAuthenticated() && <PageHeader /> }
+      {isAuthenticated() && <NavApp /> }
 
       <Routes>
-        <Route path="/" element={<Register />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/register" element={<Register />} />
+        {/* <Route path="/home" element={<Home />} /> */}
         <Route path="/profile" element={<Profile />} /> 
         <Route path="/complaint" element={<Complaint />} /> 
         <Route path="/complaint/add" element={<ComplaintForm />} /> 

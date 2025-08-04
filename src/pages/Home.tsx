@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./css/Home.css"
 import   { SwiperSlide ,Swiper } from "swiper/react";
+import { isAuthenticated } from "../auth";
+import { useNavigate } from "react-router-dom";
 // import type { Swiper as SwiperType } from "swiper/types";
 
 const Home:React.FC=()=>{
+    const navigate =  useNavigate()
 
     const [executive] = useState({
         image:"../assets/images/executive-profile.png" ,
@@ -36,6 +39,12 @@ const Home:React.FC=()=>{
             และความภาคภูมิใจร่วมกัน`
         ]
     })
+
+    useEffect(()=>{
+       if( isAuthenticated() ){
+         navigate("/register")
+       }
+    },[])
 
     return(
     <div className="page" style={{paddingTop:"0" }}>
