@@ -34,11 +34,7 @@ function App() {
           if (!liff.isLoggedIn()) {
             liff.login(); 
           }
-          const profile = await liff.getProfile()
-          localStorage.setItem("token", JSON.stringify(liff.getAccessToken()))
-          setCookie("lineProfile",profile,30)
-          console.log("liff token ", liff.getAccessToken())
-          console.log("liff profile ",profile)
+          const profile = await liff.getProfile() 
 
           const usr = await userLineid(profile?.userId)
           if(usr.result ){
@@ -50,19 +46,7 @@ function App() {
         .catch((err) => {
           console.error('LIFF init failed', err);
       }); 
-      }
-      // liff.init({ liffId: "2001116231-q0zBmZEw" })
-      //   .then(async () => {
-      //     console.log('LIFF init success');
-      //     if (!liff.isLoggedIn()) {
-      //       liff.login(); 
-      //     }
-      //     console.log("liff token ", liff.getAccessToken())
-      //     console.log("liff profile ",await liff.getProfile())
-      //   })
-      //   .catch((err) => {
-      //     console.error('LIFF init failed', err);
-      // }); 
+      } 
     }
     getAppCompany()
     
@@ -71,10 +55,10 @@ function App() {
 
   return ( 
     <div style={{background:"#FFF"}} > 
-      {isAuthenticated() && <PageHeader /> }
-      {isAuthenticated() && <NavApp /> }
+      {isAuthenticated() ?  <Routes>
+       <PageHeader /> 
+       <NavApp /> 
 
-      <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         {/* <Route path="/home" element={<Home />} /> */}
@@ -85,7 +69,13 @@ function App() {
         <Route path="/activities" element={<Activities />} /> 
         <Route path='/activities/detail' element={<ActivitieDetail/>} />
         <Route path='/register' element={<Register/>} />
+      </Routes>:
+      <Routes> 
+        <Route path="/" element={<Register />} />
+        <Route path="/register" element={<Register />} />  
       </Routes>
+      }
+
     </div>
   )
 }

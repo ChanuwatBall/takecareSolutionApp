@@ -1,7 +1,10 @@
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ActionSheet, ActionSheetButtonStyle } from '@capacitor/action-sheet';
 import { useNavigate } from "react-router-dom";
+import liff from "@line/liff";
+import { getDefaultCompay, setCookie, villageoption } from "../action";
+import Select from 'react-select';
 
 
 type FormData = {
@@ -14,24 +17,36 @@ type FormData = {
   gender: string;
   agree: boolean;
 };
+// const options = [
+//   { value: 'chocolate', label: 'Chocolate' },
+//   { value: 'strawberry', label: 'Strawberry' },
+//   { value: 'vanilla', label: 'Vanilla' },
+// ];
+
 const Register=()=>{
     const navigate = useNavigate();
     const [company] = useState({id:1 , name:"เทศบาลตำบลบางหมาก"})
-    const [image ,setImage] = useState(false)
+    const [isimage ,setIsImage] = useState(false)
+    const [selectedOption, setSelectedOption] = useState(null);
+    const [options , setOptions] = useState([])
+    const [lineprofile,setLineProfile]=useState(null)
+    const [image,setImage] = useState(null)
+    
+
     const [formData, setFormData] = useState<FormData>({
-    firstName: '',
-    lastName: '',
-    phone: '',
-    birthDate: '',
-    address: '',
-    village: '',
-    gender: '',
-    agree: false,
-  });
+      firstName: '',
+      lastName: '',
+      phone: '',
+      birthDate: '',
+      address: '',
+      village: '',
+      gender: '',
+      agree: false,
+    });
 
     const imagesprofile=(e:any)=>{
         console.log("imagesprofile ",e)
-        setImage(e)
+        setIsImage(e)
     }
   const handleChange = (e: any) => {
     console.log("handleChange ",e)
@@ -42,10 +57,41 @@ const Register=()=>{
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(()=>{
+    const getvillage=async()=>{ 
+      const companyapp = await getDefaultCompay() 
+      console.log("companyapp ",companyapp)
+      const opts= await villageoption(companyapp?.id)
+      console.log("opts ",opts)
+      setOptions(opts)
+
+      // if(!liff.isLoggedIn()){
+      //   liff.login()
+      // }
+      const profile:any = await liff.getProfile()
+      setLineProfile(profile)
+      console.log("profile ",profile)
+    }
+    getvillage()
+  },[])
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData, image);
+    console.log('Form submitted:', isimage); 
+     console.log("form ", formData)
+     console.log("village  ", selectedOption)
+    
+     
+      localStorage.setItem("token", JSON.stringify(liff.getAccessToken()))
+      // setCookie("lineProfile",lineprofile,30)
+ 
+      localStorage.setItem("token", JSON.stringify(liff.getAccessToken()))
+              
   };
+  const handleChangeOpt = (selectedOption:any) => {
+    setSelectedOption(selectedOption);
+  };
+
 
     return(
     <div className="page" style={{background:"#F7F7F9"}}>
@@ -53,19 +99,23 @@ const Register=()=>{
             <div className="bg-primary w-fit text-2xl text-white px-4 py-1 rounded-lg" >{company?.name}</div>
             <label className="text-primary-light my-5 font-medium">สมัครสมาชิก</label>
             <div className="profile-images" >
-                <CircleImageUploader onChange={imagesprofile} />
+                <CircleImageUploader onChange={imagesprofile} image={image} />
             </div>
-              <div className="w-full max-w-md bg-white mt-4 p-4 rounded-xl shadow" onSubmit={handleSubmit}>
+              <div className="w-full max-w-md bg-white mt-4 p-4 rounded-xl shadow"  >
                 <label className="block mb-2">ชื่อ*<input type="text" name="firstName" className="w-full border p-2 rounded border-gray-300" onChange={handleChange} /></label>
                 <label className="block mb-2">นามสกุล*<input type="text" name="lastName" className="w-full border p-2 rounded border-gray-300" onChange={handleChange} /></label>
                 <label className="block mb-2">หมายเลขโทรศัพท์*<input type="tel" name="phone" className="w-full border p-2 rounded border-gray-300" onChange={handleChange} /></label>
                 <label className="block mb-2">วันเกิด*<input type="date" name="birthDate" className="w-full border p-2 rounded border-gray-300" onChange={handleChange} /></label>
                 <label className="block mb-2">ที่อยู่<textarea name="address" className="w-full border p-2 rounded border-gray-300" onChange={handleChange}></textarea></label>
-                <label className="block mb-2">หมู่บ้าน<select name="village" className="w-full border p-2 rounded border-gray-300" onChange={handleChange}>
-                <option value="">เลือกหมู่บ้าน</option>
-                <option value="1">หมู่บ้าน 1</option>
-                <option value="2">หมู่บ้าน 2</option>
-                </select></label>
+                <label className="block mb-2">หมู่บ้าน
+                  <Select
+                    options={options}
+                    value={selectedOption}
+                    onChange={handleChangeOpt}
+                    placeholder="เลือกหมู่บ้าน..."
+                  />
+                 
+                </label> 
             </div>
             <div className="w-full max-w-md bg-white mt-4 p-4 rounded-xl shadow"> 
                 <div className="mb-2">เพศ*<div>
@@ -78,7 +128,7 @@ const Register=()=>{
               
             </div><br/>
               <button type="submit" 
-              onClick={()=>{navigate("/home")}}
+              onClick={handleSubmit}
               className="w-full bg-blue-600 bg-primary text-white py-2 rounded hover:bg-blue-700">สมัครสมาชิก</button>
         </div>
     </div>
@@ -90,10 +140,10 @@ export default Register
 
 type ImageUploaderProps = {
   onChange?: (imageDataUrl: any) => void;
+  image: any
 };
 
-const CircleImageUploader: React.FC<ImageUploaderProps> = ({ onChange }) => {
-  const [image, setImage] = useState<string | null>(null);
+const CircleImageUploader: React.FC<ImageUploaderProps> = ({ onChange  ,image}) => {
 
   const pickImage = async () => {
     try {
@@ -103,7 +153,7 @@ const CircleImageUploader: React.FC<ImageUploaderProps> = ({ onChange }) => {
         resultType: CameraResultType.DataUrl,
         source: CameraSource.Photos,
       });
-      setImage(photo.dataUrl || null);
+      // setImage(photo.dataUrl || null);
       onChange?.(photo || null);
     } catch (err) {
       console.error('Image selection cancelled or failed', err);
@@ -125,7 +175,7 @@ const CircleImageUploader: React.FC<ImageUploaderProps> = ({ onChange }) => {
        if (result.index === 0) {
         pickImage();
       } else if (result.index === 1) {
-        setImage(null);
+        // setImage(null);
         onChange?.(null);
       }
     } else {

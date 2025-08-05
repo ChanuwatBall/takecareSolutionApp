@@ -43,8 +43,9 @@ const Home:React.FC=()=>{
     useEffect(()=>{
        if( isAuthenticated() ){
         //  navigate("/register")
+        
        }
-    },[])
+    },[]) 
 
     return(
     <div className="page" style={{paddingTop:"0" }}>
