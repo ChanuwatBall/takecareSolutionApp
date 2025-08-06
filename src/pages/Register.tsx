@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { ActionSheet, ActionSheetButtonStyle } from '@capacitor/action-sheet';
 import { useNavigate } from "react-router-dom";
 import liff from "@line/liff";
-import { getDefaultCompay, setCookie, villageoption } from "../action";
+import { getDefaultCompay, registerNewMember, setCookie, villageoption } from "../action";
 import Select from 'react-select';
 
 
@@ -22,70 +22,140 @@ type FormData = {
 //   { value: 'strawberry', label: 'Strawberry' },
 //   { value: 'vanilla', label: 'Vanilla' },
 // ];
+interface LineProfile {
+    userId: String
+    displayName: String
+    statusMessage:  String
+    pictureUrl:  String
+}
 
 const Register=()=>{
     const navigate = useNavigate();
-    const [company] = useState({id:1 , name:"เทศบาลตำบลบางหมาก"})
+    const [company,setCompany] = useState<any>({id:1 , name:"เทศบาลตำบลบางหมาก"})
     const [isimage ,setIsImage] = useState(false)
-    const [selectedOption, setSelectedOption] = useState(null);
+    const [selectedOption, setSelectedOption] = useState<any>(null);
     const [options , setOptions] = useState([])
-    const [lineprofile,setLineProfile]=useState(null)
-    const [image,setImage] = useState(null)
-    
-
-    const [formData, setFormData] = useState<FormData>({
-      firstName: '',
-      lastName: '',
-      phone: '',
-      birthDate: '',
-      address: '',
-      village: '',
-      gender: '',
-      agree: false,
-    });
+    const [lineprofile,setLineProfile]=useState<LineProfile | null>(null)
+    const [image,setImage] = useState<any>(null)
+    const [imgFormat , setImgFormat] = useState("jpeg")
+    const [firstName , setFirstName] = useState("")
+    const [lastName , setLastName] = useState("")
+    const [phone , setPhone] = useState("")
+    const [birthDate , setBirthDate] = useState("")
+    const [address , setAddress] = useState("")
+    const [gender , setGender] = useState("")
+    const [agree , setAgree] = useState(false)  
+     
 
     const imagesprofile=(e:any)=>{
         console.log("imagesprofile ",e)
         setIsImage(e)
+        setImage(e?.dataUrl)
+        setImgFormat(e?.format)
     }
-  const handleChange = (e: any) => {
-    console.log("handleChange ",e)
-    const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value,
-    }));
-  };
+    
 
   useEffect(()=>{
     const getvillage=async()=>{ 
       const companyapp = await getDefaultCompay() 
       console.log("companyapp ",companyapp)
+      setCompany(companyapp)
       const opts= await villageoption(companyapp?.id)
       console.log("opts ",opts)
       setOptions(opts)
-
-      // if(!liff.isLoggedIn()){
-      //   liff.login()
-      // }
+ 
       const profile:any = await liff.getProfile()
       setLineProfile(profile)
       console.log("profile ",profile)
+      setImage(profile?.pictureUrl)
+
     }
     getvillage()
   },[])
 
+    const fetchImage = async (imageUrl:any) => { 
+        const response = await fetch(imageUrl);
+        const blob = await response.blob();
+        const file = new File([blob], 'image.jpg', { type: blob.type });
+ 
+        return await file //mageUrlFromFile 
+  }
+
+  const dataURLToFile = (dataUrl: string, filename: string): File => {
+    // Split the dataURL into the base64 part and the metadata part
+    const [metadata, base64String] = dataUrl.split(',');
+
+    // Convert the base64 string to a binary format (ArrayBuffer)
+    const byteCharacters = atob(base64String); // Decode the base64 string
+    const byteArrays = [];
+
+    // Convert the byteCharacters into an array of bytes
+    for (let offset = 0; offset < byteCharacters.length; offset++) {
+      byteArrays.push(byteCharacters.charCodeAt(offset));
+    }
+
+    // Create a Blob from the binary data
+    const byteArray = new Uint8Array(byteArrays);
+    const blob = new Blob([byteArray], { type: 'image/'+imgFormat  });
+
+    // Convert the Blob into a File
+    return new File([blob], filename, { type: 'image/'+imgFormat  });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', isimage); 
-     console.log("form ", formData)
+      console.log("profile ",lineprofile)
+      console.log('Form submitted:', isimage);  
      console.log("village  ", selectedOption)
-    
-     
-      localStorage.setItem("token", JSON.stringify(liff.getAccessToken()))
-      // setCookie("lineProfile",lineprofile,30)
- 
-      localStorage.setItem("token", JSON.stringify(liff.getAccessToken()))
+     let fileprofile = null
+     if(image.indexOf("profile.line-scdn.net") > -1 ){
+      fileprofile = await fetchImage(image)
+      console.log("file ",fileprofile)
+     }else{
+      fileprofile =  dataURLToFile(image , "profile-upload."+imgFormat)
+      console.log("file ",fileprofile)
+     }
+    //  const body ={ 
+    //     image ,
+    //     firstName ,  
+    //     lastName ,  
+    //     phone ,  
+    //     birthDate , 
+    //     address ,  
+    //     gender , 
+    //     agree  ,
+    //     lineUserId: lineprofile?.userId ,
+    //     lineName: lineprofile?.displayName
+    //  }
+    //  console.log(" body ",body)    
+     const formData = new FormData();
+      formData.append('image',fileprofile);
+      formData.append('firstName',firstName); 
+      formData.append('lastName',lastName);
+      formData.append('phone',phone);
+      formData.append('birthDate',birthDate);
+      formData.append('address',address);
+      formData.append('gender',gender);
+      formData.append('address',address);
+      formData.append('agree',agree.toString()); 
+      
+      let lineUserId:any =lineprofile?.userId
+      let lineName:any =lineprofile?.displayName
+      formData.append('lineUserId', lineUserId );
+      formData.append('lineName', lineName );
+      formData.append('villageId', selectedOption?.value );
+      formData.append('companyId', company?.id );
+      
+      const result = await registerNewMember(formData)
+      console.log(" registerNewMember result ",result)
+      if(result?.result){ 
+        setCookie("member", result?.villager,30)
+        localStorage.setItem("token", JSON.stringify(liff.getAccessToken())) 
+        localStorage.setItem("token", JSON.stringify(liff.getAccessToken()))
+        navigate("/")
+      }else{
+
+      } 
               
   };
   const handleChangeOpt = (selectedOption:any) => {
@@ -102,11 +172,36 @@ const Register=()=>{
                 <CircleImageUploader onChange={imagesprofile} image={image} />
             </div>
               <div className="w-full max-w-md bg-white mt-4 p-4 rounded-xl shadow"  >
-                <label className="block mb-2">ชื่อ*<input type="text" name="firstName" className="w-full border p-2 rounded border-gray-300" onChange={handleChange} /></label>
-                <label className="block mb-2">นามสกุล*<input type="text" name="lastName" className="w-full border p-2 rounded border-gray-300" onChange={handleChange} /></label>
-                <label className="block mb-2">หมายเลขโทรศัพท์*<input type="tel" name="phone" className="w-full border p-2 rounded border-gray-300" onChange={handleChange} /></label>
-                <label className="block mb-2">วันเกิด*<input type="date" name="birthDate" className="w-full border p-2 rounded border-gray-300" onChange={handleChange} /></label>
-                <label className="block mb-2">ที่อยู่<textarea name="address" className="w-full border p-2 rounded border-gray-300" onChange={handleChange}></textarea></label>
+                <label className="block mb-2">ชื่อ*
+                  <input 
+                    type="text" name="firstName" 
+                    className="w-full border p-2 rounded border-gray-300"
+                    onChange={(e:any)=>{setFirstName(e.target.value)}} />
+                  </label>
+                <label className="block mb-2">นามสกุล*
+                  <input 
+                   type="text" name="lastName" 
+                   className="w-full border p-2 rounded border-gray-300" 
+                   onChange={(e)=>{setLastName(e.target.value)}} 
+                  /></label>
+                <label className="block mb-2">หมายเลขโทรศัพท์*
+                  <input 
+                    type="tel" name="phone" 
+                    className="w-full border p-2 rounded border-gray-300" 
+                    onChange={(e)=>{setPhone(e.target.value)}} />
+                  </label>
+                <label className="block mb-2">วันเกิด*
+                   <input 
+                    type="date" name="birthDate" 
+                    className="w-full border p-2 rounded border-gray-300" 
+                    onChange={(e)=>{setBirthDate(e.target.value)}} 
+                  /></label>
+                <label className="block mb-2">ที่อยู่
+                   <textarea 
+                      name="address" 
+                      className="w-full border p-2 rounded border-gray-300" 
+                      onChange={(e)=>{setAddress(e.target.value)}}
+                   ></textarea></label>
                 <label className="block mb-2">หมู่บ้าน
                   <Select
                     options={options}
@@ -119,12 +214,23 @@ const Register=()=>{
             </div>
             <div className="w-full max-w-md bg-white mt-4 p-4 rounded-xl shadow"> 
                 <div className="mb-2">เพศ*<div>
-                <label className="mr-4"><input type="radio" name="gender" value="ชาย" onChange={handleChange}/> ชาย</label>
-                <label><input type="radio" name="gender" value="หญิง" onChange={handleChange}/> หญิง</label>
+                <label className="mr-4">
+                  <input 
+                    type="radio" name="gender" value="ชาย" 
+                    onChange={(e)=>{setGender("male")}}/> ชาย
+                  </label>
+                <label>
+                  <input 
+                    type="radio" name="gender" value="หญิง" 
+                    onChange={(e)=>{setGender("female")}}/> หญิง
+                  </label>
                 </div></div>
             </div>
             <div className="w-full max-w-md bg-white mt-4 p-4 rounded-xl shadow">  
-                <label className="block mb-4"><input type="checkbox" name="agree" onChange={handleChange}/> ฉันยินยอมให้ร้านเก็บและใช้ข้อมูลส่วนตัวตามนโยบาย</label>
+                <label className="block mb-4">
+                  <input type="checkbox" name="agree"
+                   onChange={(e)=>{setAgree(true)}}
+                  /> ฉันยินยอมให้ร้านเก็บและใช้ข้อมูลส่วนตัวตามนโยบาย</label>
               
             </div><br/>
               <button type="submit" 
@@ -182,6 +288,10 @@ const CircleImageUploader: React.FC<ImageUploaderProps> = ({ onChange  ,image}) 
       pickImage();
     }
   };
+
+  useEffect(()=>{
+
+  },[image])
 
   return (
     <div className="flex justify-center items-center mt-4">

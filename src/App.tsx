@@ -18,7 +18,7 @@ import Activities from './pages/Activities';
 import ActivitieDetail from './pages/ActivitieDetail';
 import Register from './pages/Register';
 import { isAuthenticated } from './auth';
-import { getDefaultCompay, setCookie, userLineid } from './action';
+import { getDefaultCompay,   userLineid } from './action';
 
 function App() { 
   const navigation = useNavigate()
@@ -54,10 +54,12 @@ function App() {
 
 
   return ( 
-    <div style={{background:"#FFF"}} > 
-      {isAuthenticated() ?  <Routes>
-       <PageHeader /> 
-       <NavApp /> 
+    <   > 
+       {isAuthenticated() &&( <> 
+         <PageHeader /> 
+         <NavApp /> </>)
+       }
+      {isAuthenticated() ?(  <Routes>
 
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
@@ -69,14 +71,14 @@ function App() {
         <Route path="/activities" element={<Activities />} /> 
         <Route path='/activities/detail' element={<ActivitieDetail/>} />
         <Route path='/register' element={<Register/>} />
-      </Routes>:
+      </Routes>):(
       <Routes> 
         <Route path="/" element={<Register />} />
         <Route path="/register" element={<Register />} />  
-      </Routes>
+      </Routes>)
       }
 
-    </div>
+    </>
   )
 }
 

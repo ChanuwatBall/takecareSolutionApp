@@ -7,7 +7,7 @@ const api = axios.create({
     baseURL: apiUrl+"/api/liffapp"  ,
     headers: {
         Authorization: "Bearer "+token ,
-       "Content-Type": "application/json" 
+    //    "Content-Type": "application/json" 
         // 'Content-Type': 'application/json',
     }, 
 })
@@ -59,15 +59,23 @@ export const userLineid=async(lineid:any)=>{
     })
 }
 ///villageoption
-export const villageoption=async(companyid:any)=>{
-        console.log("apiUrl   ",apiUrl)
-        console.log("token   ",token) 
+export const villageoption=async(companyid:any)=>{ 
     return await api.post("villageoption",{companyId: companyid}).then((res)=>{
         console.log("userLineid res ",res)
         return res.data
     }).catch((err)=>{
         console.log("userLineid err ",err)
         return null
+    })
+}
+
+export const registerNewMember=async(form:any)=>{
+    return await api.post("registernewvillager", form ).then((res)=>{
+        console.log("registerNewMember res ",res)
+        return res.data
+    }).catch((err)=>{
+        console.log("registerNewMember err ",err)
+        return {result:false}
     })
 }
 
