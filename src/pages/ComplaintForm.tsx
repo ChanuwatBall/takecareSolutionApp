@@ -2,7 +2,7 @@
 
 
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Swiper ,SwiperSlide } from 'swiper/react';  
 import { Camera, CameraResultType, type GalleryPhotos, type Photo } from '@capacitor/camera';
 
@@ -12,6 +12,7 @@ import "./css/ComplaintForm.css"
 //@ts-ignore
 import 'swiper/css';      
 import type { Swiper as SwiperType } from "swiper/types";
+import { useAlert } from "../components/AlertContext";
 // import L from "leaflet"
 
 
@@ -19,11 +20,14 @@ import type { Swiper as SwiperType } from "swiper/types";
 let L = window?.leaflet
  var map:any = null
 const ComplaintForm=()=>{
-    const [topic,setTopic] = useState("")
-    const [subtitle,setSupTitle] = useState("")
-    const [phone,setPhone] = useState("")
-    const [detail,setDetail] = useState("")
+    const [showAlert] = useAlert();
+    const { type , title } = useParams<{ type: string , title:string}>();
+    const [topic,setTopic] = useState<any>("")
+    const [subtitle,setSupTitle] = useState<any>("")
+    const [phone,setPhone] = useState<any>("")
+    const [detail,setDetail] = useState<any>("")
     const [images , setImages] = useState<any[]>([])
+    const [complainTopic, setComplainTopic] = useState<any>("")
     const maxLengthImage = 5;
 
     const navigate = useNavigate();
@@ -46,49 +50,69 @@ const ComplaintForm=()=>{
        console.log("location ",location)
     }
 
-    const confirmComplaint=()=>{
-        // navigate("/complaint")
-        setOpen(true)
+    useEffect(()=>{ 
+        setTopic(title)
+        setComplainTopic(type)
+    },[])
 
+    const confirmComplaint=()=>{ 
+        setOpen(true) 
     }
 
 
     const takePicture = async () => {
-        if(images.length < maxLengthImage){
-            const image:Photo = await Camera.getPhoto({
-                quality: 70,
-                allowEditing: true,
-                resultType: CameraResultType.Uri
-            });
-
-            // image.webPath will contain a path that can be set as an image src.
-            // You can access the original file using image.path, which can be
-            // passed to the Filesystem API to read the raw data of the image,
-            // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
-            let imageUrl = image.webPath;
-            console.log("imageUrl ",imageUrl)
-            setImages([images ,  imageUrl ])
-            // Can be set to the src of an image now
-            // imageElement.src = imageUrl;
+        if(images?.length < maxLengthImage){
+            try { 
+                const image:Photo = await Camera.getPhoto({
+                    quality: 70,
+                    allowEditing: true,
+                    resultType: CameraResultType.Uri
+                }).then(e =>{
+                    return e
+                }).catch(err=>{
+                    console.log(" err",err)
+                    return err
+                })
+     
+                let imageUrl = image.webPath; 
+                const addimg = [...images ,  imageUrl ] 
+                setImages(addimg)
+            
+            } catch (error) {
+               console.log("err ", error) 
+            }
         }else{
 
         }
     };
 
     const pickImages=async ()=>{
-         if(images.length < maxLengthImage){
-            const image:GalleryPhotos    = await Camera.pickImages({
-                quality: 70,  
-                presentationStyle: 'fullscreen' ,
-                limit: maxLengthImage - images.length
-            })
-            let imageUrl:any[] = []
-            image?.photos.map((p)=>{
-                imageUrl = [...imageUrl , p?.webPath]
-            }) 
-            console.log("imageUrl ",imageUrl)
-            setImages( [...images , ...imageUrl ]  )
+        try { 
+            if(images.length < maxLengthImage){
+                const image:GalleryPhotos    = await Camera.pickImages({
+                    quality: 70,  
+                    presentationStyle: 'fullscreen' ,
+                    limit: maxLengthImage - images.length
+                })
+                let imageUrl:any[] = []
+                image?.photos.map((p)=>{
+                    imageUrl = [...imageUrl , p?.webPath]
+                })  
+                setImages( [...images , ...imageUrl ]  )
+            }
+        } catch (error) {
+            console.log("err ",error)
         }
+    }
+
+    function continueform(){
+         if(
+            !subtitle || !phone || !detail || images.length === 0
+         ){
+            showAlert("โปรดกรอกข้อมูลให้ครบถ้วน !!")
+         }else{
+         swiperref?.slideNext()
+         }
     }
 
     return(
@@ -126,7 +150,9 @@ const ComplaintForm=()=>{
                         <div className="row-input flex column " style={{alignItems:"flex-start"}} >
                             <label className="title" >หัวข้อเรื่องย่อย* </label>
                             <div className="input" >
-                                <input placeholder="โปรดเลือก" value={subtitle} onChange={(e)=>{setSupTitle(e.target.value)}}>
+                                <input 
+                                placeholder="โปรดระบุ" value={subtitle} 
+                                onChange={(e)=>{setSupTitle(e.target.value)}}>
                                 </input>
                             </div>
                         </div>
@@ -151,12 +177,12 @@ const ComplaintForm=()=>{
                                 
                             </label>
                             <button onClick={()=>{takePicture()}} >
-                                <img src="../assets/images/camera.png"  />
+                                <img src="assets/images/camera.png"  />
                                 <label>ถ่ายรูป</label>
                             </button>
                             
                             <button onClick={()=>{pickImages()}} >
-                                <img src="../assets/images/picture.png"  />
+                                <img src="assets/images/picture.png"  />
                                 <label>แนบรูป</label>
                             </button>
                         </div>
@@ -164,7 +190,7 @@ const ComplaintForm=()=>{
                             <button className="back" onClick={()=>{navigate(-1)}} >
                                 <label>ย้อนกลับ</label>
                             </button>
-                            <button className="next" onClick={()=>{swiperref?.slideNext() }} >
+                            <button className="next" onClick={()=>{continueform(); }} >
                                 <label>ถัดไป</label>
                             </button>
                         </div>
@@ -173,7 +199,7 @@ const ComplaintForm=()=>{
                 <SwiperSlide>
                     <MapPosition />
                     <button className="find-my-loaction" onClick={()=>{userlocation()}} >
-                        <img src="../assets/images/pin-locatiion.png" />
+                        <img src="assets/images/pin-locatiion.png" />
                          ตำแหน่งของฉัน
                     </button>
                     <div className="row-input "  >

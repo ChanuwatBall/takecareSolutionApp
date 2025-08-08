@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { ActionSheet, ActionSheetButtonStyle } from '@capacitor/action-sheet';
 import { useNavigate } from "react-router-dom";
 import liff from "@line/liff";
-import { getDefaultCompay, registerNewMember, setCookie, villageoption } from "../action";
+import { getDefaultCompay, registerNewMember, setCookie, userLineid, villageoption } from "../action";
 import Select from 'react-select';
 
 
@@ -64,7 +64,18 @@ const Register=()=>{
       console.log("opts ",opts)
       setOptions(opts)
  
-      const profile:any = await liff.getProfile()
+      const profile:any = await liff.getProfile() 
+
+      const usr = await userLineid(profile?.userId)
+      if(usr.result ){
+        navigate("/")
+        setCookie("member", usr?.villager,30)
+        setCookie("profile", profile ,30)
+        localStorage.setItem("token", JSON.stringify(liff.getAccessToken()))  
+      }else{ 
+        navigate("/register")
+      }
+
       setLineProfile(profile)
       console.log("profile ",profile)
       setImage(profile?.pictureUrl)
@@ -73,7 +84,7 @@ const Register=()=>{
     getvillage()
   },[])
 
-    const fetchImage = async (imageUrl:any) => { 
+  const fetchImage = async (imageUrl:any) => { 
         const response = await fetch(imageUrl);
         const blob = await response.blob();
         const file = new File([blob], 'image.jpg', { type: blob.type });
@@ -114,20 +125,8 @@ const Register=()=>{
      }else{
       fileprofile =  dataURLToFile(image , "profile-upload."+imgFormat)
       console.log("file ",fileprofile)
-     }
-    //  const body ={ 
-    //     image ,
-    //     firstName ,  
-    //     lastName ,  
-    //     phone ,  
-    //     birthDate , 
-    //     address ,  
-    //     gender , 
-    //     agree  ,
-    //     lineUserId: lineprofile?.userId ,
-    //     lineName: lineprofile?.displayName
-    //  }
-    //  console.log(" body ",body)    
+     } 
+
      const formData = new FormData();
       formData.append('image',fileprofile);
       formData.append('firstName',firstName); 

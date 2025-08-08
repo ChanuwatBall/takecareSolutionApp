@@ -1,13 +1,37 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./css/Profile.css"
+import { getCookie, userLineid } from "../action";
+import liff from "@line/liff";
+const apiUrl = import.meta.env.VITE_API;
 
 const Profile:React.FC=()=>{
-    const  [profile]  = useState({
-        profile: "../assets/images/member-profile.jpg" ,
-        first_name:"นพวิชญ์" ,
-        last_name:"นาคเพ่งพิศ",
-        village:"หมู่ 1",
-        familyMember:2 
+    const  [profile , setProfile]  = useState({
+        // profile: "../assets/images/member-profile.jpg" ,
+        // first_name:"นพวิชญ์" ,
+        // last_name:"นาคเพ่งพิศ",
+        // village:"หมู่ 1",
+        // familyMember:2 
+       
+        "id": 18,
+        "lineName": "TH.CHANU",
+        "firstName": "Chanuwat",
+        "lastName": "Thongbut",
+        "phoneNumber": "090-0000000",
+        "birthDate": "2025-08-05",
+        "address": "55/34 M.2",
+        "gender": "male",
+        "agreePolicy": null,
+        "email": null,
+        "lineId": null,
+        "profile": "1beiOitXh1CdTfuZr3Z1RtETgcdoprGuW",
+        "villageId": 1,
+        "villageName": null,
+        "subdistrictId": 1,
+        "subdistrictName": "เทศบาลตำบลบางหมาก",
+        "companyId": 1,
+        "companyName": "เทศบาลตำบลบางหมาก",
+        "createdAt": null
+
     })
     const [complaintStatus  ] = useState({
         wait: 0 ,
@@ -22,6 +46,20 @@ const Profile:React.FC=()=>{
         { topic:"ขยะ" ,admin:"เทศกิจ" , status: "กำลังดำเนินการ" },
     ])
 
+    useEffect(()=>{
+        const getuservillager=async ()=>{
+            // const member = await getCookie("member")
+            // console.log("getuservillager member ",member)
+            const profile:any = await liff.getProfile() 
+            const usr = await userLineid(profile?.userId)
+            console.log(" usr ",usr)
+            setProfile(usr?.villager)
+                 
+
+        }
+        getuservillager()
+    },[])
+
     return(
     <div className="page">
         <div className="card-profile  flex items-center ">
@@ -29,15 +67,15 @@ const Profile:React.FC=()=>{
                 <div 
                     className="wrap-member-profile flex items-center justify-center ">
                     <img 
-                        src={profile?.profile} 
+                        src={apiUrl+"/api/file/drive-image/"+profile?.profile} 
                         alt="member-profile" 
                     />
                 </div>  
             </div>
             <div className="profile-detail flex items-start justify-center column">
-                <label className="profile-member-name" >{profile?.first_name} {profile?.last_name}</label>
-                <div className="chip-profile" >ลูกบ้าน{profile?.village}</div>
-                <div className="chip-profile" >จำนวนสมาชิกในครอบครัว {profile?.familyMember}</div>
+                <label className="profile-member-name" >{profile?.firstName} {profile?.lastName}</label>
+                <div className="chip-profile" >ลูกบ้าน{profile?.villageName} {profile?.subdistrictName}</div>
+                <div className="chip-profile" >จำนวนสมาชิกในครอบครัว 0</div>
             </div> 
         </div>
 

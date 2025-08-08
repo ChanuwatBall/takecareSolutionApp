@@ -5,12 +5,15 @@ import './index.css'
 import App from './App.tsx'
 
 import { defineCustomElements } from '@ionic/pwa-elements/loader';
+import { AlertProvider } from './components/AlertContext.tsx';
 
 defineCustomElements(window);
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter> 
+    <AlertProvider> 
      <App />
+     </AlertProvider>
     </BrowserRouter>
   </StrictMode>,
 )

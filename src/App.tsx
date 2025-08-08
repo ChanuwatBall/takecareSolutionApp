@@ -18,7 +18,7 @@ import Activities from './pages/Activities';
 import ActivitieDetail from './pages/ActivitieDetail';
 import Register from './pages/Register';
 import { isAuthenticated } from './auth';
-import { getDefaultCompay,   userLineid } from './action';
+import { getDefaultCompay,   setCookie,   userLineid } from './action';
 
 function App() { 
   const navigation = useNavigate()
@@ -34,14 +34,7 @@ function App() {
           if (!liff.isLoggedIn()) {
             liff.login(); 
           }
-          const profile = await liff.getProfile() 
-
-          const usr = await userLineid(profile?.userId)
-          if(usr.result ){
-            navigation("/")
-          }else{ 
-            navigation("/register")
-          }
+         
         })
         .catch((err) => {
           console.error('LIFF init failed', err);
@@ -66,7 +59,7 @@ function App() {
         {/* <Route path="/home" element={<Home />} /> */}
         <Route path="/profile" element={<Profile />} /> 
         <Route path="/complaint" element={<Complaint />} /> 
-        <Route path="/complaint/add" element={<ComplaintForm />} /> 
+        <Route path="/complaint/add/:type/:title" element={<ComplaintForm />} /> 
         <Route path="/setting" element={<Setting />} /> 
         <Route path="/activities" element={<Activities />} /> 
         <Route path='/activities/detail' element={<ActivitieDetail/>} />
