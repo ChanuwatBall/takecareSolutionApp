@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Swiper ,SwiperSlide } from 'swiper/react';  
 import { Camera, CameraResultType, type GalleryPhotos, type Photo } from '@capacitor/camera';
-
+// import {type Marker as MarkerType }from "leaflet"
 
 import "./css/Complaint.css"
 import "./css/ComplaintForm.css" 
@@ -13,12 +13,17 @@ import "./css/ComplaintForm.css"
 import 'swiper/css';      
 import type { Swiper as SwiperType } from "swiper/types";
 import { useAlert } from "../components/AlertContext";
+import { createComplaint, getCookie } from "../action";
+import {Geolocation} from "@capacitor/geolocation"
+import liff from "@line/liff";
+import axios from "axios"
 // import L from "leaflet"
 
 
 //@ts-ignore
 let L = window?.leaflet
  var map:any = null
+ let marker:  any = null
 const ComplaintForm=()=>{
     const [showAlert] = useAlert();
     const { type , title } = useParams<{ type: string , title:string}>();
@@ -29,25 +34,28 @@ const ComplaintForm=()=>{
     const [images , setImages] = useState<any[]>([])
     const [complainTopic, setComplainTopic] = useState<any>("")
     const maxLengthImage = 5;
+    const [curlocation , setCurLocation] = useState<any>(null)
+    
 
     const navigate = useNavigate();
     const [swiperref , setSwiperRef ] = useState<SwiperType|any>(null)
     const [ openmodal ,setOpen] = useState(false)
 
     const userlocation=async()=>{
-       const location=await map?.locate({setView: true })
-        .on('locationfound', function(e:any){
-            var marker = L.marker([e.latitude, e.longitude]).bindPopup('ตำแหน่งของคุณ)');
-            map.setView([e.latitude, e.longitude],16)
-           
-            map.addLayer(marker);
-            // map.addLayer(circle);
-        })
-       .on('locationerror', function(e:any){
-            console.log(e);
-            alert("Location access denied.");
-        });
-       console.log("location ",location)
+        await Geolocation.getCurrentPosition({enableHighAccuracy:true}).then((e) =>{
+            console.log("coord ", e?.coords)
+            if(e.coords){
+                setCurLocation(e.coords)
+                if(marker==null){ 
+                    marker = L.marker([e.coords.latitude, e.coords.longitude]).bindPopup('ตำแหน่งของคุณ)');
+                    map.setView([e.coords.latitude, e.coords.longitude],16)
+                
+                    map.addLayer(marker);
+                }else{
+                    marker?.setLatLng([e.coords.latitude, e.coords.longitude],16);
+                }
+            }
+        }) 
     }
 
     useEffect(()=>{ 
@@ -122,20 +130,154 @@ const ComplaintForm=()=>{
          if(
             !subtitle || !phone || !detail || images.length === 0
          ){
-            showAlert("โปรดกรอกข้อมูลให้ครบถ้วน !!")
+            showAlert("โปรดกรอกข้อมูลให้ครบถ้วน !!","warning")
          }else{
          swiperref?.slideNext()
          }
     }
 
-    const acceptform=()=>{
-        setOpen(false)
+    const blobUrlToFile = async (blobUrl: string, filename: string): Promise<File> => {
+        const response = await fetch(blobUrl);  // Fetch the blob data
+        const blob = await response.blob();     // Get the blob from the response
+        const file = new File([blob], filename, { type: blob.type }); // Convert blob to file
+        return file;
+    };
 
-        const form ={
-            topic , subtitle , phone , detail ,images ,complainTopic
-        } 
-        console.log("form ",form)
+
+    const acceptform=async ()=>{
+        setOpen(false)
+        const formData = new FormData();
+        const villager = await getCookie("member")
+        console.log("villager ",villager)
+        let files: any[] = []
+       await Promise.all ( await images.map( async (e,index)=>{
+            const img = await  blobUrlToFile(e.webPath, `complaint-img${index}.${e.format}`)
+            files = [...files , img]
+            formData.append('files',img);
+        })
+        )
+        const line = await liff.getProfile() 
+        formData.append('curlocation',curlocation);
+        formData.append('topic',topic);
+        formData.append('subtitle',subtitle);
+        formData.append('phone',phone);
+        formData.append('detail',detail);
+        formData.append('complainTopic',complainTopic);
+        formData.append('villagerId',villager?.id);
+        formData.append('villageId',  villager?.villageId );
+        formData.append('lineId',  line?.userId );
+
+
+        // console.log("form ",form) 
+        const result = await createComplaint(formData)
+        if(result?.result ){ 
+            showAlert(result?.description,"success")
+
+        }else{
+            showAlert(result?.description,"error")
+        }
     }
+
+    const sendCarouselMessage = async () => {
+        if (!liff.isLoggedIn()) {
+            liff.login(); // If not logged in, prompt user to log in
+            return;
+        }
+
+        try {
+            const messages:any = [
+            {
+                type: 'template',
+                altText: 'This is a carousel template',
+                template: {
+                    type: 'carousel',
+                    columns: [
+                    {
+                        thumbnailImageUrl: 'https://example.com/thumbnail1.jpg',
+                        title: 'Title 1',
+                        text: 'Description 1',
+                        actions: [
+                        {
+                            type: 'uri',
+                            label: 'View More',
+                            uri: 'https://example.com/page1',
+                        },
+                        ],
+                    },
+                    {
+                        thumbnailImageUrl: 'https://example.com/thumbnail2.jpg',
+                        title: 'Title 2',
+                        text: 'Description 2',
+                        actions: [
+                        {
+                            type: 'uri',
+                            label: 'View More',
+                            uri: 'https://example.com/page2',
+                        },
+                        ],
+                    },
+                    ],
+                },
+              },
+            ];
+            const res =await liff.sendMessages(messages);
+            console.log("send msg ",res)
+            // alert('Carousel message sent successfully!');
+        } catch (error) {
+            // console.error('Error sending carousel message', error);
+        }
+    };
+
+    const sendMessage = async () => {
+        if (!liff.isLoggedIn()) {
+         liff.login(); // If not logged in, prompt user to log in
+         return;
+        }
+
+        
+        const accessToken = liff.getAccessToken();
+        try {
+            // Verify the access token
+            const result = await  axios({
+            method: 'POST',
+            url: 'https://api.line.me/v2/oauth2/v1/verify',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            },
+            withCredentials: true,  // Add credentials if necessary (cookies, etc.)
+            })
+            .then((response) => {
+                console.log('Response:', response.data);
+                return response
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                return error
+            });
+          
+
+            console.log(result); // Should show user info and granted scopes
+
+            // Check if the necessary permission is granted
+            if (!result.data.scope || !result.data.scope.includes('chat_message.write')) {
+            alert('Required permission not granted: chat_message.write');
+            return;
+            }
+
+            // Send message
+            const message:any = {
+            type: 'text',
+            text: 'Hello, this is a test message sent from LIFF!',
+            };
+
+            await liff.sendMessages([message]);
+            alert('Message sent successfully!');
+        } catch (error) {
+            console.error('Error verifying access token or sending message:', error);
+            alert('Failed to verify access token or send message');
+        }
+    };
 
     const removeimage=(e:any)=>{
         console.log(" remove images ",e)
@@ -165,6 +307,7 @@ const ComplaintForm=()=>{
         </div> 
           <div  className="complaints-menu" >  
             <Swiper
+            draggable={false}
             spaceBetween={5}
             slidesPerView={1}
             onSlideChange={() => console.log('slide change')}
@@ -191,7 +334,11 @@ const ComplaintForm=()=>{
                         <div className="row-input row" >
                             <label className="title" >เบอร์โทรที่สามารถติดต่อได้: </label>
                             <div className="input" >
-                                <input placeholder="090-000-000" value={phone} onChange={(e)=>{setPhone(e.target.value)}}>
+                                <input 
+                                    placeholder="09 0000000" 
+                                    value={phone} maxLength={10} 
+                                    onFocus={()=>{phone.length === 0 &&  setPhone("0") }}
+                                    onChange={(e)=>{setPhone(e.target.value)}}>
                                 </input>
                             </div>
                         </div>
@@ -261,19 +408,25 @@ const MapPosition=()=>{
     },[])
 
     const createMap=async ()=>{
-        const mapel: Element | any = document.querySelector('#mapposition') 
-        if(mapel != null && mapel?.innerHTML.length < 1){
-            map = L.map(mapel, {
-                center: [51.505, -0.09],
-                zoom: 13
-            }); 
-            //  var marker = L.marker([e.latitude, e.longitude]).bindPopup('Your are here :)');
-            await map?.locate({setView: true })
-                .on('locationfound', function(e:any){
-                    map.setView([e.latitude, e.longitude],16)
-                })
-            L.tileLayer('https://longdomap.attg.cc/mmmap/img.php?zoom={z}&x={x}&y={y}', {  attribution: '© Longdo Map'}).addTo(map);
-        }
+         await Geolocation.getCurrentPosition({enableHighAccuracy:true}).then(async (e) =>{
+            console.log("coord ", e?.coords)
+            if(e.coords){
+                 const mapel: Element | any = document.querySelector('#mapposition') 
+                if(mapel != null && mapel?.innerHTML.length < 1){
+                    map = L.map(mapel, {
+                        center: [ e?.coords?.latitude,  e?.coords?.longitude],
+                        zoom: 13
+                    }); 
+                    //  var marker = L.marker([e.latitude, e.longitude]).bindPopup('Your are here :)');
+                    await map?.locate({setView: true })
+                        .on('locationfound', function(e:any){
+                            map.setView([e.latitude, e.longitude],16)
+                        })
+                    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {  attribution: '© Longdo Map'}).addTo(map);
+                }
+            }
+         })
+       
     }
 
 

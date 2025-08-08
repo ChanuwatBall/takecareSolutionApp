@@ -79,4 +79,14 @@ export const registerNewMember=async(form:any)=>{
     })
 }
 
+export const createComplaint=async(form:any)=>{
+    return await api.post("complaint/create",form).then((res)=>{
+        console.log("createComplaint res ",res)
+        return res.data
+    }).catch((err)=>{
+        console.log("createComplaint err ",err)
+        return {result:false , description: err?.message}
+    })
+}
+
 export default {}
