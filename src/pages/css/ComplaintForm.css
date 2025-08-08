@@ -22,9 +22,11 @@
 }
 .row-input  .input input{
     height: 2.7rem;
+    width: 100%;
 }
 .input textarea{
     height: 7rem;
+    width: 100%;
 }
 .input input::placeholder ,
 .input textarea::placeholder {

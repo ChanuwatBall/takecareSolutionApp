@@ -68,14 +68,16 @@ const ComplaintForm=()=>{
                     allowEditing: true,
                     resultType: CameraResultType.Uri
                 }).then(e =>{
+                    console.log(" image ", e)
                     return e
                 }).catch(err=>{
                     console.log(" err",err)
                     return err
                 })
      
-                let imageUrl = image.webPath; 
-                const addimg = [...images ,  imageUrl ] 
+                // let imageUrl = image.webPath; 
+                const addimg = [...images ,  image ] 
+                console.log("addimg ",addimg)
                 setImages(addimg)
             
             } catch (error) {
@@ -93,12 +95,23 @@ const ComplaintForm=()=>{
                     quality: 70,  
                     presentationStyle: 'fullscreen' ,
                     limit: maxLengthImage - images.length
+                }).then(e =>{
+                    console.log(" image ", e)
+                    return e
+                }).catch(err=>{
+                    console.log(" err",err)
+                    return err
                 })
                 let imageUrl:any[] = []
                 image?.photos.map((p)=>{
-                    imageUrl = [...imageUrl , p?.webPath]
+                    imageUrl = [...imageUrl , p]
                 })  
-                setImages( [...images , ...imageUrl ]  )
+                console.log("addimg ",imageUrl)
+                 
+                const imagesall =[...images , imageUrl ]
+                const flatimg = imagesall.flat() 
+                console.log("flatimg ",flatimg)
+                setImages(flatimg  )
             }
         } catch (error) {
             console.log("err ",error)
@@ -115,12 +128,31 @@ const ComplaintForm=()=>{
          }
     }
 
+    const acceptform=()=>{
+        setOpen(false)
+
+        const form ={
+            topic , subtitle , phone , detail ,images ,complainTopic
+        } 
+        console.log("form ",form)
+    }
+
+    const removeimage=(e:any)=>{
+        console.log(" remove images ",e)
+        images.splice(e?.index, 1);
+        let filteredArray = images.filter((item) => item !== e.image )
+       
+        setImages(filteredArray)
+    }
+
     return(
         <div className="page  " style={{position:"relative"}} >
         {/* {openmodal && <div className="backdrop"></div> } */}
         <ModalDialog 
          open={openmodal} setOpen={(e:any)=>{setOpen(e)}}
          complaint={ {topic, subtitle , phone, detail, images} }
+         acceptform={acceptform}
+         removeImage={(e:any)=>{removeimage(e)}}
         />
         <div className="title-row set-row" style={{flexDirection:"row-reverse"}} >
             <div className="complaint-button-title" style={{justifyContent:"center"}}>
@@ -252,7 +284,7 @@ const MapPosition=()=>{
 }
 
 
-const ModalDialog=({open,setOpen ,complaint} :any)=>{
+const ModalDialog=({open,setOpen ,complaint,acceptform ,removeImage} :any)=>{
     useEffect(()=>{ 
         console.log("complaint  ",complaint)
     },[])
@@ -262,49 +294,65 @@ const ModalDialog=({open,setOpen ,complaint} :any)=>{
         <div className=" flex items-center justify-between p-4 md:p-5 border-b rounded-t   dark:border-gray-600 border-gray-200" > 
           <div className="relative bg-white rounded-lg shadow-sm dark:bg-gray-700" style={{minHeight:"70vh",width:"90vw",padding:"1rem"}}>
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                 Static modal
-             </h3>
+                 ภาพรวมการแจ้งปัญหา
+             </h3><br/>
 
              <div>
-                <div className="row-input row" >
+                <div className="row-input " style={{margin:"0px"}}>
                     <label className="title" >หัวข้อเรื่อง: </label>
                     <div className="input" >
                         {complaint?.topic}
                     </div>
                 </div>
 
-                <div className="row-input row" >
+                <div className="row-input row"  style={{margin:"0px"}} >
                     <label className="title" >หัวข้อเรื่องย่อย: </label>
                      <div className="input" >
                         {complaint?.subtitle}
                     </div>
                 </div>
-                <div className="row-input row" >
+                <div className="row-input row"  style={{margin:"0px"}}>
                     <label className="title" >เบอร์โทรที่สามารถติดต่อได้: </label>
                      <div className="input" >
                         {complaint?.phone}
                     </div>
-                </div>
+                </div><br/>
                 <div className=" p-4 md:p-5 border-t border-gray-200 " ></div>
-                <div className="columns-3 ">
-                    {complaint?.images.map((e:any)=>
-                     e && <img className="aspect-3/2" src={e} />
+                <div className="grid grid-cols-3 gap-4 mt-4">
+                    {complaint?.images.map((image:any,index:any)=>
+                     image && <div key={index} className="relative">
+                        {/* Image Display */}
+                        <img
+                            src={image.webPath}
+                            alt={`Image ${index}`}
+                            className="w-full h-full object-cover rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105"
+                        />
+
+                        {/* Delete Button */}
+                        <button
+                            onClick={() => removeImage(image, index)} style={{padding:"3px 5px 3px  5px"}}
+                            className="absolute top-2 right-2 bg-red-500 text-black rounded-full text-sm hover:bg-red-700 transition duration-200"
+                        >
+                            X
+                        </button>
+                        </div>
                     )} 
                 </div>
               
              </div>
  
-            <div className="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                <button   
-                type="button" 
-                onClick={()=>{setOpen(false)}}className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                    I accept
-                </button>
+            <div className="flex items-center justify-end p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
                 <button  
                 type="button" 
                 onClick={()=>{setOpen(false)}}
                 className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                    Decline
+                    ยกเลิก
+                </button>
+                <button   
+                type="button" 
+                onClick={()=>{acceptform()}} 
+                className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                    ตกลง
                 </button>
             </div>
             </div>
