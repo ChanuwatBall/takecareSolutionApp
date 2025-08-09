@@ -38,6 +38,9 @@ function App() {
         })
         .catch((err) => {
           console.error('LIFF init failed', err);
+          if (!liff.isLoggedIn()) {
+            liff.login(); 
+          }
       }); 
       } 
     }
@@ -56,7 +59,7 @@ function App() {
 
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
-        {/* <Route path="/home" element={<Home />} /> */}
+        <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<Profile />} /> 
         <Route path="/complaint" element={<Complaint />} /> 
         <Route path="/complaint/add/:type/:title" element={<ComplaintForm />} /> 

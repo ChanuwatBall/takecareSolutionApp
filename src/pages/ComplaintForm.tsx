@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Swiper ,SwiperSlide } from 'swiper/react';  
 import { Camera, CameraResultType, type GalleryPhotos, type Photo } from '@capacitor/camera';
+ 
 // import {type Marker as MarkerType }from "leaflet"
 
 import "./css/Complaint.css"
@@ -17,6 +18,7 @@ import { createComplaint, getCookie } from "../action";
 import {Geolocation} from "@capacitor/geolocation"
 import liff from "@line/liff";
 import axios from "axios"
+import Loading from "../components/Loading";
 // import L from "leaflet"
 
 
@@ -35,6 +37,7 @@ const ComplaintForm=()=>{
     const [complainTopic, setComplainTopic] = useState<any>("")
     const maxLengthImage = 5;
     const [curlocation , setCurLocation] = useState<any>(null)
+    const [loading,setLoading] = useState(false)
     
 
     const navigate = useNavigate();
@@ -146,6 +149,7 @@ const ComplaintForm=()=>{
 
     const acceptform=async ()=>{
         setOpen(false)
+        setLoading(true)
         const formData = new FormData();
         const villager = await getCookie("member")
         console.log("villager ",villager)
@@ -170,6 +174,7 @@ const ComplaintForm=()=>{
 
         // console.log("form ",form) 
         const result = await createComplaint(formData)
+        setLoading(false)
         if(result?.result ){ 
             showAlert(result?.description,"success")
 
@@ -289,6 +294,9 @@ const ComplaintForm=()=>{
 
     return(
         <div className="page  " style={{position:"relative"}} >
+
+        <Loading open={loading} />
+        {/* {loading && <ReactLoading type={ "bubbles"} color={"black"} height={'20%'} width={'20%'} /> } */}
         {/* {openmodal && <div className="backdrop"></div> } */}
         <ModalDialog 
          open={openmodal} setOpen={(e:any)=>{setOpen(e)}}

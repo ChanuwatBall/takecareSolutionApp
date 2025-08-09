@@ -89,4 +89,36 @@ export const createComplaint=async(form:any)=>{
     })
 }
 
+//
+export const complaintbyuser=async(form:any)=>{
+    return await api.post("complaintbyuser",form).then((res)=>{
+        console.log("complaintbyuser res ",res)
+        return res.data
+    }).catch((err)=>{
+        console.log("complaintbyuser err ",err)
+        return {result:false , description: err?.message}
+    })
+}
+///complaintsumbyuser 
+export const complaintsumbyuser=async(form:any)=>{
+    return await api.post("complaintsumbyuser",form).then((res)=>{
+        console.log("complaintsumbyuser res ",res)
+        return res.data
+    }).catch((err)=>{
+        console.log("complaintsumbyuser err ",err)
+        return null
+    })
+}
+//activity
+export const activity=async(form:any)=>{
+    return await api.post("activity",form).then((res)=>{
+        console.log("activity res ",res)
+        return res.data
+    }).catch((err)=>{
+        console.log("activity err ",err)
+        return []
+    })
+}
+
+
 export default {}

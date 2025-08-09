@@ -1,22 +1,21 @@
-import { useState } from "react"
+ 
+import { useLocation, useNavigate } from "react-router-dom";
 import "./css/Activities.css"
+import { useEffect } from "react";
+const apiUrl = import.meta.env.VITE_API;
+
 
 const ActivitieDetail=()=>{
-    const [activity ] = useState({ 
-            startDate:"24-28 เม.ย. 67",
-            endDate:"" ,
-            description :`ไทยทรงดำ หรือ ไทค่า เป็นกลุ่มชาติพพันธุ์ที่มีที่มีที่นท่าเนิดจากเกล้นสองจ่าย (เมืองแกง
-ทางตอนหมือของอียคนาม อพยพเข้ามาในประทศไทยทั้งแผ่สมัยกรุงขงธนบุรี กระจายตั้ง
-ถิ่นฐานในหลายจังหวัด เช่น เพชรบุรี สุพรรณบุรี และสระบุรี มีเอกลักษณ์โดดเด่นด้านการ
-แต่งทานด้อยชุดสีดำ สถาปีตยกรรมบ้านบ้านได้ถนลุงกรงกระคองเละวิถีความเรื่องเชื่อเรื่องมี
-บรรพบุรุษ มีเรือนและมีเมือง โดยมีประพาพที่เดิม เช่น งานอื่นก่อนพี่จนเทน และการ
-สืบทอดวัฒนธรรรมผ่านศูนย์เรียนรู้ในชุมชนต่างๆ อย่างกันแข็ง.`,
-            image:"../assets/images/activity-1.jpg" ,
-            cover: "../assets/images/activity-cover-1.jpg" ,
-            coverTitle:`ขอเชิญร่วมงานประเพณีไทยทรงดำ ณ วัดดอนรวบ โครงการผู้สูงอายุสุขภาพดี ชีวีมีสุข ครั้งที่ 1` ,
-            location:"วัดดอน"
-
-   })
+    const location = useLocation(); 
+    const navigate = useNavigate()
+    const activity =  location.state?.activity
+ 
+    useEffect(()=>{
+        console.log("activity ",activity)    
+        if(!activity){
+            navigate(-1)
+        }
+    },[])
      
 
     return(
@@ -26,17 +25,17 @@ const ActivitieDetail=()=>{
         </div> 
 
         <div className="card-activity p-0 "  >
-            <img src={activity?.cover} alt="activity-cover" className="w-100"   />
+            <img src={`${apiUrl}/api/file/drive-image/${activity?.coverImagePath}` } alt="activity-cover" className="w-100"   />
             <br/>
-            <h5>{activity?.coverTitle}</h5>
+            <h5>{activity?.name}</h5>
             <p>{activity?.description}</p>
 
             <div className="  grid  grid-cols-2 my-3 mt-5" >
                 <div className="flex items-center justify-center" >
-                    <button className="bg-hilight  detail-hilight "  >สถานที่จัด {activity?.location}</button>
+                    <button className="bg-hilight  detail-hilight "  >สถานที่จัดงาน: {activity?.location}</button>
                 </div>
                 <div className="flex items-center justify-center" >
-                     <button  className="bg-hilight detail-hilight " >วันที่ {activity?.startDate}</button>
+                     <button  className="bg-hilight detail-hilight " >วันที่ {activity?.dateActivity}</button>
                 </div>
             </div>
         </div>

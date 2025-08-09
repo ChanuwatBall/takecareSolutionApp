@@ -1,13 +1,13 @@
 
 .card-activity {
     margin: .5rem 0 .5rem;
-    border-radius: 1rem;
+    border-radius: 1rem; 
 }
 .card-activity  .act-img {
     border-radius: 1rem !important; 
-    width: 8rem ;
+    width: 7rem ;
     max-width: 100%;
-    height: 8rem ;
+    height: 7rem ;
     background-size: cover;
 
 }
@@ -32,12 +32,11 @@
  }
 
  .card-activity{
-    width: 100%;
-    min-height: 10rem;
+    width: 100%; 
     border-radius: var(--border-radius);
     background: var(--gradient-primary);
     color: #FFF;
-    padding: 1rem;
+    padding:.5rem;
  }
  .card-activity img{
     border-radius: var(--border-radius);

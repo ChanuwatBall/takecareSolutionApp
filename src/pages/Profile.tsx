@@ -1,67 +1,63 @@
 import { useEffect, useState } from "react";
 import "./css/Profile.css"
-import { getCookie, userLineid } from "../action";
-import liff from "@line/liff";
+import { complaintsumbyuser,   userLineid } from "../action";
+import liff from "@line/liff"; 
+import Loading from "../components/Loading";
+
 const apiUrl = import.meta.env.VITE_API;
 
+ 
 const Profile:React.FC=()=>{
-    const  [profile , setProfile]  = useState({
-        // profile: "../assets/images/member-profile.jpg" ,
-        // first_name:"นพวิชญ์" ,
-        // last_name:"นาคเพ่งพิศ",
-        // village:"หมู่ 1",
-        // familyMember:2 
-       
-        "id": 18,
-        "lineName": "TH.CHANU",
-        "firstName": "Chanuwat",
-        "lastName": "Thongbut",
-        "phoneNumber": "090-0000000",
-        "birthDate": "2025-08-05",
-        "address": "55/34 M.2",
-        "gender": "male",
-        "agreePolicy": null,
-        "email": null,
-        "lineId": null,
-        "profile": "1beiOitXh1CdTfuZr3Z1RtETgcdoprGuW",
-        "villageId": 1,
-        "villageName": null,
-        "subdistrictId": 1,
-        "subdistrictName": "เทศบาลตำบลบางหมาก",
-        "companyId": 1,
-        "companyName": "เทศบาลตำบลบางหมาก",
-        "createdAt": null
-
-    })
-    const [complaintStatus  ] = useState({
+    const [loading,setLoading] = useState(false)
+    const [profile , setProfile]  = useState<any>(null) 
+    const [complaintStatus  , setComplaints] = useState({
+        total: 0,
         wait: 0 ,
         pending: 1,
-        procesing: 1 ,
-        done: 1
+        inProgress: 1 ,
+        done: 1 ,
+        complaints: []
     })
 
     const [complaints ] = useState([
-        { topic:"ถนน" ,admin:"โยธาธิการ" , status: "กำลังดำเนินการ" },
-        { topic:"ประปา" ,admin:"โยธาธิการ" , status: "กำลังดำเนินการ" },
-        { topic:"ขยะ" ,admin:"เทศกิจ" , status: "กำลังดำเนินการ" },
+        {
+            "id": 12,
+            "phone": "0889768758",
+            "supTitle": "ไฟถนนไม่สว่าง",
+            "detail": "65 ถ.การดี",
+            "status": "pending",
+            "villager": 18,
+            "topicId": 6,
+            "topic": "ซ่อมแซม",
+            "imageIds": [
+                "1QWEaBRCT3koVlf0IOfD1u3kROFnWApFm",
+                "1klZcnb1wb8kKmLtJFOzUUJUBGpHVe2Ad"
+            ],
+            "admin": "ตรวจสอบ"
+        }
     ])
 
     useEffect(()=>{
         const getuservillager=async ()=>{
+            setLoading(true)
             // const member = await getCookie("member")
             // console.log("getuservillager member ",member)
             const profile:any = await liff.getProfile() 
             const usr = await userLineid(profile?.userId)
             console.log(" usr ",usr)
             setProfile(usr?.villager)
-                 
+            const complaintsumm = await complaintsumbyuser({ id: usr.id , lineId: profile?.userId});
+            console.log("complaintsumm ",complaintsumm)
+            setComplaints(complaintsumm)
+            setLoading(false)
 
         }
         getuservillager()
-    },[])
+    },[])  
 
     return(
-    <div className="page">
+    <div className="page"> 
+    <Loading open={loading} />
         <div className="card-profile  flex items-center ">
             <div className="profile-image flex items-center" style={{justifyContent:"center"}}> 
                 <div 
@@ -81,7 +77,7 @@ const Profile:React.FC=()=>{
 
         <div className="card-complaint-count flex  items-center justify-center " >
            <img src="../assets/images/complaint-alert.png" alt="" />
-           <label>จำนวนเรื่องร้องเรียน: 3 เรื่อง</label>
+           <label>จำนวนเรื่องร้องเรียน: {complaintStatus?.total} เรื่อง</label>
         </div>
 
         <div className="card-complaint-status" >
@@ -112,7 +108,7 @@ const Profile:React.FC=()=>{
                      {complaintStatus?.pending}
                    </div>
                    <div className="text-center flex  items-center justify-center">
-                     {complaintStatus?.procesing}
+                     {complaintStatus?.inProgress}
                    </div>
                 </div>
                 <div  style={{margin:"0px",paddingLeft:".3rem"}}>
@@ -134,13 +130,15 @@ const Profile:React.FC=()=>{
                 <div className="grid grid-cols-3  py-1" >
                     <div className="text-center text-sm" >{e?.topic}</div>
                     <div  className="text-center text-sm" >{e?.admin}</div>
-                    <div className="text-center text-sm" >{e?.status}</div>
+                    <div className="text-center text-sm" >
+                        {e?.status?.match("pending") ? "รอดำเนินการ" :
+                         e?.status?.match("in-progress") ? "กำลังดำเนินการ" :
+                         e?.status?.match("done") ? "เสร็จสิ้น" :
+                        "ตรวจสอบ" }
+                    </div>
                 </div>
                )
-           }
-
-            
-
+           } 
             
         </div>
 
