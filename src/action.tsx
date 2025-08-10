@@ -32,6 +32,13 @@ export async function getCookie(name: string)  {
 export async function deleteCookie(name:string) {
   document.cookie = name + '=; Max-Age=0; path=/';
 }
+export function encodeBase64(str: string): string {
+  return btoa(unescape(encodeURIComponent(str)));
+} 
+export function decodeBase64(base64: string): string {
+  return decodeURIComponent(escape(atob(base64)));
+}
+
 
 
 export const getDefaultCompay=async()=>{

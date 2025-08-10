@@ -1,13 +1,21 @@
  
 import { useNavigate } from 'react-router-dom';
 import "./css/NavApp.css"
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { getDefaultCompay } from '../action';
 
 const NavApp=()=>{
   const navigate = useNavigate();
+  const [name,setName] = useState("")
 
   useEffect(()=>{
     console.log(" window.location.pathname ", window.location.pathname)
+            const getcompanydetail=async ()=>{
+                const companyapp = await getDefaultCompay()
+                console.log("companyapp  ",companyapp)
+                setName(companyapp?.name) 
+            }
+            getcompanydetail()
    },[ window.location.pathname])
     
     return( 
@@ -43,7 +51,7 @@ const NavApp=()=>{
     </div>
    </div>
    <div   onClick={()=>{ navigate('/home');}} className={`nav-item center-circle ${window.location.pathname === "/home" ? "active" :"deactive"}  `} >
-      <label> เทศบาลตำบล  บางหมาก</label>
+      <label>{name}</label>
    </div>
 </div>
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./css/Profile.css"
-import { complaintsumbyuser,   userLineid } from "../action";
+import { complaintsumbyuser,   getCookie,   userLineid } from "../action";
 import liff from "@line/liff"; 
 import Loading from "../components/Loading";
 
@@ -10,7 +10,7 @@ const apiUrl = import.meta.env.VITE_API;
 const Profile:React.FC=()=>{
     const [loading,setLoading] = useState(false)
     const [profile , setProfile]  = useState<any>(null) 
-    const [complaintStatus  , setComplaints] = useState({
+    const [complaintStatus  , setComplaintSumm] = useState({
         total: 0,
         wait: 0 ,
         pending: 1,
@@ -19,7 +19,7 @@ const Profile:React.FC=()=>{
         complaints: []
     })
 
-    const [complaints ] = useState([
+    const [complaints ,setComplaints] = useState([
         {
             "id": 12,
             "phone": "0889768758",
@@ -42,13 +42,21 @@ const Profile:React.FC=()=>{
             setLoading(true)
             // const member = await getCookie("member")
             // console.log("getuservillager member ",member)
-            const profile:any = await liff.getProfile() 
-            const usr = await userLineid(profile?.userId)
-            console.log(" usr ",usr)
-            setProfile(usr?.villager)
-            const complaintsumm = await complaintsumbyuser({ id: usr.id , lineId: profile?.userId});
-            console.log("complaintsumm ",complaintsumm)
-            setComplaints(complaintsumm)
+            try {
+                
+                // const profile:any = await liff.getProfile() 
+                const profile = await getCookie("profile")
+                const usr = await userLineid(profile?.userId)
+                console.log(" usr ",usr)
+                setProfile(usr?.villager)
+                const complaintsumm = await complaintsumbyuser({ id: usr.id , lineId: profile?.userId});
+                console.log("complaintsumm ",complaintsumm)
+                setComplaintSumm(complaintsumm)
+                setComplaints(complaintsumm?.complaints)
+            } catch (error) {
+                setLoading(false)
+                console.log("error ",error)
+            }
             setLoading(false)
 
         }

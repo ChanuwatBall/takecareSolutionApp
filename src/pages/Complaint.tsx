@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import "./css/Complaint.css"
+import { encodeBase64 } from "../action";
 
 const Complaint=()=>{
   const navigate = useNavigate();
@@ -80,7 +81,7 @@ const Complaint=()=>{
                     <div key={index}  
                         className=" flex items-center justify-start  h-32 text-center " 
                         style={{flexDirection:"column"}} 
-                        onClick={()=>{navigate(`/complaint/add/${menu?.value}/${menu?.label}`)}}
+                        onClick={()=>{navigate(`/complaint/add/${menu?.value}}`,{state:{complaintmenu:menu }})}}
                     >
                         <img src={menu?.icon} alt={menu?.value} className="mt-4" />
                         <label className="text-sm" >{menu?.label}</label>

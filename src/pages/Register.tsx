@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import liff from "@line/liff";
 import { getDefaultCompay, registerNewMember, setCookie, userLineid, villageoption } from "../action";
 import Select from 'react-select';
+import { isAuthenticated } from "../auth";
  
  
 interface LineProfile {
@@ -41,6 +42,30 @@ const Register=()=>{
     
 
   useEffect(()=>{
+    const initline=async ()=>{
+      if(!isAuthenticated()){ 
+        const companyapp = await getDefaultCompay() 
+        console.log("companyapp ",companyapp)
+          if(companyapp && companyapp?.liffId){
+          liff.init({ liffId: companyapp?.liffId })
+          .then(async () => {
+        //     console.log('LIFF init success');
+            if (!liff.isLoggedIn()) {
+              liff.login(); 
+            }
+            getvillage()
+          
+          })
+          .catch((err) => {
+            console.log("error ", err)
+        }); 
+        } 
+      }else{
+        window.location.href = "/home"
+      }
+    }
+    initline()
+    
     const getvillage=async()=>{ 
       const companyapp = await getDefaultCompay() 
       console.log("companyapp ",companyapp)
@@ -52,8 +77,10 @@ const Register=()=>{
       const profile:any = await liff.getProfile() 
 
       const usr = await userLineid(profile?.userId)
+      console.log("userLineid usr ",usr)
       if(usr.result ){
-        navigate("/")
+        // navigate("/hom")
+        window.location.href = "/home"
         setCookie("member", usr?.villager,30)
         setCookie("profile", profile ,30)
         localStorage.setItem("token", JSON.stringify(liff.getAccessToken()))  
@@ -66,7 +93,6 @@ const Register=()=>{
       setImage(profile?.pictureUrl)
 
     }
-    getvillage()
   },[])
 
   const fetchImage = async (imageUrl:any) => { 

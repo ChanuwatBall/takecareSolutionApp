@@ -1,8 +1,7 @@
 // import { useState } from 'react'
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
-import { useEffect } from 'react';
-import liff from '@line/liff';
+import { useEffect } from 'react'; 
 
 import  {  Routes, Route, useNavigate  } from 'react-router-dom';
 import Home from './pages/Home';
@@ -17,33 +16,9 @@ import Setting from './pages/Setting';
 import Activities from './pages/Activities';
 import ActivitieDetail from './pages/ActivitieDetail';
 import Register from './pages/Register';
-import { isAuthenticated } from './auth';
-import { getDefaultCompay  } from './action';
-
+import { isAuthenticated } from './auth'; 
 function App() {  
-  useEffect(() => {
-    const getAppCompany=async ()=>{
-      const companyapp = await getDefaultCompay()
-
-      console.log("companyapp ",companyapp)
-      if(companyapp && companyapp?.liffId){
-        liff.init({ liffId: companyapp?.liffId })
-        .then(async () => {
-          console.log('LIFF init success');
-          if (!liff.isLoggedIn()) {
-            liff.login(); 
-          }
-         
-        })
-        .catch((err) => {
-          console.error('LIFF init failed', err);
-          if (!liff.isLoggedIn()) {
-            liff.login(); 
-          }
-      }); 
-      } 
-    }
-    getAppCompany()
+  useEffect(() => { 
     
   }, []);
 
@@ -61,7 +36,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<Profile />} /> 
         <Route path="/complaint" element={<Complaint />} /> 
-        <Route path="/complaint/add/:type/:title" element={<ComplaintForm />} /> 
+        <Route path="/complaint/add/:type" element={<ComplaintForm />} /> 
         <Route path="/setting" element={<Setting />} /> 
         <Route path="/activities" element={<Activities />} /> 
         <Route path='/activities/detail' element={<ActivitieDetail/>} />

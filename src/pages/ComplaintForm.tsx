@@ -2,7 +2,7 @@
 
 
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Swiper ,SwiperSlide } from 'swiper/react';  
 import { Camera, CameraResultType, type GalleryPhotos, type Photo } from '@capacitor/camera';
  
@@ -14,7 +14,7 @@ import "./css/ComplaintForm.css"
 import 'swiper/css';      
 import type { Swiper as SwiperType } from "swiper/types";
 import { useAlert } from "../components/AlertContext";
-import { createComplaint, getCookie } from "../action";
+import { createComplaint, decodeBase64, getCookie } from "../action";
 import {Geolocation} from "@capacitor/geolocation"
 import liff from "@line/liff"; 
 import Loading from "../components/Loading";
@@ -27,7 +27,7 @@ let L = window?.leaflet
  let marker:  any = null
 const ComplaintForm=()=>{
     const [showAlert] = useAlert();
-    const { type , title } = useParams<{ type: string , title:string}>();
+    const { type } = useParams<{ type: string  }>();
     const [topic,setTopic] = useState<any>("")
     const [subtitle,setSupTitle] = useState<any>("")
     const [phone,setPhone] = useState<any>("")
@@ -37,6 +37,8 @@ const ComplaintForm=()=>{
     const maxLengthImage = 5;
     const [curlocation , setCurLocation] = useState<any>(null)
     const [loading,setLoading] = useState(false)
+    const location = useLocation();  
+    const comaplaintmenu =  location.state?.complaintmenu
     
 
     const navigate = useNavigate();
@@ -60,9 +62,9 @@ const ComplaintForm=()=>{
         }) 
     }
 
-    useEffect(()=>{ 
-        setTopic(title)
-        setComplainTopic(type)
+    useEffect(()=>{  
+        setTopic( comaplaintmenu?.label)
+        setComplainTopic( comaplaintmenu?.value)
     },[])
 
     const confirmComplaint=()=>{ 
@@ -159,7 +161,8 @@ const ComplaintForm=()=>{
             formData.append('files',img);
         })
         )
-        const line = await liff.getProfile() 
+        // const line = await liff.getProfile() 
+        const line = await getCookie("profile")
         formData.append('curlocation',curlocation);
         formData.append('topic',topic);
         formData.append('subtitle',subtitle);
@@ -175,8 +178,8 @@ const ComplaintForm=()=>{
         const result = await createComplaint(formData)
         setLoading(false)
         if(result?.result ){ 
-            showAlert(result?.description,"success")
-
+            showAlert(result?.description+" สามรถติดตามสถานะเรื่องร้องเรียนได้ที่หน้าโปรไฟล์ของท่าน ","success")
+            navigate(-1)
         }else{
             showAlert(result?.description,"error")
         }
