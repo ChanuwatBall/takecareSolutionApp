@@ -4,7 +4,7 @@
 import { useEffect } from 'react';
 import liff from '@line/liff';
 
-import  {  Routes, Route  } from 'react-router-dom';
+import  {  Routes, Route, useNavigate  } from 'react-router-dom';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
 import NavApp from './components/NavApp';
@@ -68,7 +68,7 @@ function App() {
         <Route path='/register' element={<Register/>} />
       </Routes>):(
       <Routes> 
-        <Route path="/" element={<Register />} />
+        <Route path="/" element={<RedirectToRegister />} />
         <Route path="/register" element={<Register />} />  
       </Routes>)
       }
@@ -78,3 +78,20 @@ function App() {
 }
 
 export default App
+
+
+const RedirectToRegister: React.FC = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Redirect to /register when the component is mounted
+    navigate('/register');
+  }, [navigate]);
+
+  return (
+    <div className='page' >
+      {/* Optionally, you can display a message while redirecting */}
+      <p>Redirecting to register...</p>
+    </div>
+  );
+};
