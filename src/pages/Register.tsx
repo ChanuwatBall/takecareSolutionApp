@@ -5,23 +5,8 @@ import { useNavigate } from "react-router-dom";
 import liff from "@line/liff";
 import { getDefaultCompay, registerNewMember, setCookie, userLineid, villageoption } from "../action";
 import Select from 'react-select';
-
-
-type FormData = {
-  firstName: string;
-  lastName: string;
-  phone: string;
-  birthDate: string;
-  address: string;
-  village: string;
-  gender: string;
-  agree: boolean;
-};
-// const options = [
-//   { value: 'chocolate', label: 'Chocolate' },
-//   { value: 'strawberry', label: 'Strawberry' },
-//   { value: 'vanilla', label: 'Vanilla' },
-// ];
+ 
+ 
 interface LineProfile {
     userId: String
     displayName: String
@@ -95,7 +80,7 @@ const Register=()=>{
   const dataURLToFile = (dataUrl: string, filename: string): File => {
     // Split the dataURL into the base64 part and the metadata part
     const [metadata, base64String] = dataUrl.split(',');
-
+    console.log("metadata  ",metadata)
     // Convert the base64 string to a binary format (ArrayBuffer)
     const byteCharacters = atob(base64String); // Decode the base64 string
     const byteArrays = [];
@@ -216,19 +201,19 @@ const Register=()=>{
                 <label className="mr-4">
                   <input 
                     type="radio" name="gender" value="ชาย" 
-                    onChange={(e)=>{setGender("male")}}/> ชาย
+                    onChange={()=>{setGender("male")}}/> ชาย
                   </label>
                 <label>
                   <input 
                     type="radio" name="gender" value="หญิง" 
-                    onChange={(e)=>{setGender("female")}}/> หญิง
+                    onChange={()=>{setGender("female")}}/> หญิง
                   </label>
                 </div></div>
             </div>
             <div className="w-full max-w-md bg-white mt-4 p-4 rounded-xl shadow">  
                 <label className="block mb-4">
                   <input type="checkbox" name="agree"
-                   onChange={(e)=>{setAgree(true)}}
+                   onChange={()=>{setAgree(true)}}
                   /> ฉันยินยอมให้ร้านเก็บและใช้ข้อมูลส่วนตัวตามนโยบาย</label>
               
             </div><br/>

@@ -16,8 +16,7 @@ import type { Swiper as SwiperType } from "swiper/types";
 import { useAlert } from "../components/AlertContext";
 import { createComplaint, getCookie } from "../action";
 import {Geolocation} from "@capacitor/geolocation"
-import liff from "@line/liff";
-import axios from "axios"
+import liff from "@line/liff"; 
 import Loading from "../components/Loading";
 // import L from "leaflet"
 
@@ -183,106 +182,106 @@ const ComplaintForm=()=>{
         }
     }
 
-    const sendCarouselMessage = async () => {
-        if (!liff.isLoggedIn()) {
-            liff.login(); // If not logged in, prompt user to log in
-            return;
-        }
+    // const sendCarouselMessage = async () => {
+    //     if (!liff.isLoggedIn()) {
+    //         liff.login(); // If not logged in, prompt user to log in
+    //         return;
+    //     }
 
-        try {
-            const messages:any = [
-            {
-                type: 'template',
-                altText: 'This is a carousel template',
-                template: {
-                    type: 'carousel',
-                    columns: [
-                    {
-                        thumbnailImageUrl: 'https://example.com/thumbnail1.jpg',
-                        title: 'Title 1',
-                        text: 'Description 1',
-                        actions: [
-                        {
-                            type: 'uri',
-                            label: 'View More',
-                            uri: 'https://example.com/page1',
-                        },
-                        ],
-                    },
-                    {
-                        thumbnailImageUrl: 'https://example.com/thumbnail2.jpg',
-                        title: 'Title 2',
-                        text: 'Description 2',
-                        actions: [
-                        {
-                            type: 'uri',
-                            label: 'View More',
-                            uri: 'https://example.com/page2',
-                        },
-                        ],
-                    },
-                    ],
-                },
-              },
-            ];
-            const res =await liff.sendMessages(messages);
-            console.log("send msg ",res)
-            // alert('Carousel message sent successfully!');
-        } catch (error) {
-            // console.error('Error sending carousel message', error);
-        }
-    };
+    //     try {
+    //         const messages:any = [
+    //         {
+    //             type: 'template',
+    //             altText: 'This is a carousel template',
+    //             template: {
+    //                 type: 'carousel',
+    //                 columns: [
+    //                 {
+    //                     thumbnailImageUrl: 'https://example.com/thumbnail1.jpg',
+    //                     title: 'Title 1',
+    //                     text: 'Description 1',
+    //                     actions: [
+    //                     {
+    //                         type: 'uri',
+    //                         label: 'View More',
+    //                         uri: 'https://example.com/page1',
+    //                     },
+    //                     ],
+    //                 },
+    //                 {
+    //                     thumbnailImageUrl: 'https://example.com/thumbnail2.jpg',
+    //                     title: 'Title 2',
+    //                     text: 'Description 2',
+    //                     actions: [
+    //                     {
+    //                         type: 'uri',
+    //                         label: 'View More',
+    //                         uri: 'https://example.com/page2',
+    //                     },
+    //                     ],
+    //                 },
+    //                 ],
+    //             },
+    //           },
+    //         ];
+    //         const res =await liff.sendMessages(messages);
+    //         console.log("send msg ",res)
+    //         // alert('Carousel message sent successfully!');
+    //     } catch (error) {
+    //         // console.error('Error sending carousel message', error);
+    //     }
+    // };
 
-    const sendMessage = async () => {
-        if (!liff.isLoggedIn()) {
-         liff.login(); // If not logged in, prompt user to log in
-         return;
-        }
+    // const sendMessage = async () => {
+    //     if (!liff.isLoggedIn()) {
+    //      liff.login(); // If not logged in, prompt user to log in
+    //      return;
+    //     }
 
         
-        const accessToken = liff.getAccessToken();
-        try {
-            // Verify the access token
-            const result = await  axios({
-            method: 'POST',
-            url: 'https://api.line.me/v2/oauth2/v1/verify',
-            headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-            },
-            withCredentials: true,  // Add credentials if necessary (cookies, etc.)
-            })
-            .then((response) => {
-                console.log('Response:', response.data);
-                return response
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                return error
-            });
+    //     const accessToken = liff.getAccessToken();
+    //     try {
+    //         // Verify the access token
+    //         const result = await  axios({
+    //         method: 'POST',
+    //         url: 'https://api.line.me/v2/oauth2/v1/verify',
+    //         headers: {
+    //             'Authorization': `Bearer ${accessToken}`,
+    //             'Content-Type': 'application/json',
+    //         },
+    //         withCredentials: true,  // Add credentials if necessary (cookies, etc.)
+    //         })
+    //         .then((response) => {
+    //             console.log('Response:', response.data);
+    //             return response
+    //         })
+    //         .catch((error) => {
+    //             console.error('Error:', error);
+    //             return error
+    //         });
           
 
-            console.log(result); // Should show user info and granted scopes
+    //         console.log(result); // Should show user info and granted scopes
 
-            // Check if the necessary permission is granted
-            if (!result.data.scope || !result.data.scope.includes('chat_message.write')) {
-            alert('Required permission not granted: chat_message.write');
-            return;
-            }
+    //         // Check if the necessary permission is granted
+    //         if (!result.data.scope || !result.data.scope.includes('chat_message.write')) {
+    //         alert('Required permission not granted: chat_message.write');
+    //         return;
+    //         }
 
-            // Send message
-            const message:any = {
-            type: 'text',
-            text: 'Hello, this is a test message sent from LIFF!',
-            };
+    //         // Send message
+    //         const message:any = {
+    //         type: 'text',
+    //         text: 'Hello, this is a test message sent from LIFF!',
+    //         };
 
-            await liff.sendMessages([message]);
-            alert('Message sent successfully!');
-        } catch (error) {
-            console.error('Error verifying access token or sending message:', error);
-            alert('Failed to verify access token or send message');
-        }
-    };
+    //         await liff.sendMessages([message]);
+    //         alert('Message sent successfully!');
+    //     } catch (error) {
+    //         console.error('Error verifying access token or sending message:', error);
+    //         alert('Failed to verify access token or send message');
+    //     }
+    // };
 
     const removeimage=(e:any)=>{
         console.log(" remove images ",e)

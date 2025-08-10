@@ -4,7 +4,7 @@
 import { useEffect } from 'react';
 import liff from '@line/liff';
 
-import  {  Routes, Route, useNavigate } from 'react-router-dom';
+import  {  Routes, Route  } from 'react-router-dom';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
 import NavApp from './components/NavApp';
@@ -18,10 +18,9 @@ import Activities from './pages/Activities';
 import ActivitieDetail from './pages/ActivitieDetail';
 import Register from './pages/Register';
 import { isAuthenticated } from './auth';
-import { getDefaultCompay,   setCookie,   userLineid } from './action';
+import { getDefaultCompay  } from './action';
 
-function App() { 
-  const navigation = useNavigate()
+function App() {  
   useEffect(() => {
     const getAppCompany=async ()=>{
       const companyapp = await getDefaultCompay()
