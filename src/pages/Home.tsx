@@ -87,7 +87,7 @@ const Home:React.FC=()=>{
                     style={{width:"100%"}}
                 >
                   <div  style={{ height:"fit-content" }} > 
-                        {teamleft.map((url)=>
+                        {teamleft&&teamleft.map((url)=>
                         <SwiperSlide>  
                             <div className="team-profile" style={{backgroundImage: "url("+apiUrl+"/api/file/drive-image/"+url+")" ,}} ></div> 
                         </SwiperSlide>
@@ -104,7 +104,7 @@ const Home:React.FC=()=>{
                     onSlideChange={() => console.log('slide change')} 
                     style={{width:"100%"}}
                 > 
-                    {teamright.map((url)=>
+                    {teamright&&teamright.map((url)=>
                      <SwiperSlide style={{width:"100%"}}> 
                         <div className="team-profile"  style={{backgroundImage: "url("+apiUrl+"/api/file/drive-image/"+url+")" ,  }} ></div>
                     </SwiperSlide>
@@ -115,7 +115,7 @@ const Home:React.FC=()=>{
         </div>
         <div className="card-team-description" >
             <h6> {comname} <br/> {slogan} </h6> 
-            {history.map((p)=><p>{p}</p> )}
+            {history&&history.map((p)=><p>{p}</p> )}
             <p></p>
         </div>
     </div>
