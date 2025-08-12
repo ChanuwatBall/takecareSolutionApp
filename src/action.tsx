@@ -59,7 +59,12 @@ export const userLineid=async(lineid:any)=>{
         console.log("token   ",token) 
     return await api.post("userlineid",{lineId: lineid}).then((res)=>{
         console.log("userLineid res ",res)
-        return res.data
+        // return res.data
+        if(typeof res.data == "string"){
+            return JSON.stringify(res.data)
+        }else{
+            return res.data
+        }
     }).catch((err)=>{
         console.log("userLineid err ",err)
         return null
@@ -79,7 +84,12 @@ export const villageoption=async(companyid:any)=>{
 export const registerNewMember=async(form:any)=>{
     return await api.post("registernewvillager", form ).then((res)=>{
         console.log("registerNewMember res ",res)
-        return res.data
+        // return res.data 
+        if(typeof res.data == "string"){
+            return JSON.stringify(res.data)
+        }else{
+            return res.data
+        }
     }).catch((err)=>{
         console.log("registerNewMember err ",err)
         return {result:false}

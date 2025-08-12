@@ -19,6 +19,9 @@ import {Geolocation} from "@capacitor/geolocation"
 // import liff from "@line/liff"; 
 import Loading from "../components/Loading";
 // import L from "leaflet"
+const apiUrl = import.meta.env.VITE_API;
+
+
 
 
 //@ts-ignore
@@ -366,12 +369,12 @@ const ComplaintForm=()=>{
                                 
                             </label>
                             <button onClick={()=>{takePicture()}} >
-                                <img src="../assets/images/camera.png"  />
+                                <img src={apiUrl+"/images/camera.png"}  />
                                 <label>ถ่ายรูป</label>
                             </button>
                             
                             <button onClick={()=>{pickImages()}} >
-                                <img src="../assets/images/picture.png"  />
+                                <img src={apiUrl+"/images/picture.png"}  />
                                 <label>แนบรูป</label>
                             </button>
                         </div>
@@ -388,7 +391,7 @@ const ComplaintForm=()=>{
                 <SwiperSlide>
                     <MapPosition />
                     <button className="find-my-loaction" onClick={()=>{userlocation()}} >
-                        <img src="../assets/images/pin-locatiion.png" />
+                        <img src={apiUrl+"images/pin-locatiion.png"} />
                          ตำแหน่งของฉัน
                     </button>
                     <div className="row-input "  >
