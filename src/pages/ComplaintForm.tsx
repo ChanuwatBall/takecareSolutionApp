@@ -2,7 +2,7 @@
 
 
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Swiper ,SwiperSlide } from 'swiper/react';  
 import { Camera, CameraResultType, type GalleryPhotos, type Photo } from '@capacitor/camera';
  
@@ -14,9 +14,9 @@ import "./css/ComplaintForm.css"
 import 'swiper/css';      
 import type { Swiper as SwiperType } from "swiper/types";
 import { useAlert } from "../components/AlertContext";
-import { createComplaint, decodeBase64, getCookie } from "../action";
+import { createComplaint, getCookie } from "../action";
 import {Geolocation} from "@capacitor/geolocation"
-import liff from "@line/liff"; 
+// import liff from "@line/liff"; 
 import Loading from "../components/Loading";
 // import L from "leaflet"
 
@@ -27,7 +27,7 @@ let L = window?.leaflet
  let marker:  any = null
 const ComplaintForm=()=>{
     const [showAlert] = useAlert();
-    const { type } = useParams<{ type: string  }>();
+    // const { type } = useParams<{ type: string  }>();
     const [topic,setTopic] = useState<any>("")
     const [subtitle,setSupTitle] = useState<any>("")
     const [phone,setPhone] = useState<any>("")

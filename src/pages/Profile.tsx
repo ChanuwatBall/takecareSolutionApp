@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./css/Profile.css"
 import { complaintsumbyuser,   getCookie,   userLineid } from "../action";
-import liff from "@line/liff"; 
+// import liff from "@line/liff"; 
 import Loading from "../components/Loading";
 
 const apiUrl = import.meta.env.VITE_API;

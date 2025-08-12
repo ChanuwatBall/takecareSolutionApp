@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import "./css/Complaint.css"
-import { encodeBase64 } from "../action";
+// import { encodeBase64 } from "../action";
 
 const Complaint=()=>{
   const navigate = useNavigate();
