@@ -81,11 +81,8 @@ export const villageoption=async(companyid:any)=>{
 
 export const registerNewMember=async(form:any)=>{
     return await api.post("registernewvillager", form ).then((res)=>{ 
-        if(typeof res.data == "string"){
-            return JSON.parse(res.data)
-        }else{
-            return res.data
-        }
+      
+            return res.data 
     }).catch((err)=>{
         console.log("registerNewMember err ",err)
         return {result:false}

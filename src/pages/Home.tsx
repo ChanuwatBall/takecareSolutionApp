@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import "./css/Home.css"
 import   { SwiperSlide ,Swiper } from "swiper/react";
 import { isAuthenticated } from "../auth";  
-import { companydetail, getCookie } from "../action";
+import { companydetail, getCookie, setCookie } from "../action";
+import liff from "@line/liff";
 const apiUrl = import.meta.env.VITE_API;
 
 
@@ -48,6 +49,14 @@ const Home:React.FC=()=>{
     // })
 
     useEffect(()=>{
+        const checkmemberregis=async ()=>{
+            const profilecookie = await getCookie("profile")
+            if(profilecookie === null || profilecookie === undefined){
+                 const profile:any = await liff.getProfile()
+                 setCookie("profile",profile,30) 
+            }
+        }
+        checkmemberregis()
        if( isAuthenticated() ){
         //  navigate("/register")
          const getCDetal=async ()=>{
