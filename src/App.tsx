@@ -29,9 +29,10 @@ function App() {
          <PageHeader /> 
          <NavApp /> </>)
        }
-      {isAuthenticated() ?(  <Routes>
-
-        <Route path="/" element={<Home />} />
+      {isAuthenticated() ?(  <Routes> 
+        <Route path="/" element={<RedirectToRegister />} />
+        <Route path="/register" element={<Register />} />  
+        <Route path="/home" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<Profile />} /> 
