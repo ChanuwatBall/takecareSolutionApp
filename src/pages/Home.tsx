@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import "./css/Home.css"
 import   { SwiperSlide ,Swiper } from "swiper/react";
 import { isAuthenticated } from "../auth";  
-import { companydetail, getCookie, setCookie } from "../action";
+import { companydetail, deleteCookie, getCookie, setCookie } from "../action";
 import liff from "@line/liff";
+import { useNavigate } from "react-router-dom";
 const apiUrl = import.meta.env.VITE_API;
 
 
@@ -14,6 +15,7 @@ const Home:React.FC=()=>{
     const [slogan , setSlogan] = useState("")
     const [history,setHistory] = useState([])
     const [comname , setComname] = useState("")
+    const navigate = useNavigate()
     
 
     // const [executive] = useState({
@@ -63,7 +65,7 @@ const Home:React.FC=()=>{
             const profile = await getCookie("profile")
             const result =await companydetail({  lineId: profile?.userId})
             console.log("companydetail result ",result)
-            if(result){
+            if(result?.name || result?.name){
                 setCeoName(result?.ceoName)
                 setceonickname(result?.ceoNickName)
                 setHistory(result?.history)
@@ -72,6 +74,12 @@ const Home:React.FC=()=>{
                 setTeamLeft(result?.teamMembers)
                 setTeamRight(result?.managementTeam)
                 setCeoimages(result?.ceoImage)
+            }else{
+                deleteCookie("member")
+                deleteCookie("profile")
+                localStorage.removeItem("token")
+                
+                navigate("/")
             }
          }
          getCDetal()

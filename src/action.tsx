@@ -150,5 +150,23 @@ export async function companydetail(form:any) {
   }
 }
 
+//policyandterms
+export async function policyandterms() {
+   try {
+    const token = await getCookie("auth_token")
+    console.log("token ",token)
+    const response = await api.post( "policyandterms" , { 
+      headers: { 
+        token: "Basic "+token
+      }
+    });
+
+    return response.data;
+  } catch (error: any) {
+    console.error('POST failed:', error.message);
+    return null
+  }
+}
+
 
 export default {}
