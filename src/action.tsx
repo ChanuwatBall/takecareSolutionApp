@@ -57,11 +57,9 @@ export const getDefaultCompay=async()=>{
 export const userLineid=async(lineid:any)=>{
         console.log("apiUrl   ",apiUrl)
         console.log("token   ",token) 
-    return await api.post("userlineid",{lineId: lineid}).then((res)=>{
-        console.log("userLineid res ",res)
-        // return res.data
+    return await api.post("userlineid",{lineId: lineid}).then((res)=>{ 
         if(typeof res.data == "string"){
-            return JSON.stringify(res.data)
+            return JSON.parse(res.data)
         }else{
             return res.data
         }
@@ -82,11 +80,9 @@ export const villageoption=async(companyid:any)=>{
 }
 
 export const registerNewMember=async(form:any)=>{
-    return await api.post("registernewvillager", form ).then((res)=>{
-        console.log("registerNewMember res ",res)
-        // return res.data 
+    return await api.post("registernewvillager", form ).then((res)=>{ 
         if(typeof res.data == "string"){
-            return JSON.stringify(res.data)
+            return JSON.parse(res.data)
         }else{
             return res.data
         }

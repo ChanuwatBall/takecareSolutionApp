@@ -158,10 +158,9 @@ const Register=()=>{
       
       const result = await registerNewMember(formData)
       console.log(" registerNewMember result ",result)
-      if(result?.result){ 
+      if(result?.result || (typeof result == "string"  && result.indexOf("result\":true,") > -1 ) ){ 
         setCookie("member", result?.villager,30)
-        localStorage.setItem("token", JSON.stringify(liff.getAccessToken())) 
-        localStorage.setItem("token", JSON.stringify(liff.getAccessToken()))
+        localStorage.setItem("token", JSON.stringify(liff.getAccessToken()))  
         navigate("/")
       }else{
 
