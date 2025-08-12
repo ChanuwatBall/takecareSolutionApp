@@ -2,8 +2,18 @@ import { useEffect, useState } from "react";
 import "./css/Home.css"
 import   { SwiperSlide ,Swiper } from "swiper/react";
 import { isAuthenticated } from "../auth";  
+import { companydetail, getCookie } from "../action";
+const apiUrl = import.meta.env.VITE_API;
+
 
 const Home:React.FC=()=>{ 
+    const [ceoname , setCeoName] = useState("")
+    const [ceonickname , setceonickname] = useState("") 
+    const [ceoImage,setCeoimages] = useState("")
+    const [slogan , setSlogan] = useState("")
+    const [history,setHistory] = useState([])
+    const [comname , setComname] = useState("")
+    
 
     const [executive] = useState({
         image:"../assets/images/executive-profile.png" ,
@@ -12,12 +22,12 @@ const Home:React.FC=()=>{
         lastName: "ประสารวุฒิ"
     })
 
-    const [teamleft] = useState([
+    const [teamleft, setTeamLeft] = useState([
         "../assets/images/executive-team-left.jpg",
         "../assets/images/executive-team-left.jpg",
         "../assets/images/executive-team-left.jpg"
     ])
-    const [teamright] = useState([ 
+    const [teamright, setTeamRight] = useState([ 
         "../assets/images/executive-team-right.jpg",
         "../assets/images/executive-team-right.jpg",
         "../assets/images/executive-team-right.jpg"
@@ -40,7 +50,22 @@ const Home:React.FC=()=>{
     useEffect(()=>{
        if( isAuthenticated() ){
         //  navigate("/register")
-        
+         const getCDetal=async ()=>{
+            const profile = await getCookie("profile")
+            const result =await companydetail({  lineId: profile?.userId})
+            console.log("companydetail result ",result)
+            if(result){
+                setCeoName(result?.ceoName)
+                setceonickname(result?.ceoNickName)
+                setHistory(result?.history)
+                setSlogan(result?.slogan)
+                setComname(result?.name)
+                setTeamLeft(result?.teamMembers)
+                setTeamRight(result?.managementTeam)
+                setCeoimages(result?.ceoImage)
+            }
+         }
+         getCDetal()
        }
     },[]) 
 
@@ -48,10 +73,10 @@ const Home:React.FC=()=>{
     <div className="page" style={{paddingTop:"0" }}>
         <div className="card-executive" >
             <div  className="name-container">  
-                <label className="executive-nickname" > {executive?.nickname} </label> <br/>
-                <label className="full-name" >{executive?.firstName}  {executive?.lastName}</label> 
+                <label className="executive-nickname" > {ceonickname} </label> <br/>
+                <label className="full-name" >{ceoname}</label> 
             </div> 
-            <img src={executive?.image} alt="executive-profile" />
+            <img src={apiUrl+"/api/file/drive-image/"+ceoImage} alt="executive-profile" />
         </div>
         <div className="card-executive-team  grid grid-cols-2 gap-2 ">
             <div className="executive-team" > 
@@ -64,7 +89,7 @@ const Home:React.FC=()=>{
                   <div  style={{ height:"fit-content" }} > 
                         {teamleft.map((url)=>
                         <SwiperSlide>  
-                            <div className="team-profile" style={{backgroundImage: "url("+url+")" ,}} ></div> 
+                            <div className="team-profile" style={{backgroundImage: "url("+apiUrl+"/api/file/drive-image/"+url+")" ,}} ></div> 
                         </SwiperSlide>
                         )}
                   </div>
@@ -81,7 +106,7 @@ const Home:React.FC=()=>{
                 > 
                     {teamright.map((url)=>
                      <SwiperSlide style={{width:"100%"}}> 
-                        <div className="team-profile"  style={{backgroundImage: "url("+url+")" ,  }} ></div>
+                        <div className="team-profile"  style={{backgroundImage: "url("+apiUrl+"/api/file/drive-image/"+url+")" ,  }} ></div>
                     </SwiperSlide>
                     )}
                 </Swiper>
@@ -89,8 +114,8 @@ const Home:React.FC=()=>{
             </div>
         </div>
         <div className="card-team-description" >
-            <h6> {companyDetail?.name} <br/> {companyDetail?.subtitle} </h6> 
-            {companyDetail?.description.map((p)=><p>{p}</p> )}
+            <h6> {comname} <br/> {slogan} </h6> 
+            {history.map((p)=><p>{p}</p> )}
             <p></p>
         </div>
     </div>
