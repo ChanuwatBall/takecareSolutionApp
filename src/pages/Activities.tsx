@@ -1,37 +1,18 @@
 import { useEffect, useState } from "react";
 import "./css/Activities.css"
-import { useNavigate } from "react-router-dom";
-import liff from "@line/liff";
-import { activity } from "../action";
+import { useNavigate } from "react-router-dom"; 
+import { activity, getCookie } from "../action";
 const apiUrl = import.meta.env.VITE_API;
 
 
 
 const Activities=()=>{
      const navigate = useNavigate();
-    const [activities ,setActivities] = useState([
-        {
-            "id": 1,
-            dateActivity : "21-23 ก.ค. 68",
-            "name": "งานประเพณีไทยทรงดำ",
-            "shortName": "vfdvfv",
-            "description": "cvrevrevr",
-            "coverImagePath": "1GBvEhk7a9G9AXcjFo8S0eHTqLAjA12r6",
-            "startDate": "2025-07-21",
-            "endDate": "2025-07-23",
-            "draft": false,
-            "enable": true,
-            "imagePaths": [
-                "1VWH16d0WKcXGQCQLcNeoa5ozDNV3zYep",
-                "1VWH16d0WKcXGQCQLcNeoa5ozDNV3zYep",
-                "1F6MB-ZR0K33DhxtY3-vXYNFBAjiN5iKG"
-            ]
-        } 
-    ])
+    const [activities ,setActivities] = useState([])
 
     useEffect(()=>{
         const getactivities=async()=>{
-            const profile:any = await liff.getProfile() 
+            const profile:any = await getCookie("profile") // await liff.getProfile() 
             // const usr = await userLineid(profile?.userId)
             const result = await activity({lineId:profile?.userId})
             console.log("result ",result)
@@ -48,7 +29,7 @@ const Activities=()=>{
 
         <div className="w-100 pb-9" >
             {
-                activities.map((act,inx)=>
+                activities && activities.map((act:any,inx)=>
                 inx%2==0 ?  <div  
                     className={`card-activity ${inx%2==0?"left":"right"} grid grid-cols-3  `}  style={{ height:"9rem"}} 
                     onClick={()=>{navigate("/activities/detail", { state: { activity: act } })}}>
