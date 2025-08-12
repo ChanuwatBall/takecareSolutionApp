@@ -366,12 +366,12 @@ const ComplaintForm=()=>{
                                 
                             </label>
                             <button onClick={()=>{takePicture()}} >
-                                <img src="assets/images/camera.png"  />
+                                <img src="../assets/images/camera.png"  />
                                 <label>ถ่ายรูป</label>
                             </button>
                             
                             <button onClick={()=>{pickImages()}} >
-                                <img src="assets/images/picture.png"  />
+                                <img src="../assets/images/picture.png"  />
                                 <label>แนบรูป</label>
                             </button>
                         </div>
@@ -388,7 +388,7 @@ const ComplaintForm=()=>{
                 <SwiperSlide>
                     <MapPosition />
                     <button className="find-my-loaction" onClick={()=>{userlocation()}} >
-                        <img src="assets/images/pin-locatiion.png" />
+                        <img src="../assets/images/pin-locatiion.png" />
                          ตำแหน่งของฉัน
                     </button>
                     <div className="row-input "  >
