@@ -1,10 +1,24 @@
 import { useNavigate } from "react-router-dom";
 import "./css/Complaint.css"
+import { useEffect } from "react";
+import liff from "@line/liff";
+import { getCookie, setCookie } from "../action";
 // import { encodeBase64 } from "../action";
 
 const Complaint=()=>{
   const navigate = useNavigate();
 
+  useEffect(()=>{
+
+            const checkmemberregis=async ()=>{
+                const profilecookie = await getCookie("profile")
+                if(profilecookie === null || profilecookie === undefined){
+                     const profile:any = await liff.getProfile()
+                     setCookie("profile",profile,30) 
+                }
+            }
+            checkmemberregis()
+  },[])
     const ComplaintMenu=[
         {
             label:"ถนน" ,

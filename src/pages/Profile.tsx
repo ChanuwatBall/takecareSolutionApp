@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import "./css/Profile.css"
-import { complaintsumbyuser,   getCookie,   userLineid } from "../action";
+import { complaintsumbyuser,   getCookie,   setCookie,   userLineid } from "../action";
 // import liff from "@line/liff"; 
 import Loading from "../components/Loading";
+import liff from "@line/liff";
 
 const apiUrl = import.meta.env.VITE_API;
 
@@ -38,10 +39,16 @@ const Profile:React.FC=()=>{
     ])
 
     useEffect(()=>{
+            const checkmemberregis=async ()=>{
+                const profilecookie = await getCookie("profile")
+                if(profilecookie === null || profilecookie === undefined){
+                     const profile:any = await liff.getProfile()
+                     setCookie("profile",profile,30) 
+                }
+            }
+            checkmemberregis()
         const getuservillager=async ()=>{
-            setLoading(true)
-            // const member = await getCookie("member")
-            // console.log("getuservillager member ",member)
+            setLoading(true) 
             try {
                 
                 // const profile:any = await liff.getProfile() 

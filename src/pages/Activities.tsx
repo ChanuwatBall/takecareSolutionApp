@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import "./css/Activities.css"
 import { useNavigate } from "react-router-dom"; 
-import { activity, getCookie } from "../action";
+import { activity, getCookie, setCookie } from "../action";
+import liff from "@line/liff";
 const apiUrl = import.meta.env.VITE_API;
 
 
@@ -10,7 +11,15 @@ const Activities=()=>{
      const navigate = useNavigate();
     const [activities ,setActivities] = useState([])
 
-    useEffect(()=>{
+    useEffect(()=>{ 
+        const checkmemberregis=async ()=>{
+            const profilecookie = await getCookie("profile")
+            if(profilecookie === null || profilecookie === undefined){
+                 const profile:any = await liff.getProfile()
+                 setCookie("profile",profile,30) 
+            }
+        }
+        checkmemberregis()
         const getactivities=async()=>{
             const profile:any = await getCookie("profile") // await liff.getProfile() 
             // const usr = await userLineid(profile?.userId)
