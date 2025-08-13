@@ -59,7 +59,7 @@ const Complaint=()=>{
             label:"อื่นๆ" ,
             value:"other" ,
             id: 9,
-            icon:"assets/images/Asset 9@3x.png"
+            icon:"assets/images/other.png"
         }
     ]
 
@@ -80,7 +80,7 @@ const Complaint=()=>{
                 ComplaintMenu.map((menu , index) => 
                     <div key={index}  
                         className=" flex items-center justify-start  h-32 text-center " 
-                        style={{flexDirection:"column"}} 
+                        style={{flexDirection:"column" , justifyContent:"center" , alignItems:"center"}} 
                         onClick={()=>{navigate(`/complaint/add/${menu?.value}}`,{state:{complaintmenu:menu }})}}
                     >
                         <img src={menu?.icon} alt={menu?.value} className="mt-4" />

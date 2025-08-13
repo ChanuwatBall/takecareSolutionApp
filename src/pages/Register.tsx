@@ -79,11 +79,15 @@ const Register=()=>{
       const usr = await userLineid(profile?.userId)
       console.log("userLineid usr ",usr)
       if(usr.result ){
-        navigate("/home")
         // window.location.href = "/home"
         setCookie("member", usr?.villager,30)
         setCookie("profile", profile ,30)
         localStorage.setItem("token", JSON.stringify(liff.getAccessToken()))  
+        navigate("/home")
+        setTimeout(()=>{
+          window.location.reload()
+        },500)
+       
       }else{ 
         navigate("/register")
       }

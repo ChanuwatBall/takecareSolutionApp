@@ -74,3 +74,22 @@
     position: absolute;
     margin-top: -2em !important;
 }
+
+img[alt="other"]{
+    width: 3.5rem;
+    margin-bottom: 1rem;
+    justify-self: flex-end;
+    opacity: .5;
+}
+
+img[alt="other"] label{
+    bottom: 0; 
+    position: absolute;
+}
+.complaints-menu .grid div  {
+ position: relative;
+} 
+.complaints-menu .grid div label{
+     
+    bottom: 0; 
+}
