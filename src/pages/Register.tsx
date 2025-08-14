@@ -6,6 +6,7 @@ import liff from "@line/liff";
 import { getDefaultCompay, registerNewMember, setCookie, userLineid, villageoption } from "../action";
 import Select from 'react-select';
 import { isAuthenticated } from "../auth";
+import Loading from "../components/Loading";
  
  
 interface LineProfile {
@@ -17,6 +18,7 @@ interface LineProfile {
 
 const Register=()=>{
     const navigate = useNavigate();
+    const [loading,setLoading] = useState(false)
     const [company,setCompany] = useState<any>({id:1 , name:"เทศบาลตำบลบางหมาก"})
     const [isimage ,setIsImage] = useState(false)
     const [selectedOption, setSelectedOption] = useState<any>(null);
@@ -28,6 +30,7 @@ const Register=()=>{
     const [lastName , setLastName] = useState("")
     const [phone , setPhone] = useState("")
     const [birthDate , setBirthDate] = useState("")
+    const [fammember , setFammember] = useState("0") 
     const [address , setAddress] = useState("")
     const [gender , setGender] = useState("")
     const [agree , setAgree] = useState(false)  
@@ -130,6 +133,7 @@ const Register=()=>{
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+      setLoading(true)
       console.log("profile ",lineprofile)
       console.log('Form submitted:', isimage);  
      console.log("village  ", selectedOption)
@@ -149,8 +153,7 @@ const Register=()=>{
       formData.append('phone',phone);
       formData.append('birthDate',birthDate);
       formData.append('address',address);
-      formData.append('gender',gender);
-      formData.append('address',address);
+      formData.append('gender',gender); 
       formData.append('agree',agree.toString()); 
       
       let lineUserId:any =lineprofile?.userId
@@ -159,6 +162,7 @@ const Register=()=>{
       formData.append('lineName', lineName );
       formData.append('villageId', selectedOption?.value );
       formData.append('companyId', company?.id );
+      formData.append('familyMember',fammember);  
       
       const result = await registerNewMember(formData)
       console.log(" registerNewMember result ",result)
@@ -174,9 +178,11 @@ const Register=()=>{
         setCookie("profile", lineprofile ,30)
         localStorage.setItem("token", JSON.stringify(liff.getAccessToken()))  
         navigate("/home")
+        window.location.reload()
       }else{
 
       } 
+      setLoading(false)
               
   };
   const handleChangeOpt = (selectedOption:any) => {
@@ -186,6 +192,7 @@ const Register=()=>{
 
     return(
     <div className="page" style={{background:"#F7F7F9"}}>
+    <Loading open={loading} />
         <div className="w-100 flex justify-center column items-center pt-5">
             <div className="bg-primary w-fit text-2xl text-white px-4 py-1 rounded-lg" >{company?.name}</div>
             <label className="text-primary-light my-5 font-medium">สมัครสมาชิก</label>
@@ -201,7 +208,7 @@ const Register=()=>{
                   </label>
                 <label className="block mb-2">นามสกุล*
                   <input 
-                   type="text" name="lastName" 
+                   type="tel" name="lastName" maxLength={10}
                    className="w-full border p-2 rounded border-gray-300" 
                    onChange={(e)=>{setLastName(e.target.value)}} 
                   /></label>
@@ -217,6 +224,13 @@ const Register=()=>{
                     className="w-full border p-2 rounded border-gray-300" 
                     onChange={(e)=>{setBirthDate(e.target.value)}} 
                   /></label>
+
+                <label className="block mb-2">จำนวนสมาชิกในครอบครัว
+                   <input 
+                    type="number" name="fammiltMember" value={fammember} min={0} max={100}
+                    className="w-full border p-2 rounded border-gray-300" 
+                    onChange={(e)=>{setFammember(e.target.value)}} 
+                /></label>
                 <label className="block mb-2">ที่อยู่
                    <textarea 
                       name="address" 
@@ -251,7 +265,7 @@ const Register=()=>{
                 <label className="block mb-4">
                   <input type="checkbox" name="agree"
                    onChange={()=>{setAgree(true)}}
-                  /> ฉันยินยอมให้ร้านเก็บและใช้ข้อมูลส่วนตัวตามนโยบาย</label>
+                  /> &nbsp; ฉันยินยอมให้ร้านเก็บและใช้ข้อมูลส่วนตัวตามนโยบาย</label>
               
             </div><br/>
               <button type="submit" 
@@ -270,7 +284,7 @@ type ImageUploaderProps = {
   image: any
 };
 
-const CircleImageUploader: React.FC<ImageUploaderProps> = ({ onChange  ,image}) => {
+export const CircleImageUploader: React.FC<ImageUploaderProps> = ({ onChange  ,image}) => {
 
   const pickImage = async () => {
     try {

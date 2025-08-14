@@ -103,6 +103,9 @@
   /* width: 100%; */
   margin-top: 7%;
 }
+.nav-item.highlight img{
+  filter: brightness(0) saturate(100%) invert(14%) sepia(35%) saturate(6426%) hue-rotate(213deg) brightness(95%) contrast(105%);
+}
 .nav-item[aria-valuetext="place"]{
   flex: 3;
 }

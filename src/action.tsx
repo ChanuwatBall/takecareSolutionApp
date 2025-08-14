@@ -80,14 +80,22 @@ export const villageoption=async(companyid:any)=>{
 }
 
 export const registerNewMember=async(form:any)=>{
-    return await api.post("registernewvillager", form ).then((res)=>{ 
-      
-            return res.data 
+    return await api.post("registernewvillager", form ).then((res)=>{  
+       return res.data 
     }).catch((err)=>{
         console.log("registerNewMember err ",err)
         return {result:false}
     })
 }
+export const updatevillager=async(form:any)=>{
+    return await api.post("updatevillager", form ).then((res)=>{  
+       return res.data 
+    }).catch((err)=>{
+        console.log("updatevillager err ",err)
+        return {result:false}
+    })
+}
+
 
 export const createComplaint=async(form:any)=>{
     return await api.post("complaint/create",form).then((res)=>{

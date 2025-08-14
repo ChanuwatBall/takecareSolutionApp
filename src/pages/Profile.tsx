@@ -4,13 +4,16 @@ import { complaintsumbyuser,   getCookie,   setCookie,   userLineid } from "../a
 // import liff from "@line/liff"; 
 import Loading from "../components/Loading";
 import liff from "@line/liff";
+import { useNavigate } from "react-router-dom";
 
 const apiUrl = import.meta.env.VITE_API;
 
  
 const Profile:React.FC=()=>{
+    const navigate = useNavigate()
     const [loading,setLoading] = useState(false)
     const [profile , setProfile]  = useState<any>(null) 
+    const [familyMember , setFammember] = useState(0)
     const [complaintStatus  , setComplaintSumm] = useState({
         total: 0,
         wait: 0 ,
@@ -49,6 +52,11 @@ const Profile:React.FC=()=>{
             checkmemberregis()
         const getuservillager=async ()=>{
             setLoading(true) 
+            const member = await getCookie("member")
+            console.log("member ",member)
+            if(member ){
+                setFammember(member?.fammilyMember != undefined &&member?.fammilyMember !=null? member?.fammilyMember : 0 )
+            }
             try {
                 
                 // const profile:any = await liff.getProfile() 
@@ -73,7 +81,10 @@ const Profile:React.FC=()=>{
     return(
     <div className="page"> 
     <Loading open={loading} />
-        <div className="card-profile  flex items-center ">
+        <div className="card-profile  flex items-center " style={{position: "relative"}}>
+            <div style={{position:"absolute",fontSize:".6em",color:"#FFF", top:"2rem", right:"2rem", opacity:".4"}}
+            onClick={(()=>{navigate("/profile/edit")})}
+            > แก้ไข </div>
             <div className="profile-image flex items-center" style={{justifyContent:"center"}}> 
                 <div 
                     className="wrap-member-profile flex items-center justify-center ">
@@ -86,13 +97,13 @@ const Profile:React.FC=()=>{
             <div className="profile-detail flex items-start justify-center column">
                 <label className="profile-member-name" >{profile?.firstName} {profile?.lastName}</label>
                 <div className="chip-profile" >ลูกบ้าน{profile?.villageName} {profile?.subdistrictName}</div>
-                <div className="chip-profile" >จำนวนสมาชิกในครอบครัว 0</div>
+                <div className="chip-profile" >จำนวนสมาชิกในครอบครัว {familyMember}</div>
             </div> 
         </div>
 
         <div className="card-complaint-count flex  items-center justify-center " >
            <img src="../assets/images/complaint-alert.png" alt="" />
-           <label>จำนวนเรื่องร้องเรียน: {complaintStatus?.total} เรื่อง</label>
+           <label>จำนวนเรื่องร้องเรียน: {complaintStatus && complaintStatus?.total} เรื่อง</label>
         </div>
 
         <div className="card-complaint-status" >
@@ -117,18 +128,18 @@ const Profile:React.FC=()=>{
              <div className="grid grid-cols-4  " >
                 <div className="col-span-3 grid grid-cols-3  ">
                    <div className="text-center flex  items-center justify-center">
-                     {complaintStatus?.wait}
+                     {complaintStatus && complaintStatus?.wait}
                    </div>
                    <div className="text-center  flex  items-center justify-center">
-                     {complaintStatus?.pending}
+                     {complaintStatus &&complaintStatus?.pending}
                    </div>
                    <div className="text-center flex  items-center justify-center">
-                     {complaintStatus?.inProgress}
+                     {complaintStatus &&complaintStatus?.inProgress}
                    </div>
                 </div>
                 <div  style={{margin:"0px",paddingLeft:".3rem"}}>
                     <div className="text-center" style={{padding:".67rem 0 .67rem",margin:"0"}}>
-                        {complaintStatus?.done}
+                        {complaintStatus && complaintStatus?.done}
                     </div> 
                 </div>
              </div>
@@ -141,7 +152,7 @@ const Profile:React.FC=()=>{
                 <div className="complaint-status-name flex  items-center justify-center">สถานะ</div>
             </div>
              {
-                complaints.map((e)=>
+                complaints && complaints.map((e)=>
                 <div className="grid grid-cols-3  py-1" >
                     <div className="text-center text-sm" >{e?.topic}</div>
                     <div  className="text-center text-sm" >{e?.admin}</div>

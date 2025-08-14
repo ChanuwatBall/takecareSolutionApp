@@ -17,10 +17,11 @@ import Activities from './pages/Activities';
 import ActivitieDetail from './pages/ActivitieDetail';
 import Register from './pages/Register';
 import { isAuthenticated } from './auth'; 
+import ProfileEdit from './pages/ProfileEdit';
 function App() {  
   useEffect(() => { 
     
-  }, []);
+  }, [isAuthenticated]);
 
 
   return ( 
@@ -36,7 +37,8 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/profile" element={<Profile />} /> 
+        <Route path="/profile" element={<Profile />} />  
+        <Route path="/profile/edit" element={<ProfileEdit />} />
         <Route path="/complaint" element={<Complaint />} /> 
         <Route path="/complaint/add/:type" element={<ComplaintForm />} /> 
         <Route path="/setting" element={<Setting />} /> 

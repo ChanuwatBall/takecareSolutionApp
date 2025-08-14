@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import "./css/NavApp.css"
 import { useEffect, useState } from "react";
 import { getDefaultCompay } from '../action';
+const apiUrl = import.meta.env.VITE_API;
+
 
 const NavApp=()=>{
   const navigate = useNavigate();
@@ -25,12 +27,13 @@ const NavApp=()=>{
         <div 
          className={ window.location.pathname.match("/profile") ? "highlight nav-item ":"nav-item" }
          onClick={()=>{ navigate('/profile');}} style={{width:"50%"}}  aria-valuetext="profile" >
-            <img src="https://img.icons8.com/ios-filled/50/ffffff/user-male-circle.png" alt="Profile" />
+            
+            <img src={apiUrl+"/images/svg/person.svg"} alt="Profile" />
             <span className="text-xs">Profile</span>
         </div>
         <div className={`nav-item ${window.location.pathname.indexOf("/complaint") > -1 ?"highlight":""}`} style={{width:"50%"}} 
          onClick={()=>{ navigate('/complaint');}} aria-valuetext="complaint" > 
-            <img src="https://img.icons8.com/ios-filled/50/ffffff/megaphone.png" alt="แจ้งเรื่อง" />
+            <img src={apiUrl+"/images/svg/complaint.svg"} alt="แจ้งเรื่อง" />
             <span>แจ้งเรื่องร้องทุกข์</span>
         </div> 
     </div>
@@ -38,14 +41,14 @@ const NavApp=()=>{
         <div className={`nav-item ${window.location.pathname.indexOf("/activities") > -1 ?"highlight":""}`} aria-valuetext="place" style={{width:"50%"}} 
          onClick={()=>{ navigate('/activities');}} 
         > 
-            <img src="https://img.icons8.com/ios-filled/50/ffffff/calendar.png" alt="กิจกรรม" />
+            <img src={apiUrl+"/images/svg/activity.svg"} alt="กิจกรรม" />
             <span>สถานที่ท่องเที่ยว<br/>และกิจกรรม</span>
            
         </div>
         <div  className={`nav-item ${window.location.pathname.indexOf("/setting") > -1 ?"highlight":""}`}  aria-valuetext="setting" style={{width:"50%"}} 
          onClick={()=>{ navigate('/setting');}} 
         >
-            <img src="https://img.icons8.com/ios-filled/50/ffffff/menu.png" alt="ตั้งค่า" />
+            <img  src={apiUrl+"/images/svg/setting.svg"} alt="ตั้งค่า" />
             <span>ตั้งค่า</span>
         </div>
     </div>

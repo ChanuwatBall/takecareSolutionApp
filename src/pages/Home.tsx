@@ -132,7 +132,7 @@ const Home:React.FC=()=>{
         </div>
         <div className="card-team-description" >
             <h6> {comname} <br/> {slogan} </h6> 
-            {history&&history.map((p)=><p>{p}</p> )}
+            {history&&history.map((p,i)=><p key={i} >{p}</p> )}
             <p></p>
         </div>
     </div>
