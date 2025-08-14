@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { CircleImageUploader } from "./Register";
-import { getCookie, registerNewMember, setCookie, updatevillager, userLineid } from "../action";
+import { getCookie, setCookie, updatevillager, userLineid } from "../action";
 import Loading from "../components/Loading"; 
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "../components/AlertContext";
