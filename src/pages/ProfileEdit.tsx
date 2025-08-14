@@ -137,13 +137,13 @@ const ProfileEdit=()=>{
                   </label>
                 <label className="block mb-2">นามสกุล*
                   <input 
-                   type="tel" name="lastName" maxLength={10} value={lastName}
+                   type="text" name="lastName" value={lastName}
                    className="w-full border p-2 rounded border-gray-300" 
                    onChange={(e)=>{setLastName(e.target.value)}} 
                   /></label>
                 <label className="block mb-2">หมายเลขโทรศัพท์*
                   <input 
-                    type="tel" name="phone" value={phone}
+                    type="tel" name="phone" value={phone} maxLength={10} 
                     className="w-full border p-2 rounded border-gray-300" 
                     onChange={(e)=>{setPhone(e.target.value)}} />
                   </label>
