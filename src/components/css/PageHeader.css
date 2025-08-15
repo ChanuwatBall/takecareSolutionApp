@@ -13,6 +13,9 @@
   background-color: #F7F7F9;
   background: #FFF;
   margin-bottom: 1rem;
+  position: fixed;
+  top: 0;
+  z-index: 999;
   /* flex: ; */ 
 }
 .tumbon-name{

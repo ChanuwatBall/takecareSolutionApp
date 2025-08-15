@@ -18,6 +18,7 @@ import ActivitieDetail from './pages/ActivitieDetail';
 import Register from './pages/Register';
 import { isAuthenticated } from './auth'; 
 import ProfileEdit from './pages/ProfileEdit';
+
 function App() {  
   useEffect(() => { 
     
@@ -45,8 +46,10 @@ function App() {
         <Route path="/activities" element={<Activities />} /> 
         <Route path='/activities/detail' element={<ActivitieDetail/>} />
         <Route path='/register' element={<Register/>} />
+        {/* <Route path='/scroll' element={<ScrollBounceDemo/>} /> */}
+        
       </Routes> 
-
+{/* </ScrollBounceDemo> */}
     </>
   )
 }

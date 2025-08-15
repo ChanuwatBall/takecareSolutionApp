@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import "./css/Home.css"
 import   { SwiperSlide ,Swiper } from "swiper/react";
 import { isAuthenticated } from "../auth";  
-import { companydetail, deleteCookie, getCookie, setCookie } from "../action";
+import { companydetail, deleteCookie, getCookie, setCookie, userLineid } from "../action";
 import liff from "@line/liff";
 import { useNavigate } from "react-router-dom";
+import ScrollBounce from "./ScrollBounce";
 const apiUrl = import.meta.env.VITE_API;
 
 
@@ -53,9 +54,16 @@ const Home:React.FC=()=>{
     useEffect(()=>{
         const checkmemberregis=async ()=>{
             const profilecookie = await getCookie("profile")
-            if(profilecookie === null || profilecookie === undefined){
+            const usr = await userLineid(profilecookie?.userId)
+            if(usr?.result && profilecookie === null || profilecookie === undefined){
                  const profile:any = await liff.getProfile()
                  setCookie("profile",profile,30) 
+            }else{
+                //  deleteCookie("profile" ) 
+                //  deleteCookie("member" ) 
+                //  localStorage.removeItem("token")
+                //  window.location.pathname = "/register"
+                //  window.location.reload()
             }
         }
         checkmemberregis()
@@ -86,7 +94,7 @@ const Home:React.FC=()=>{
        }
     },[]) 
 
-    return(
+    return( 
     <div className="page" style={{paddingTop:"0" }}>
         <div className="card-executive" >
             <div  className="name-container">  
@@ -135,7 +143,7 @@ const Home:React.FC=()=>{
             {history&&history.map((p,i)=><p key={i} >{p}</p> )}
             <p></p>
         </div>
-    </div>
+    </div> 
     )
 }
 export default Home;
