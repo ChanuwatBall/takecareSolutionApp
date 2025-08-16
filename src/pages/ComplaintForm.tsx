@@ -157,7 +157,7 @@ const ComplaintForm=()=>{
 
     const acceptform=async ()=>{
         setOpen(false)
-        setLoading(true)
+        // setLoading(true)
         const formData = new FormData();
         const villager = await getCookie("member")
         console.log("villager ",villager)
@@ -183,7 +183,7 @@ const ComplaintForm=()=>{
 
         // console.log("form ",form) 
         const result = await createComplaint(formData)
-        setLoading(false)
+        // setLoading(false)
         if(result?.result ){ 
             showAlert(result?.description+" สามรถติดตามสถานะเรื่องร้องเรียนได้ที่หน้าโปรไฟล์ของท่าน ","success")
             navigate(-1)
@@ -204,8 +204,7 @@ const ComplaintForm=()=>{
     return(
     <PullToRefreshComponent > 
         <div  id="page" className="page  " style={{position:"relative"}} >
-
-        <Loading open={loading} /> 
+ 
         <ModalDialog 
          open={openmodal} setOpen={(e:any)=>{setOpen(e)}}
          complaint={ {topic, subtitle , phone, detail, images} }

@@ -1,20 +1,19 @@
 import { useEffect, useState } from "react";
 import "./css/Profile.css"
 import { complaintsumbyuser,   getCookie,   setCookie,   userLineid } from "../action";
-// import liff from "@line/liff"; 
-import Loading from "../components/Loading";
+// import liff from "@line/liff";  
 import liff from "@line/liff";
 import { useNavigate } from "react-router-dom";
 import PullToRefreshComponent from "../components/PullToRefreshComponent";
 import { BouceAnimation } from "../components/Animations";
-import { headersize } from "../components/PageHeader";
-
+import { headersize } from "../components/PageHeader"; 
+ 
 const apiUrl = import.meta.env.VITE_API;
 
  
 const Profile:React.FC=()=>{
-    const navigate = useNavigate()
-    const [loading,setLoading] = useState(false)
+    const navigate = useNavigate() 
+    // const [loading,setLoading] = useState(false)
     const [profile , setProfile]  = useState<any>(null) 
     const [familyMember , setFammember] = useState(0)
     const [complaintStatus  , setComplaintSumm] = useState({
@@ -45,7 +44,6 @@ const Profile:React.FC=()=>{
     ])
 
     useEffect(()=>{
-            headersize()
             const checkmemberregis=async ()=>{
                 const profilecookie = await getCookie("profile")
                 if(profilecookie === null || profilecookie === undefined){
@@ -54,8 +52,7 @@ const Profile:React.FC=()=>{
                 }
             }
             checkmemberregis()
-        const getuservillager=async ()=>{
-            setLoading(true) 
+        const getuservillager=async ()=>{ 
             const member = await getCookie("member")
             console.log("member ",member)
             if(member ){
@@ -73,20 +70,16 @@ const Profile:React.FC=()=>{
                 setComplaintSumm(complaintsumm)
                 setComplaints(complaintsumm?.complaints)
             } catch (error) {
-                setLoading(false)
+                // SETLOADING(false) 
                 console.log("error ",error)
-            }
-            setTimeout(()=>{ 
-               setLoading(false)
-            },2000)
-
+            }  
+            headersize()
         }
         getuservillager()
     },[])  
 
     return(
     <PullToRefreshComponent > 
-    <Loading open={loading} />
     <div  id="page" className="page"> 
         <BouceAnimation duration={0.1}> 
         <div className="card-profile  flex items-center " style={{position: "relative"}}>
@@ -166,8 +159,8 @@ const Profile:React.FC=()=>{
                 <div className="complaint-status-name flex  items-center justify-center">สถานะ</div>
             </div>
              {
-                complaints && complaints.map((e)=>
-                <div className="grid grid-cols-3  py-1" >
+                complaints && complaints.map((e,index)=>
+                <div key={index} className="grid grid-cols-3  py-1" >
                     <div className="text-center text-sm" >{e?.topic}</div>
                     <div  className="text-center text-sm" >{e?.admin}</div>
                     <div className="text-center text-sm" >

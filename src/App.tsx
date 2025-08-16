@@ -17,21 +17,25 @@ import Activities from './pages/Activities';
 import ActivitieDetail from './pages/ActivitieDetail';
 import Register from './pages/Register';
 import { isAuthenticated } from './auth'; 
-import ProfileEdit from './pages/ProfileEdit'; 
+import ProfileEdit from './pages/ProfileEdit';  
+import { useDispatch, useSelector } from 'react-redux';
+import { getLoading, setLoaing } from './store/appSlice';
+import Loading from './components/Loading';
 
-function App() {  
-  useEffect(() => { 
-    
-  }, [isAuthenticated]);
 
+function App() {   
+  const dispatch = useDispatch()
+  const loading = useSelector(getLoading)
+  useEffect(()=>{ 
+    setTimeout(()=>{
+      dispatch(setLoaing(false))
+    },2000)
+  },[loading])
 
   return ( 
     <   >  
           
-       {isAuthenticated() &&( <> 
-         <PageHeader /> 
-         <NavApp /> </>)
-       } 
+    { loading && <Loading open={false} />}
      <Routes> 
         <Route path="/" element={<RedirectToRegister />} />
         <Route path="/register" element={<Register />} />  
@@ -49,6 +53,10 @@ function App() {
         {/* <Route path='/scroll' element={<ScrollBounceDemo/>} /> */}
         
       </Routes>  
+       {isAuthenticated() &&( <> 
+         <PageHeader /> 
+         <NavApp /> </>)
+       } 
 {/* </ScrollBounceDemo> */}
     </>
   )
@@ -60,15 +68,48 @@ export default App
 const RedirectToRegister: React.FC = () => {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Redirect to /register when the component is mounted
-    navigate('/register');
-  }, [navigate]);
 
-  return (
-    <div className='page' >
-      {/* Optionally, you can display a message while redirecting */}
-      <p>Redirecting to register...</p>
+    // const checklocaluser=async()=>{
+      
+    //   const profile:any = await getCookie("profile") 
+    //   // alert("profile "+JSON.stringify(profile))
+    //   const usr = await userLineid(profile?.userId) 
+    //   // alert("userLineid "+JSON.stringify(usr))
+    //   if(usr?.result ){ 
+    //       await liff.login()
+    //       localStorage.setItem("token", JSON.stringify(liff.getAccessToken()))  
+    //     // navigate("/home")
+    //        setTimeout(()=>{
+    //           navigate('/home');
+    //         },1000)  
+    //   }else{      
+    //     // navigate("/register") 
+    //     setTimeout(()=>{
+    //           navigate('/register');
+    //     },1000)
+    //   }
+    // }
+
+  useEffect(() => {
+    //   try {
+    //     checklocaluser()
+    //   } catch (error) {
+    //   // Redirect to /register when the component is mounted
+    //     setTimeout(()=>{
+    //       navigate('/register');
+    //     },1000)
+          
+    //   }
+    // checklocaluser()
+     setTimeout(()=>{
+          navigate('/register');
+        },1000)
+  }, [ ]);
+
+  return ( 
+     <div className="fixed bg-gray-500  flex items-center justify-center " 
+     style={{zIndex:999 , backgroundColor:" white",position:"fixed", top:"0" , width:"100vw" , height:"100vh",overflow:"hidden"}}>
+       <img src='../../assets/loading.gif' style={{width:"4rem",marginTop:"-2rem"}} /> 
     </div>
   );
 };

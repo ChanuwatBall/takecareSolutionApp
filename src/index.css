@@ -81,5 +81,7 @@ button:focus-visible {
   box-shadow: none;
   border: none !important;
   overflow-x: hidden;
+  z-index: 1;
+  margin-top:  20vh;
 }
 .page.no-margin{ margin: 0;}

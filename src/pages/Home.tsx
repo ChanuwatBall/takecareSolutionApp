@@ -6,11 +6,14 @@ import { useNavigate } from "react-router-dom";
 import { BouceAnimation  } from "../components/Animations"; 
 import PullToRefreshComponent from "../components/PullToRefreshComponent";
 import { headersize } from "../components/PageHeader";
+import { useDispatch } from "react-redux";
+import { setLoaing } from "../store/appSlice";
 
 const apiUrl = import.meta.env.VITE_API;
  
 
 const Home:React.FC=()=>{ 
+    const dispatch = useDispatch()
     const [ceoname , setCeoName] = useState("")
     const [ceonickname , setceonickname] = useState("") 
     const [ceoImage,setCeoimages] = useState("")
@@ -33,7 +36,8 @@ const Home:React.FC=()=>{
  
 
     useEffect(()=>{
-         headersize() 
+        headersize()
+         dispatch(setLoaing(true))
          const getCDetal=async ()=>{
             const profile = await getCookie("profile")
             const result =await companydetail({  lineId: profile?.userId})
@@ -56,6 +60,9 @@ const Home:React.FC=()=>{
             }
          }
          getCDetal() 
+         setTimeout(()=>{ 
+            dispatch(setLoaing(false))
+        },2000) 
          
 
     },[]) 

@@ -9,6 +9,8 @@
   /* width: 100vw !important ;
   height: 100vh !important; */
   background-color: #FFF;
+
+  -webkit-tap-highlight-color: transparent;
 }
 
 .logo {
@@ -65,4 +67,21 @@
     left: 1vw ;
     top: 0;
     z-index: 9999 !important;
+}
+ .noselect {
+  /* ปิดเลือกข้อความ */
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+
+  /* ปิดเมนู copy/paste ตอน long press บน iOS Safari */
+  -webkit-touch-callout: none;
+
+  /* ปิดไฮไลต์สีเทา/น้ำเงินตอนแตะบน iOS/Android */
+  -webkit-tap-highlight-color: transparent;
+
+  /* ควบคุม gesture: ให้ลากแนวตั้งได้ลื่น ๆ โดยไม่ไปซ้อน gesture อื่น */
+  touch-action: pan-y; /* ถ้าสกอลล์แนวตั้ง */
+  /* ถ้าเป็นแนวนอน ใช้ pan-x */
 }

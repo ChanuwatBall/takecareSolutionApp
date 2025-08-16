@@ -8,9 +8,9 @@ const apiUrl = import.meta.env.VITE_API;
      const header = document.getElementById("page-header") as HTMLElement | null;
      const page   = document.getElementById("page") as HTMLElement | null;
      if (!header || !page) return;
-
+    console.log("header.offsetHeight ",header.offsetHeight)
      const setOffset = () => {
-     page.style.marginTop = `${header.offsetHeight + 20}px`;
+     page.style.marginTop = `${header.offsetHeight +  20}px`; 
      };
 
      setOffset();
@@ -21,8 +21,8 @@ const apiUrl = import.meta.env.VITE_API;
 
      window.addEventListener("resize", setOffset);
      return () => {
-     ro.disconnect();
-     window.removeEventListener("resize", setOffset);
+        ro.disconnect();
+        window.removeEventListener("resize", setOffset);
      };
  }
 const PageHeader:React.FC=()=>{
@@ -42,9 +42,9 @@ const PageHeader:React.FC=()=>{
         getcompanydetail()
        },[ window.location.pathname])
 
-    return( <div id="page-header" className="page-header  flex" >
+    return( <div id="page-header noselect" className="page-header  flex" >
         <div className="tumbon-name  " >
-            <p className="name" ><label>{name}</label></p>
+            <p className="name" > {name} </p>
             <div className="address">{district}</div>
         </div>
         <div className="tumbon-logo  " >  

@@ -23,7 +23,7 @@ const NavApp=()=>{
     
     return( 
    <BouceAnimation duration={0.44}> 
-  <div className="set-column bottom-nav " >
+  <div className="set-column bottom-nav noselect" >
    <div className="wrapper-bottom-nav set-column" >
     <div className="left-wrapper-bottom-nav" >
         <div 
@@ -36,7 +36,7 @@ const NavApp=()=>{
         <div className={`nav-item ${window.location.pathname.indexOf("/complaint") > -1 ?"highlight":""}`} style={{width:"50%"}} 
          onClick={()=>{ navigate('/complaint', { viewTransition: true });}} aria-valuetext="complaint" > 
             <img src={apiUrl+"/images/svg/complaint.svg"} alt="แจ้งเรื่อง" />
-            <span>แจ้งเรื่องร้องทุกข์</span>
+            <span className='noselect' >แจ้งเรื่องร้องทุกข์</span>
         </div> 
     </div>
     <div className="right-wrapper-bottom-nav" >
@@ -44,19 +44,19 @@ const NavApp=()=>{
          onClick={()=>{ navigate('/activities', { viewTransition: true });}} 
         > 
             <img src={apiUrl+"/images/svg/activity.svg"} alt="กิจกรรม" />
-            <span>สถานที่ท่องเที่ยว<br/>และกิจกรรม</span>
+            <span className='noselect' >สถานที่ท่องเที่ยว<br/>และกิจกรรม</span>
            
         </div>
         <div  className={`nav-item ${window.location.pathname.indexOf("/setting") > -1 ?"highlight":""}`}  aria-valuetext="setting" style={{width:"50%"}} 
          onClick={()=>{ navigate('/setting', { viewTransition: true });}} 
         >
             <img  src={apiUrl+"/images/svg/setting.svg"} alt="ตั้งค่า" />
-            <span>ตั้งค่า</span>
+            <span className='noselect' >ตั้งค่า</span>
         </div>
     </div>
    </div>
    <div   onClick={()=>{ navigate('/home', { viewTransition: true });}} className={`nav-item center-circle ${window.location.pathname === "/home" ? "active" :"deactive"}  `} >
-      <label>{name}</label>
+      <label className='noselect' >{name}</label>
    </div>
 </div>
 </BouceAnimation>

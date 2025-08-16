@@ -5,9 +5,10 @@ import { useNavigate } from "react-router-dom";
 import liff from "@line/liff";
 import { getDefaultCompay, registerNewMember, setCookie, userLineid, villageoption } from "../action";
 import Select from 'react-select';
-import { isAuthenticated } from "../auth";
-import Loading from "../components/Loading";
+import { isAuthenticated } from "../auth"; 
 import PullToRefreshComponent from "../components/PullToRefreshComponent";
+import { useDispatch } from "react-redux";
+import { setLoaing } from "../store/appSlice";
  
  
 interface LineProfile {
@@ -18,8 +19,8 @@ interface LineProfile {
 }
 
 const Register=()=>{
-    const navigate = useNavigate();
-    const [loading,setLoading] = useState(false)
+    const navigate = useNavigate(); 
+    const dispatch = useDispatch()
     const [company,setCompany] = useState<any>({id:1 , name:"เทศบาลตำบลบางหมาก"})
     const [isimage ,setIsImage] = useState(false)
     const [selectedOption, setSelectedOption] = useState<any>(null);
@@ -46,6 +47,7 @@ const Register=()=>{
     
 
   useEffect(()=>{
+    dispatch(setLoaing(true))
     const initline=async ()=>{
       if(!isAuthenticated()){ 
         const companyapp = await getDefaultCompay() 
@@ -69,6 +71,7 @@ const Register=()=>{
       }
     }
     initline()
+    dispatch(setLoaing(false))
     
     const getvillage=async()=>{ 
       const companyapp = await getDefaultCompay() 
@@ -133,8 +136,8 @@ const Register=()=>{
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-      setLoading(true)
+    e.preventDefault(); 
+      dispatch(setLoaing(true))
       console.log("profile ",lineprofile)
       console.log('Form submitted:', isimage);  
      console.log("village  ", selectedOption)
@@ -183,7 +186,7 @@ const Register=()=>{
       }else{
 
       } 
-      setLoading(false)
+      dispatch(setLoaing(true))
               
   };
   const handleChangeOpt = (selectedOption:any) => {
@@ -193,9 +196,8 @@ const Register=()=>{
 
     return(
     <PullToRefreshComponent > 
-    <div className="page no-margin" style={{background:"#F7F7F9"}}>
-    <Loading open={loading} />
-        <div className="w-100 flex justify-center column items-center pt-5">
+    <div className="page no-margin" style={{background:"#F7F7F9"}}> 
+        <div className=" flex justify-center column items-center pt-5">
             <div className="bg-primary w-fit text-2xl text-white px-4 py-1 rounded-lg" >{company?.name}</div>
             <label className="text-primary-light my-5 font-medium">สมัครสมาชิก</label>
             <div className="profile-images" >
@@ -328,7 +330,6 @@ export const CircleImageUploader: React.FC<ImageUploaderProps> = ({ onChange  ,i
   };
 
   useEffect(()=>{
-
   },[image])
 
   return (
