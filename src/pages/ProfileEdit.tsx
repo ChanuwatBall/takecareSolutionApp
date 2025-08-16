@@ -4,6 +4,8 @@ import { getCookie, setCookie, updatevillager, userLineid } from "../action";
 import Loading from "../components/Loading"; 
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "../components/AlertContext";
+import { headersize } from "../components/PageHeader";
+import PullToRefreshComponent from "../components/PullToRefreshComponent";
 
 const apiUrl = import.meta.env.VITE_API;
 
@@ -27,6 +29,7 @@ const ProfileEdit=()=>{
         setImgFormat(e?.format)
     }
     useEffect(()=>{
+       headersize()
         const getlocalprofile=async ()=>{
             const member = await getCookie("member")
             console.log("member ",member)
@@ -121,9 +124,10 @@ const ProfileEdit=()=>{
       };
 
     return(
-    <div className="page">  
+    <PullToRefreshComponent > 
+    <div  id="page" className="page">  
     <Loading open={loading} />
-     <div className="w-100 flex justify-center column items-center pt-5"> 
+     <div className="  flex justify-center column items-center pt-5"> 
             <label className="text-primary-light my-5 font-medium"> แก้ไขข้อมูล</label>
             <div className="profile-images" >
                 <CircleImageUploader onChange={imagesprofile} image={image} />
@@ -186,6 +190,7 @@ const ProfileEdit=()=>{
             <br/><br/><br/>
         </div>
     </div>
+    </PullToRefreshComponent>
     )
 }
 export default ProfileEdit;

@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import "./css/Home.css"
-import   { SwiperSlide ,Swiper } from "swiper/react";
-import { isAuthenticated } from "../auth";  
-import { companydetail, deleteCookie, getCookie, setCookie, userLineid } from "../action";
-import liff from "@line/liff";
+import   { SwiperSlide ,Swiper } from "swiper/react"; 
+import { companydetail, deleteCookie, getCookie } from "../action"; 
 import { useNavigate } from "react-router-dom";
-import ScrollBounce from "./ScrollBounce";
-const apiUrl = import.meta.env.VITE_API;
+import { BouceAnimation  } from "../components/Animations"; 
+import PullToRefreshComponent from "../components/PullToRefreshComponent";
+import { headersize } from "../components/PageHeader";
 
+const apiUrl = import.meta.env.VITE_API;
+ 
 
 const Home:React.FC=()=>{ 
     const [ceoname , setCeoName] = useState("")
@@ -17,14 +18,7 @@ const Home:React.FC=()=>{
     const [history,setHistory] = useState([])
     const [comname , setComname] = useState("")
     const navigate = useNavigate()
-    
-
-    // const [executive] = useState({
-    //     image:"../assets/images/executive-profile.png" ,
-    //     nickname:"นายกตู่" ,
-    //     firstName:"สุรพงษ์" ,
-    //     lastName: "ประสารวุฒิ"
-    // })
+     
 
     const [teamleft, setTeamLeft] = useState([
         "../assets/images/executive-team-left.jpg",
@@ -36,43 +30,14 @@ const Home:React.FC=()=>{
         "../assets/images/executive-team-right.jpg",
         "../assets/images/executive-team-right.jpg"
     ])
-
-    // const [companyDetail ] = useState({
-    //     name:"เทศบาลตำบลบางหมาก:" , subtitle:"ท้องถิ่นน่าอยู่ คู่พัฒนาชุมชนเมืองชุมพร" ,
-    //     description:[
-    //         `เทศบาลตำบลบางหมาก ตั้งอยู่ในพื้นที่ตำนลบามหมาก อำเทอเมืองรุมพร จึงหรัดรุงพร
-    //         เป็นหน่วยงามปกครอง ส่วนก็องเห็นที่มีนทบากสำหรัญ ในการดูแลคคุณภาพเวัวิภาพย์วิตของ
-    //         ประชาชนกว่า 12,000 คนในพื้นที่กว่า 13 หมู่บ้าน คือยการพัฒบาอย่างรอบคำต่างรอบคำน` ,
-    //         `ด้วยวิสัยทักษ์ที่มุ่งมั่นสร้าง "ซุนฆ่าอยู่ ประชาชนมีลูก ทหบาลค่านสบางหมาามาใช้อิ่ม
-    //         และเล็กคันโครงการหลากทลาม อาที โครสาร "ผู้สูงอายุสูงอายุสุทาพที่ 850" ที่ใช้ความรู้
-    //         และดูแลกลุ่มผู้สูงวัยอย่างต่อเนื่อง รวมถึงการจัดกิจกรรมต้อนรับคณะกรรมการตรวจ
-    //         ประเมินระดับจังหวัด เพื่อส่งเสริมบทบาทของชุมชนในการสร้างสรรค์พื้นที่ให้เกิดคุณภาพ
-    //         และความภาคภูมิใจร่วมกัน`
-    //     ]
-    // })
+ 
 
     useEffect(()=>{
-        const checkmemberregis=async ()=>{
-            const profilecookie = await getCookie("profile")
-            const usr = await userLineid(profilecookie?.userId)
-            if(usr?.result && profilecookie === null || profilecookie === undefined){
-                 const profile:any = await liff.getProfile()
-                 setCookie("profile",profile,30) 
-            }else{
-                //  deleteCookie("profile" ) 
-                //  deleteCookie("member" ) 
-                //  localStorage.removeItem("token")
-                //  window.location.pathname = "/register"
-                //  window.location.reload()
-            }
-        }
-        checkmemberregis()
-       if( isAuthenticated() ){
-        //  navigate("/register")
+         headersize() 
          const getCDetal=async ()=>{
             const profile = await getCookie("profile")
             const result =await companydetail({  lineId: profile?.userId})
-            console.log("companydetail result ",result)
+        
             if(result?.name || result?.name){
                 setCeoName(result?.ceoName)
                 setceonickname(result?.ceoNickName)
@@ -90,19 +55,22 @@ const Home:React.FC=()=>{
                 navigate("/")
             }
          }
-         getCDetal()
-       }
+         getCDetal() 
+         
+
     },[]) 
 
-    return( 
-    <div className="page" style={{paddingTop:"0" }}>
-        <div className="card-executive" >
+    return(    
+    <PullToRefreshComponent > 
+    <div id="page" className="page" style={{paddingTop:"0" }}> <br/> 
+        <BouceAnimation duration={0.1} className="card-executive" > 
             <div  className="name-container">  
                 <label className="executive-nickname" > {ceonickname} </label> <br/>
                 <label className="full-name" >{ceoname}</label> 
             </div> 
-            <img src={apiUrl+"/api/file/drive-image/"+ceoImage} alt="executive-profile" />
-        </div>
+            <img src={apiUrl+"/api/file/drive-image/"+ceoImage} className="executive-profile" alt="executive-profile" /> 
+        </BouceAnimation>
+        <BouceAnimation duration={0.4}> 
         <div className="card-executive-team  grid grid-cols-2 gap-2 ">
             <div className="executive-team" > 
                 <Swiper
@@ -138,12 +106,17 @@ const Home:React.FC=()=>{
                 <div className="executive-team-name" > ทีมบริหาร </div>
             </div>
         </div>
+        </BouceAnimation>
+        <BouceAnimation duration={0.3}>
         <div className="card-team-description" >
             <h6> {comname} <br/> {slogan} </h6> 
             {history&&history.map((p,i)=><p key={i} >{p}</p> )}
             <p></p>
         </div>
+        </BouceAnimation>
     </div> 
+    </PullToRefreshComponent>
     )
 }
 export default Home;
+

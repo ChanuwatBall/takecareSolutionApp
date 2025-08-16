@@ -3,6 +3,9 @@ import "./css/Activities.css"
 import { useNavigate } from "react-router-dom"; 
 import { activity, getCookie, setCookie } from "../action";
 import liff from "@line/liff";
+import PullToRefreshComponent from "../components/PullToRefreshComponent";
+import { BouceAnimation } from "../components/Animations";
+import { headersize } from "../components/PageHeader";
 const apiUrl = import.meta.env.VITE_API;
 
 
@@ -27,19 +30,22 @@ const Activities=()=>{
             console.log("result ",result)
             setActivities(result)
         }
-        getactivities()
+        getactivities() 
+        headersize()
     },[])
 
     return(
-    <div className="page">
+    <PullToRefreshComponent > 
+    <div id="page" className="page"><br/>
         <div className="button-title" >
             กิจกรรม
         </div> 
 
-        <div className="w-100 pb-9" >
+        <div className=" pb-9" >
             {
                 activities && activities.map((act:any,inx)=>
-                inx%2==0 ?  <div  
+                inx%2==0 ? 
+                 <BouceAnimation duration={0.3 + (inx/100)}><div  
                     className={`card-activity ${inx%2==0?"left":"right"} grid grid-cols-3  `}  style={{ height:"9rem"}} 
                     onClick={()=>{navigate("/activities/detail", { state: { activity: act } })}}>
                     <div><div className="act-img my-1 mx-1" style={{backgroundImage:`url(${apiUrl}/api/file/drive-image/${act?.coverImagePath})`}} ></div>
@@ -48,7 +54,7 @@ const Activities=()=>{
                         <label className="date">{act?.dateActivity}</label>
                         <label className="description">{act?.name}</label>
                     </div>
-                </div>:<div 
+                </div> </BouceAnimation> :<BouceAnimation duration={0.3 + (inx/100)}> <div 
                     className={`card-activity ${inx%2==0?"left":"right"} grid grid-cols-3  `} 
                     onClick={()=>{navigate("/activities/detail", { state: { activity: act } })}} >
                     <div className={`col-span-2 px-2 flex column justify-center  items-end  `} style={{textAlign:"right"}}>
@@ -57,14 +63,13 @@ const Activities=()=>{
                     </div>
                     <div className="flex  justify-end items-end"> 
                        <div className="act-img col-span-1 my-1 mx-1" style={{backgroundImage:`url(${apiUrl}/api/file/drive-image/${act?.coverImagePath})`}} ></div>
-                    </div>
-                    
-                </div>
-                )
-
+                    </div> 
+                </div></BouceAnimation>
+                ) 
             }
         </div>
     </div>
+    </PullToRefreshComponent>
     )
 }
 

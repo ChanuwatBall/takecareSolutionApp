@@ -57,3 +57,12 @@
 .items-center{ align-items: center; }
 .items-end{ align-items: flex-end; }
 
+.modal{
+    max-height: 98vh;
+    top: 1vh;
+    max-width: 98vw ;
+    overflow: scroll;
+    left: 1vw ;
+    top: 0;
+    z-index: 9999 !important;
+}

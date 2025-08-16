@@ -7,6 +7,7 @@ import { getDefaultCompay, registerNewMember, setCookie, userLineid, villageopti
 import Select from 'react-select';
 import { isAuthenticated } from "../auth";
 import Loading from "../components/Loading";
+import PullToRefreshComponent from "../components/PullToRefreshComponent";
  
  
 interface LineProfile {
@@ -191,7 +192,8 @@ const Register=()=>{
 
 
     return(
-    <div className="page" style={{background:"#F7F7F9"}}>
+    <PullToRefreshComponent > 
+    <div className="page no-margin" style={{background:"#F7F7F9"}}>
     <Loading open={loading} />
         <div className="w-100 flex justify-center column items-center pt-5">
             <div className="bg-primary w-fit text-2xl text-white px-4 py-1 rounded-lg" >{company?.name}</div>
@@ -273,6 +275,7 @@ const Register=()=>{
               className="w-full bg-blue-600 bg-primary text-white py-2 rounded hover:bg-blue-700">สมัครสมาชิก</button>
         </div>
     </div>
+    </PullToRefreshComponent>
     )
 }
 

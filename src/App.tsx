@@ -17,7 +17,7 @@ import Activities from './pages/Activities';
 import ActivitieDetail from './pages/ActivitieDetail';
 import Register from './pages/Register';
 import { isAuthenticated } from './auth'; 
-import ProfileEdit from './pages/ProfileEdit';
+import ProfileEdit from './pages/ProfileEdit'; 
 
 function App() {  
   useEffect(() => { 
@@ -26,12 +26,12 @@ function App() {
 
 
   return ( 
-    <   > 
+    <   >  
+          
        {isAuthenticated() &&( <> 
          <PageHeader /> 
          <NavApp /> </>)
-       }
-    
+       } 
      <Routes> 
         <Route path="/" element={<RedirectToRegister />} />
         <Route path="/register" element={<Register />} />  
@@ -48,7 +48,7 @@ function App() {
         <Route path='/register' element={<Register/>} />
         {/* <Route path='/scroll' element={<ScrollBounceDemo/>} /> */}
         
-      </Routes> 
+      </Routes>  
 {/* </ScrollBounceDemo> */}
     </>
   )

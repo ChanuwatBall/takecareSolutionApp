@@ -2,6 +2,7 @@
 .card-activity {
     margin: .5rem 0 .5rem;
     border-radius: 1rem; 
+    /* width: 95% !important; */
 }
 .card-activity  .act-img {
     border-radius: 1rem !important; 

@@ -3,6 +3,9 @@ import "./css/Complaint.css"
 import { useEffect } from "react";
 import liff from "@line/liff";
 import { getCookie, setCookie } from "../action";
+import PullToRefreshComponent from "../components/PullToRefreshComponent";
+import { BouceAnimation } from "../components/Animations";
+import { headersize } from "../components/PageHeader";
 // import { encodeBase64 } from "../action";
 
 const Complaint=()=>{
@@ -10,14 +13,15 @@ const Complaint=()=>{
 
   useEffect(()=>{
 
-            const checkmemberregis=async ()=>{
-                const profilecookie = await getCookie("profile")
-                if(profilecookie === null || profilecookie === undefined){
-                     const profile:any = await liff.getProfile()
-                     setCookie("profile",profile,30) 
-                }
-            }
-            checkmemberregis()
+    const checkmemberregis=async ()=>{
+        const profilecookie = await getCookie("profile")
+        if(profilecookie === null || profilecookie === undefined){
+             const profile:any = await liff.getProfile()
+             setCookie("profile",profile,30) 
+        }
+    }
+    checkmemberregis()
+    headersize()
   },[])
     const ComplaintMenu=[
         {
@@ -78,7 +82,9 @@ const Complaint=()=>{
     ]
 
     return(
-    <div className="page grid" >
+        <PullToRefreshComponent > 
+    <div  id="page" className="page  " >
+        <BouceAnimation duration={0.1}>
         <div className="title-row set-row" >
             <div className="complaint-button-title">
                 <div className="wrap-img" >
@@ -86,12 +92,17 @@ const Complaint=()=>{
                 </div>
                 <label>แจ้งเรื่องร้องทุกข์</label>
             </div>
-            <div className="top-continue-complaint-menu" >  </div>
+            <BouceAnimation duration={0.3}>
+             <div className="top-continue-complaint-menu" >  </div>
+            </BouceAnimation>
         </div> 
+        </BouceAnimation>
+        <BouceAnimation duration={0.1}>
         <div  className="complaints-menu" >
             <div className="grid grid-cols-3 grid-rows-3 gap-4 p-4">
             {
                 ComplaintMenu.map((menu , index) => 
+                    <BouceAnimation duration={0.1+( index/10)}>
                     <div key={index}  
                         className=" flex items-center justify-start  h-32 text-center " 
                         style={{flexDirection:"column" , justifyContent:"center" , alignItems:"center"}} 
@@ -100,11 +111,14 @@ const Complaint=()=>{
                         <img src={menu?.icon} alt={menu?.value} className="mt-4" />
                         <label className="text-sm" >{menu?.label}</label>
                     </div>
+                    </BouceAnimation>
                 )
             }
             </div>
         </div>
+        </BouceAnimation>
     </div>
+    </PullToRefreshComponent>
     )
 }
 export default Complaint;

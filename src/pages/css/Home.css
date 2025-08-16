@@ -41,7 +41,7 @@
     right: 0; */
 }
 .executive-profile{
-
+  z-index: 999;
 }
 .card-executive-team{
     width: 100%;

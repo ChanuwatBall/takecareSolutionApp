@@ -2,6 +2,9 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import "./css/Activities.css"
 import { useEffect } from "react";
+import PullToRefreshComponent from "../components/PullToRefreshComponent";
+import { BouceAnimation } from "../components/Animations";
+import { headersize } from "../components/PageHeader";
 const apiUrl = import.meta.env.VITE_API;
 
 
@@ -11,6 +14,7 @@ const ActivitieDetail=()=>{
     const activity =  location.state?.activity
  
     useEffect(()=>{
+        headersize()
         console.log("activity ",activity)    
         if(!activity){
             navigate(-1)
@@ -19,29 +23,40 @@ const ActivitieDetail=()=>{
      
 
     return(
-    <div className="page mb-6">   
+    <PullToRefreshComponent > 
+    <div id="page" className="page mb-6">  
+        <BouceAnimation duration={0.1}>
         <div className="button-title" >
             กิจกรรม
-        </div> 
+        </div> </BouceAnimation> 
 
         <div className="card-activity p-0 "  >
-            <img src={`${apiUrl}/api/file/drive-image/${activity?.coverImagePath}` } alt="activity-cover" className="w-100"   />
+            <BouceAnimation duration={0.6}>
+              <img src={`${apiUrl}/api/file/drive-image/${activity?.coverImagePath}` } alt="activity-cover" className="w-100"   />
+            </BouceAnimation>
             <br/>
-            <h5>{activity?.name}</h5>
-            <p>{activity?.description}</p>
+            <BouceAnimation duration={0.2}> 
+              <h5>{activity?.name}</h5>
+            </BouceAnimation>
+            <BouceAnimation duration={0.3}> 
+              <p>{activity?.description}</p>
+            </BouceAnimation>
 
             <div className="  grid  grid-cols-2 my-3 mt-5" >
-                <div className="flex items-center justify-center" >
-                    <button className="bg-hilight  detail-hilight "  >สถานที่จัดงาน: {activity?.location}</button>
-                </div>
-                <div className="flex items-center justify-center" >
-                     <button  className="bg-hilight detail-hilight " >วันที่ {activity?.dateActivity}</button>
-                </div>
+                <BouceAnimation duration={0.3}> 
+                    <div className="flex items-center justify-center" >
+                        <button className="bg-hilight  detail-hilight "  >สถานที่จัดงาน: {activity?.location}</button>
+                    </div>
+                </BouceAnimation>
+                <BouceAnimation duration={0.3}> 
+                    <div className="flex items-center justify-center" >
+                        <button  className="bg-hilight detail-hilight " >วันที่ {activity?.dateActivity}</button>
+                    </div>
+                </BouceAnimation>
             </div>
         </div>
-
-
-    </div>
+    </div>  
+    </PullToRefreshComponent>
     )
 }
 

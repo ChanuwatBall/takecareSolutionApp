@@ -75,5 +75,11 @@ button:focus-visible {
   background-color: #FFF;
   padding: 1rem;
   padding-bottom: 3rem !important;
-  margin-top: 17vh;
+  /* margin-top: 19vh; */
+  /* min-height: 110vh; */
+  overflow-y: scroll;
+  box-shadow: none;
+  border: none !important;
+  overflow-x: hidden;
 }
+.page.no-margin{ margin: 0;}

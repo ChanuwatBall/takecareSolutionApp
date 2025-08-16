@@ -18,6 +18,9 @@ import { createComplaint, getCookie } from "../action";
 import {Geolocation} from "@capacitor/geolocation"
 // import liff from "@line/liff"; 
 import Loading from "../components/Loading";
+import PullToRefreshComponent from "../components/PullToRefreshComponent";
+import { BouceAnimation } from "../components/Animations";
+import { headersize } from "../components/PageHeader";
 // import L from "leaflet"
 const apiUrl = import.meta.env.VITE_API;
 
@@ -66,6 +69,7 @@ const ComplaintForm=()=>{
     }
 
     useEffect(()=>{  
+        headersize()
         setTopic( comaplaintmenu?.label)
         setComplainTopic( comaplaintmenu?.value)
     },[])
@@ -187,107 +191,7 @@ const ComplaintForm=()=>{
             showAlert(result?.description,"error")
         }
     }
-
-    // const sendCarouselMessage = async () => {
-    //     if (!liff.isLoggedIn()) {
-    //         liff.login(); // If not logged in, prompt user to log in
-    //         return;
-    //     }
-
-    //     try {
-    //         const messages:any = [
-    //         {
-    //             type: 'template',
-    //             altText: 'This is a carousel template',
-    //             template: {
-    //                 type: 'carousel',
-    //                 columns: [
-    //                 {
-    //                     thumbnailImageUrl: 'https://example.com/thumbnail1.jpg',
-    //                     title: 'Title 1',
-    //                     text: 'Description 1',
-    //                     actions: [
-    //                     {
-    //                         type: 'uri',
-    //                         label: 'View More',
-    //                         uri: 'https://example.com/page1',
-    //                     },
-    //                     ],
-    //                 },
-    //                 {
-    //                     thumbnailImageUrl: 'https://example.com/thumbnail2.jpg',
-    //                     title: 'Title 2',
-    //                     text: 'Description 2',
-    //                     actions: [
-    //                     {
-    //                         type: 'uri',
-    //                         label: 'View More',
-    //                         uri: 'https://example.com/page2',
-    //                     },
-    //                     ],
-    //                 },
-    //                 ],
-    //             },
-    //           },
-    //         ];
-    //         const res =await liff.sendMessages(messages);
-    //         console.log("send msg ",res)
-    //         // alert('Carousel message sent successfully!');
-    //     } catch (error) {
-    //         // console.error('Error sending carousel message', error);
-    //     }
-    // };
-
-    // const sendMessage = async () => {
-    //     if (!liff.isLoggedIn()) {
-    //      liff.login(); // If not logged in, prompt user to log in
-    //      return;
-    //     }
-
-        
-    //     const accessToken = liff.getAccessToken();
-    //     try {
-    //         // Verify the access token
-    //         const result = await  axios({
-    //         method: 'POST',
-    //         url: 'https://api.line.me/v2/oauth2/v1/verify',
-    //         headers: {
-    //             'Authorization': `Bearer ${accessToken}`,
-    //             'Content-Type': 'application/json',
-    //         },
-    //         withCredentials: true,  // Add credentials if necessary (cookies, etc.)
-    //         })
-    //         .then((response) => {
-    //             console.log('Response:', response.data);
-    //             return response
-    //         })
-    //         .catch((error) => {
-    //             console.error('Error:', error);
-    //             return error
-    //         });
-          
-
-    //         console.log(result); // Should show user info and granted scopes
-
-    //         // Check if the necessary permission is granted
-    //         if (!result.data.scope || !result.data.scope.includes('chat_message.write')) {
-    //         alert('Required permission not granted: chat_message.write');
-    //         return;
-    //         }
-
-    //         // Send message
-    //         const message:any = {
-    //         type: 'text',
-    //         text: 'Hello, this is a test message sent from LIFF!',
-    //         };
-
-    //         await liff.sendMessages([message]);
-    //         alert('Message sent successfully!');
-    //     } catch (error) {
-    //         console.error('Error verifying access token or sending message:', error);
-    //         alert('Failed to verify access token or send message');
-    //     }
-    // };
+ 
 
     const removeimage=(e:any)=>{
         console.log(" remove images ",e)
@@ -298,26 +202,28 @@ const ComplaintForm=()=>{
     }
 
     return(
-        <div className="page  " style={{position:"relative"}} >
+    <PullToRefreshComponent > 
+        <div  id="page" className="page  " style={{position:"relative"}} >
 
-        <Loading open={loading} />
-        {/* {loading && <ReactLoading type={ "bubbles"} color={"black"} height={'20%'} width={'20%'} /> } */}
-        {/* {openmodal && <div className="backdrop"></div> } */}
+        <Loading open={loading} /> 
         <ModalDialog 
          open={openmodal} setOpen={(e:any)=>{setOpen(e)}}
          complaint={ {topic, subtitle , phone, detail, images} }
          acceptform={acceptform}
          removeImage={(e:any)=>{removeimage(e)}}
         />
+        
+        <BouceAnimation duration={0.1}> 
         <div className="title-row set-row" style={{flexDirection:"row-reverse"}} >
-            <div className="complaint-button-title" style={{justifyContent:"center"}}>
-                {/* <div className="wrap-img" >
-                    <img src="assets/images/Asset12@3x.png" />
-                </div> */}
+            <div className="complaint-button-title" style={{justifyContent:"center"}}> 
                 <label>รับเรื่องร้องทุกข์</label>
-            </div>
-            <div className="topleft-continue-complaint-menu" >  </div>
+            </div> 
+            <BouceAnimation duration={0.5}> 
+               <div className="topleft-continue-complaint-menu" >  </div>
+            </BouceAnimation>
         </div> 
+        </BouceAnimation>
+       <BouceAnimation duration={0.3}> 
           <div  className="complaints-menu" >  
             <Swiper
             draggable={false}
@@ -389,11 +295,16 @@ const ComplaintForm=()=>{
                      
                 </SwiperSlide>
                 <SwiperSlide>
-                    <MapPosition />
-                    <button className="find-my-loaction" onClick={()=>{userlocation()}} >
-                        <img src={apiUrl+"/images/pin-locatiion.png"} />
-                         ตำแหน่งของฉัน
-                    </button>
+                    <BouceAnimation duration={0.3}>
+                        <MapPosition />
+                    </BouceAnimation>
+                    <BouceAnimation duration={0.4}>
+                        <button className="find-my-loaction" onClick={()=>{userlocation()}} >
+                            <img src={apiUrl+"/images/pin-locatiion.png"} />
+                            ตำแหน่งของฉัน
+                        </button>
+                    </BouceAnimation>
+                    <BouceAnimation duration={0.5}>
                     <div className="row-input "  >
                         <button className="back" onClick={()=>{swiperref?.slidePrev() }} >
                             <label>ย้อนกลับ</label>
@@ -402,14 +313,15 @@ const ComplaintForm=()=>{
                         data-dialog-target="modal"
                         onClick={()=>{confirmComplaint()}} >
                             <label>ถัดไป</label>
-                        </button>
-                        
+                        </button> 
                     </div>
+                    </BouceAnimation>
                 </SwiperSlide>  
             </Swiper>
-        </div> 
-    
+        </div>
+        </BouceAnimation>  
     </div>
+    </PullToRefreshComponent>
     )
 }
 

@@ -5,6 +5,9 @@ import { complaintsumbyuser,   getCookie,   setCookie,   userLineid } from "../a
 import Loading from "../components/Loading";
 import liff from "@line/liff";
 import { useNavigate } from "react-router-dom";
+import PullToRefreshComponent from "../components/PullToRefreshComponent";
+import { BouceAnimation } from "../components/Animations";
+import { headersize } from "../components/PageHeader";
 
 const apiUrl = import.meta.env.VITE_API;
 
@@ -42,6 +45,7 @@ const Profile:React.FC=()=>{
     ])
 
     useEffect(()=>{
+            headersize()
             const checkmemberregis=async ()=>{
                 const profilecookie = await getCookie("profile")
                 if(profilecookie === null || profilecookie === undefined){
@@ -72,15 +76,19 @@ const Profile:React.FC=()=>{
                 setLoading(false)
                 console.log("error ",error)
             }
-            setLoading(false)
+            setTimeout(()=>{ 
+               setLoading(false)
+            },2000)
 
         }
         getuservillager()
     },[])  
 
     return(
-    <div className="page"> 
+    <PullToRefreshComponent > 
     <Loading open={loading} />
+    <div  id="page" className="page"> 
+        <BouceAnimation duration={0.1}> 
         <div className="card-profile  flex items-center " style={{position: "relative"}}>
             <div style={{position:"absolute",fontSize:".6em",color:"#FFF", top:"2rem", right:"2rem", opacity:".4"}}
             onClick={(()=>{navigate("/profile/edit")})}
@@ -100,12 +108,16 @@ const Profile:React.FC=()=>{
                 <div className="chip-profile" >จำนวนสมาชิกในครอบครัว {familyMember}</div>
             </div> 
         </div>
+        </BouceAnimation>
 
+        <BouceAnimation duration={0.3}> 
         <div className="card-complaint-count flex  items-center justify-center " >
            <img src="../assets/images/complaint-alert.png" alt="" />
            <label>จำนวนเรื่องร้องเรียน: {complaintStatus && complaintStatus?.total} เรื่อง</label>
         </div>
+        </BouceAnimation>
 
+        <BouceAnimation duration={0.5}> 
         <div className="card-complaint-status" >
              <div className="grid grid-cols-4  " >
                 <div className="col-span-3 grid grid-cols-3 gradient-primary rounded-md">
@@ -143,8 +155,10 @@ const Profile:React.FC=()=>{
                     </div> 
                 </div>
              </div>
-        </div><br/>
+        </div>
+        </BouceAnimation><br/>
 
+        <BouceAnimation duration={0.5}> 
         <div className="card-complaint-status" >
             <div className="grid grid-cols-3  gradient-primary rounded-md py-1" >
                 <div className="complaint-status-name flex  items-center justify-center">หัวข้อเรื่อง</div>
@@ -164,12 +178,11 @@ const Profile:React.FC=()=>{
                     </div>
                 </div>
                )
-           } 
-            
-        </div>
-
-
+           }  
+        </div> 
+        </BouceAnimation>
     </div>
+    </PullToRefreshComponent>
     )
 }
 export default Profile;

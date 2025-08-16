@@ -7,6 +7,9 @@ import { deleteCookie, policyandterms } from "../action";
 
 import DOMPurify from 'dompurify';
 import liff from "@line/liff";
+import PullToRefreshComponent from "../components/PullToRefreshComponent";
+import { BouceAnimation } from "../components/Animations";
+import { headersize } from "../components/PageHeader";
 
 
 const Setting=()=>{
@@ -31,7 +34,8 @@ const Setting=()=>{
     }
 
     useEffect(()=>{
-        const gettermcondition=async ()=>{
+      headersize()
+      const gettermcondition=async ()=>{
             const result = await policyandterms()
             console.log("result ",result)
             if(result?.policy ){  
@@ -59,12 +63,16 @@ const Setting=()=>{
     }
 
     return(
-    <div className="page" >
+    <PullToRefreshComponent > 
+    <div  id="page" className="page" >
         
+        <BouceAnimation duration={0.1}> 
         <div className="complaints-menu" >
+          <BouceAnimation duration={0.3}> 
             <div className="button-title" >
                 ตั้งค่า
-            </div><br/>
+            </div>
+            </BouceAnimation><br/>
 
             <div className="setting-menu flex" onClick={()=>{navigate("/profile")}}>
                 <img src="../assets/images/person-setting.png" className="icon" />
@@ -92,6 +100,7 @@ const Setting=()=>{
             </div>
 
         </div>
+        </BouceAnimation>
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <div className="flex items-start justify-between p-5 border-b border-solid border-gray-300 rounded-t"> 
@@ -140,6 +149,7 @@ const Setting=()=>{
       </Modal>
 
     </div>
+    </PullToRefreshComponent>
     )
 }
 export default Setting;
@@ -150,8 +160,8 @@ const Modal = ({ isOpen, onClose, children }:any) => {
   if (!isOpen) return null;
 
   return (
-    <div style={{zIndex:999 , maxHeight:"98vh", top:"1vh",maxWidth:"98vw" , overflow:"scroll",left:"1vw"}} 
-    className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
+    <div 
+    className="modal fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
       {/* Overlay */}
       <div className="fixed inset-0 bg-black opacity-50" onClick={onClose}></div>
 
