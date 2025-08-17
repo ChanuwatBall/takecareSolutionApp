@@ -1,7 +1,7 @@
  
 import { motion } from 'framer-motion';
 
-export function BouceAnimation({ isOpen , children , duration ,className }:any) {
+export function BouceAnimation({ children , duration ,className }:any) {
   
   return (
     <motion.div  

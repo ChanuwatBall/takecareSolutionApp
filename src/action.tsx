@@ -95,7 +95,15 @@ export const updatevillager=async(form:any)=>{
         return {result:false}
     })
 }
-
+ 
+export const villageuser=async(form:any)=>{
+    return await api.post("villageuser", form ).then((res)=>{  
+       return res.data 
+    }).catch((err)=>{
+        console.log("villageuser err ",err)
+        return null
+    })
+}
 
 export const createComplaint=async(form:any)=>{
     return await api.post("complaint/create",form).then((res)=>{

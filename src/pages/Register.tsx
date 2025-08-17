@@ -276,6 +276,7 @@ const Register=()=>{
               onClick={handleSubmit}
               className="w-full bg-blue-600 bg-primary text-white py-2 rounded hover:bg-blue-700">สมัครสมาชิก</button>
         </div>
+        <br/>
     </div>
     </PullToRefreshComponent>
     )

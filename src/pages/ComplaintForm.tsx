@@ -14,13 +14,14 @@ import "./css/ComplaintForm.css"
 import 'swiper/css';      
 import type { Swiper as SwiperType } from "swiper/types";
 import { useAlert } from "../components/AlertContext";
-import { createComplaint, getCookie } from "../action";
+import { createComplaint, getCookie, villageuser } from "../action";
 import {Geolocation} from "@capacitor/geolocation"
 // import liff from "@line/liff"; 
-import Loading from "../components/Loading";
+
 import PullToRefreshComponent from "../components/PullToRefreshComponent";
 import { BouceAnimation } from "../components/Animations";
 import { headersize } from "../components/PageHeader";
+import { areaInputToFeature, isLatLonInsideGeoJSON } from "../utils/geo-contains";
 // import L from "leaflet"
 const apiUrl = import.meta.env.VITE_API;
 
@@ -29,8 +30,11 @@ const apiUrl = import.meta.env.VITE_API;
 
 //@ts-ignore
 let L = window?.leaflet
- var map:any = null
- let marker:  any = null
+var map:any = null
+let marker:  any = null
+let villagePoly:  any = null
+let village :  any = null
+
 const ComplaintForm=()=>{
     const [showAlert] = useAlert();
     // const { type } = useParams<{ type: string  }>();
@@ -41,8 +45,9 @@ const ComplaintForm=()=>{
     const [images , setImages] = useState<any[]>([])
     const [complainTopic, setComplainTopic] = useState<any>("")
     const maxLengthImage = 5;
-    const [curlocation , setCurLocation] = useState<any>(null)
-    const [loading,setLoading] = useState(false)
+    const [curlocation , setCurLocation] = useState<any>(null) 
+    const [isInSide , setIsInSide] = useState(true)
+   
     const location = useLocation();  
     const comaplaintmenu =  location.state?.complaintmenu
     
@@ -58,11 +63,18 @@ const ComplaintForm=()=>{
                 setCurLocation(e.coords)
                 if(marker==null){ 
                     marker = L.marker([e.coords.latitude, e.coords.longitude]).bindPopup('ตำแหน่งของคุณ)');
-                    map.setView([e.coords.latitude, e.coords.longitude],16)
+                    map?.setView([e.coords.latitude, e.coords.longitude],16)
                 
-                    map.addLayer(marker);
+                    map?.addLayer(marker);
                 }else{
                     marker?.setLatLng([e.coords.latitude, e.coords.longitude],16);
+                }
+
+                const feature = areaInputToFeature(village);
+                const inside = isLatLonInsideGeoJSON(e.coords.latitude, e.coords.longitude, feature);
+                setIsInSide(inside)
+                if(!inside){
+                    showAlert("ไม่สามารถแจ้งปัญหา ท่านอยู่นอกพื้นที่ร้องเรียน ","error")
                 }
             }
         }) 
@@ -72,6 +84,15 @@ const ComplaintForm=()=>{
         headersize()
         setTopic( comaplaintmenu?.label)
         setComplainTopic( comaplaintmenu?.value)
+
+        // const getvillage=async()=>{
+        //     const profile= await getCookie("profile")
+        //     console.log("profile ",profile)
+        //     const vil = await villageuser({lineId:profile?.userId})
+        //     setVillage(vil)
+        //     console.log("village ",vil)
+        // }
+        // getvillage()
     },[])
 
     const confirmComplaint=()=>{ 
@@ -157,41 +178,41 @@ const ComplaintForm=()=>{
 
     const acceptform=async ()=>{
         setOpen(false)
-        // setLoading(true)
-        const formData = new FormData();
-        const villager = await getCookie("member")
-        console.log("villager ",villager)
-        let files: any[] = []
-       await Promise.all ( await images.map( async (e,index)=>{
-            const img = await  blobUrlToFile(e.webPath, `complaint-img${index}.${e.format}`)
-            files = [...files , img]
-            formData.append('files',img);
-        })
-        )
-        // const line = await liff.getProfile() 
-        const line = await getCookie("profile")
-        formData.append('curlocation',curlocation);
-        formData.append('topic',topic);
-        formData.append('subtitle',subtitle);
-        formData.append('phone',phone);
-        formData.append('detail',detail);
-        formData.append('complainTopic',complainTopic);
-        formData.append('villagerId',villager?.id);
-        formData.append('villageId',  villager?.villageId );
-        formData.append('lineId',  line?.userId );
+        if(isInSide){ 
+            const formData = new FormData();
+            const villager = await getCookie("member")
+            console.log("villager ",villager)
+            let files: any[] = []
+            await Promise.all ( await images.map( async (e,index)=>{
+                const img = await  blobUrlToFile(e.webPath, `complaint-img${index}.${e.format}`)
+                files = [...files , img]
+                formData.append('files',img);
+            })
+            )
+            // const line = await liff.getProfile() 
+            const line = await getCookie("profile")
+            formData.append('curlocation',curlocation);
+            formData.append('topic',topic);
+            formData.append('subtitle',subtitle);
+            formData.append('phone',phone);
+            formData.append('detail',detail);
+            formData.append('complainTopic',complainTopic);
+            formData.append('villagerId',villager?.id);
+            formData.append('villageId',  villager?.villageId );
+            formData.append('lineId',  line?.userId );
 
 
-        // console.log("form ",form) 
-        const result = await createComplaint(formData)
-        // setLoading(false)
-        if(result?.result ){ 
-            showAlert(result?.description+" สามรถติดตามสถานะเรื่องร้องเรียนได้ที่หน้าโปรไฟล์ของท่าน ","success")
-            navigate(-1)
-        }else{
-            showAlert(result?.description,"error")
+            // console.log("form ",form) 
+            const result = await createComplaint(formData)
+            // setLoading(false)
+            if(result?.result ){ 
+                showAlert(result?.description+" สามรถติดตามสถานะเรื่องร้องเรียนได้ที่หน้าโปรไฟล์ของท่าน ","success")
+                navigate(-1)
+            }else{
+                showAlert(result?.description,"error")
+            }
         }
     }
- 
 
     const removeimage=(e:any)=>{
         console.log(" remove images ",e)
@@ -295,7 +316,7 @@ const ComplaintForm=()=>{
                 </SwiperSlide>
                 <SwiperSlide>
                     <BouceAnimation duration={0.3}>
-                        <MapPosition />
+                        <MapPosition  />
                     </BouceAnimation>
                     <BouceAnimation duration={0.4}>
                         <button className="find-my-loaction" onClick={()=>{userlocation()}} >
@@ -347,6 +368,19 @@ const MapPosition=()=>{
                             map.setView([e.latitude, e.longitude],16)
                         })
                     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {  attribution: '© Longdo Map'}).addTo(map);
+                
+
+                       
+                    const profile= await getCookie("profile") 
+                    village = await villageuser({lineId:profile?.userId})
+                 
+                    villagePoly = await createAreaLayer(village) 
+                    villagePoly.addTo(map);
+
+                    const bounds = (villagePoly as any).getBounds?.();
+                    if (bounds && bounds.isValid()) {
+                        map.fitBounds(bounds.pad(0.1));
+                    }
                 }
             }
          })
@@ -436,4 +470,50 @@ const ModalDialog=({open,setOpen ,complaint,acceptform ,removeImage} :any)=>{
         </div>
      </div>  
     )
+}
+
+
+async function createAreaLayer(
+  data: any,
+  options?: L.GeoJSONOptions
+): Promise<L.GeoJSON> {
+  // 1) แปลง [lat, lng] -> [lng, lat] ตามสเปค GeoJSON
+  const ring: [number, number][] = data.area.map(([lat, lng]:any) => [lng, lat]);
+
+  // 2) ปิดรูปรอบ polygon ถ้าจุดสุดท้ายไม่เท่าจุดแรก
+  const first = ring[0];
+  const last = ring[ring.length - 1];
+  if (!first || !last) {
+    throw new Error("area is empty");
+  }
+  if (first[0] !== last[0] || first[1] !== last[1]) {
+    ring.push([first[0], first[1]]);
+  }
+
+  // 3) สร้าง GeoJSON Feature (Polygon)
+  const feature: GeoJSON.Feature<GeoJSON.Polygon, { id: number; name: string }> = {
+    type: "Feature",
+    properties: { id: data.id, name: data.name },
+    geometry: {
+      type: "Polygon",
+      coordinates: [ring], // Polygon ต้องเป็น array ของ "linear ring"
+    },
+  };
+
+  // 4) สร้าง Leaflet GeoJSON Layer
+  const layer = L.geoJSON(feature, {
+    // style เริ่มต้น (แก้ได้ผ่าน options)
+    style: () => ({
+      color: "#1976d2",
+      weight: 2,
+      fillColor: "#1976d2",
+      fillOpacity: 0.2,
+    }),
+    onEachFeature: (_f:any, lyr:any) => {
+      lyr.bindPopup(`<b>${data.name}</b>`);
+    },
+    ...options,
+  });
+
+  return   layer;
 }

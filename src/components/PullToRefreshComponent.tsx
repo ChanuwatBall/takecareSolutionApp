@@ -29,7 +29,7 @@ const PullToRefreshComponent = ({children}:PullContettProp) => {
 
   // debug HUD
   const [hud, setHud] = useState({ st: 0, ch: 0, sh: 0, mode: "none" });
-
+  console.log("hud ",hud)
   const resist = (d: number) => {
     if (d <= 0) return 0;
     const limited = Math.min(d, MAX_PULL);
@@ -245,7 +245,7 @@ const PullToRefreshComponent = ({children}:PullContettProp) => {
           fontSize: 12,
         }}
       >
-        st:{Math.round(hud.st)} ch:{hud.ch} sh:{hud.sh} mode:{hud.mode}
+        {/* st:{Math.round(hud.st)} ch:{hud.ch} sh:{hud.sh} mode:{hud.mode} */}
       </div>
     </div>
   );

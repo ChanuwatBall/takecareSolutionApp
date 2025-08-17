@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 
  
 export default function ScrollBounce({
-  height = 520,
+  // height = 520,
   max = 70,           // ระยะ overscroll สูงสุด (px)
   wheelFactor = 0.28, // ความต้านสำหรับ wheel
   touchFactor = 0.45, // ความต้านสำหรับ touch
@@ -155,11 +155,11 @@ export default function ScrollBounce({
   const onScroll: React.UIEventHandler<HTMLDivElement> = () => updateEdges();
 
   // ปุ่มเลื่อนแบบ smooth
-  const smoothScrollTo = (top: number) => {
-    const el = containerRef.current;
-    if (!el) return;
-    el.scrollTo({ top, behavior: "smooth" });
-  };
+  // const smoothScrollTo = (top: number) => {
+  //   const el = containerRef.current;
+  //   if (!el) return;
+  //   el.scrollTo({ top, behavior: "smooth" });
+  // };
 
   return (
     <div
@@ -204,13 +204,13 @@ export default function ScrollBounce({
   );
 }
 
-const btn: React.CSSProperties = {
-  padding: "8px 12px",
-  border: "1px solid #e5e7eb",
-  borderRadius: 10,
-  background: "#fff",
-  cursor: "pointer",
-};
+// const btn: React.CSSProperties = {
+//   padding: "8px 12px",
+//   border: "1px solid #e5e7eb",
+//   borderRadius: 10,
+//   background: "#fff",
+//   cursor: "pointer",
+// };
 
 const glowTop: React.CSSProperties = {
   position: "sticky",
@@ -232,21 +232,21 @@ const glowBottom: React.CSSProperties = {
   pointerEvents: "none",
 };
 
-function ContentBlocks() {
-  const blocks = new Array(18).fill(0).map((_, i) => i + 1);
-  return (
-    <div style={{ padding: 16, display: "grid", gap: 12 }}>
-      {blocks.map((i) => (
-        <div key={i} style={card}>
-          <h4 style={{ margin: 0 }}>บล็อกเนื้อหา #{i}</h4>
-          <p style={{ margin: "6px 0 0", color: "#4b5563", lineHeight: 1.6 }}>
-            เนื้อหาตัวอย่างเพื่อทดสอบเลื่อนหน้าจอและเด้งนุ่ม ๆ เมื่อชนขอบบน/ล่าง
-          </p>
-        </div>
-      ))}
-    </div>
-  );
-}
+// function ContentBlocks() {
+//   const blocks = new Array(18).fill(0).map((_, i) => i + 1);
+//   return (
+//     <div style={{ padding: 16, display: "grid", gap: 12 }}>
+//       {blocks.map((i) => (
+//         <div key={i} style={card}>
+//           <h4 style={{ margin: 0 }}>บล็อกเนื้อหา #{i}</h4>
+//           <p style={{ margin: "6px 0 0", color: "#4b5563", lineHeight: 1.6 }}>
+//             เนื้อหาตัวอย่างเพื่อทดสอบเลื่อนหน้าจอและเด้งนุ่ม ๆ เมื่อชนขอบบน/ล่าง
+//           </p>
+//         </div>
+//       ))}
+//     </div>
+//   );
+// }
 
 const card: React.CSSProperties = {
   border: "1px solid #e5e7eb",
