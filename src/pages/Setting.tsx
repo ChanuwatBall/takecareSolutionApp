@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ActionSheet, ActionSheetButtonStyle } from "@capacitor/action-sheet";
 import "./css/Setting.css"
 import { useEffect, useState } from "react";
-import { companydetail, deleteCookie, getCookie, policyandterms, setCookie } from "../action";
+import { deleteCookie, getCookie, policyandterms, setCookie, userLineid } from "../action";
 
 import DOMPurify from 'dompurify';
 import liff from "@line/liff";
@@ -36,9 +36,9 @@ const Setting=()=>{
     useEffect(()=>{
       headersize() 
       const checkmemberregis=async ()=>{
-          const profilecookie = await getCookie("profile")
-          const result =await companydetail({  lineId: profilecookie?.userId})
-          if(result?.result &&( profilecookie === null || profilecookie === undefined)){
+          const profilecookie = await getCookie("profile") 
+          const usr = await userLineid(profilecookie?.userId) 
+          if(usr?.result &&( profilecookie === null || profilecookie === undefined)){
                const profile:any = await liff.getProfile()
                setCookie("profile",profile,30) 
           }else{

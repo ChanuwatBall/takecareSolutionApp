@@ -83,16 +83,8 @@ const ComplaintForm=()=>{
     useEffect(()=>{  
         headersize()
         setTopic( comaplaintmenu?.label)
-        setComplainTopic( comaplaintmenu?.value)
-
-        // const getvillage=async()=>{
-        //     const profile= await getCookie("profile")
-        //     console.log("profile ",profile)
-        //     const vil = await villageuser({lineId:profile?.userId})
-        //     setVillage(vil)
-        //     console.log("village ",vil)
-        // }
-        // getvillage()
+        setComplainTopic( comaplaintmenu?.value) 
+        
     },[])
 
     const confirmComplaint=()=>{ 

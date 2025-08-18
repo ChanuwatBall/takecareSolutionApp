@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import "./css/Complaint.css"
 import { useEffect } from "react";
 import liff from "@line/liff";
-import { companydetail, deleteCookie, getCookie, setCookie } from "../action";
+import { deleteCookie, getCookie, setCookie, userLineid } from "../action";
 import PullToRefreshComponent from "../components/PullToRefreshComponent";
 import { BouceAnimation } from "../components/Animations";
 import { headersize } from "../components/PageHeader";
@@ -13,9 +13,9 @@ const Complaint=()=>{
 
   useEffect(()=>{
         const checkmemberregis=async ()=>{
-            const profilecookie = await getCookie("profile")
-            const result =await companydetail({  lineId: profilecookie?.userId})
-            if(result?.result &&( profilecookie === null || profilecookie === undefined)){
+            const profilecookie = await getCookie("profile") 
+            const usr = await userLineid(profilecookie?.userId) 
+            if(usr?.result &&( profilecookie === null || profilecookie === undefined)){
                  const profile:any = await liff.getProfile()
                  setCookie("profile",profile,30) 
             }else{
