@@ -18,11 +18,12 @@ const Complaint=()=>{
             if(usr?.result &&( profilecookie === null || profilecookie === undefined)){
                  const profile:any = await liff.getProfile()
                  setCookie("profile",profile,30) 
-            }else{
+            }
+            if(!usr?.result){
                 deleteCookie("member")
                 deleteCookie("profile")
                 localStorage.removeItem("token")
-        
+                      
                 navigate("/")
             }
         }

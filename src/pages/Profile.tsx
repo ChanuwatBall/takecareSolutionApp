@@ -46,11 +46,12 @@ const Profile:React.FC=()=>{
     useEffect(()=>{
             const checkmemberregis=async ()=>{
                 const profilecookie = await getCookie("profile") 
-                const usr = await userLineid(profilecookie?.userId) 
+                const usr = await userLineid(profilecookie?.userId)  
                 if(usr?.result &&( profilecookie === null || profilecookie === undefined)){
                      const profile:any = await liff.getProfile()
                      setCookie("profile",profile,30) 
-                }else{
+                }
+                if(!usr?.result){
                     deleteCookie("member")
                     deleteCookie("profile")
                     localStorage.removeItem("token")
