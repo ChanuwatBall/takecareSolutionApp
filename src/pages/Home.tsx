@@ -37,7 +37,7 @@ const Home:React.FC=()=>{
 
     useEffect(()=>{
         headersize()
-         dispatch(setLoaing(true))
+        dispatch(setLoaing(true))
          const getCDetal=async ()=>{
             const profile = await getCookie("profile")
             const result =await companydetail({  lineId: profile?.userId})
