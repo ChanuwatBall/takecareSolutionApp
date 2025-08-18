@@ -22,6 +22,8 @@ import PullToRefreshComponent from "../components/PullToRefreshComponent";
 import { BouceAnimation } from "../components/Animations";
 import { headersize } from "../components/PageHeader";
 import { areaInputToFeature, isLatLonInsideGeoJSON } from "../utils/geo-contains";
+import { useDispatch } from "react-redux";
+import { setLoaing } from "../store/appSlice";
 // import L from "leaflet"
 const apiUrl = import.meta.env.VITE_API;
 
@@ -47,6 +49,7 @@ const ComplaintForm=()=>{
     const maxLengthImage = 5;
     const [curlocation , setCurLocation] = useState<any>(null) 
     const [isInSide , setIsInSide] = useState(true)
+    const dispatch = useDispatch()
    
     const location = useLocation();  
     const comaplaintmenu =  location.state?.complaintmenu
@@ -84,7 +87,7 @@ const ComplaintForm=()=>{
         headersize()
         setTopic( comaplaintmenu?.label)
         setComplainTopic( comaplaintmenu?.value) 
-        
+
     },[])
 
     const confirmComplaint=()=>{ 
@@ -171,6 +174,7 @@ const ComplaintForm=()=>{
     const acceptform=async ()=>{
         setOpen(false)
         if(isInSide){ 
+            dispatch(setLoaing(true))
             const formData = new FormData();
             const villager = await getCookie("member")
             console.log("villager ",villager)
@@ -196,6 +200,8 @@ const ComplaintForm=()=>{
 
             // console.log("form ",form) 
             const result = await createComplaint(formData)
+
+            dispatch(setLoaing(false))
             // setLoading(false)
             if(result?.result ){ 
                 showAlert(result?.description+" สามรถติดตามสถานะเรื่องร้องเรียนได้ที่หน้าโปรไฟล์ของท่าน ","success")
