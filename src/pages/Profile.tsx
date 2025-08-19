@@ -45,7 +45,7 @@ const Profile:React.FC=()=>{
 
     useEffect(()=>{
             const checkmemberregis=async ()=>{
-                const profilecookie:any = await getCookie("profile") 
+                const profilecookie:any = await getCookie("profile")
                 const usr = await userLineid(profilecookie?.userId)  
                 if(usr?.result &&( profilecookie === null || profilecookie === undefined)){
                      const profile:any = await liff.getProfile()

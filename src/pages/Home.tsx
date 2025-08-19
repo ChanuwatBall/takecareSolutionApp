@@ -40,8 +40,7 @@ const Home:React.FC=()=>{
         dispatch(setLoaing(true))
          const getCDetal=async ()=>{
             try {
-                const profile:any = await getCookie("profile")
- 
+                const profile:any = await getCookie("profile")  
                 if(profile != null && profile != undefined){
 
                     const result =await companydetail({  lineId: profile?.userId})
@@ -56,16 +55,19 @@ const Home:React.FC=()=>{
                         setTeamRight(result?.managementTeam)
                         setCeoimages(result?.ceoImage)
                     }else{
+                        alert("profile no profile " )
                         deleteCookie("member")
                         deleteCookie("profile")
                         localStorage.removeItem("token")
-                        
-                        navigate("/")
+                         
+                        window.location.reload()
                     }
-                }
+                }else{ 
+                        navigate("/") 
+                    }
             } catch (error) {
                 
-                alert("error "+ error)
+                alert("error "+ JSON.stringify(error))
             }
             
             }

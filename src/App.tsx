@@ -68,27 +68,7 @@ export default App
 const RedirectToRegister: React.FC = () => {
   const navigate = useNavigate();
 
-
-    // const checklocaluser=async()=>{
-      
-    //   const profile:any = await getCookie("profile") 
-    //   // alert("profile "+JSON.stringify(profile))
-    //   const usr = await userLineid(profile?.userId) 
-    //   // alert("userLineid "+JSON.stringify(usr))
-    //   if(usr?.result ){ 
-    //       await liff.login()
-    //       localStorage.setItem("token", JSON.stringify(liff.getAccessToken()))  
-    //     // navigate("/home")
-    //        setTimeout(()=>{
-    //           navigate('/home');
-    //         },1000)  
-    //   }else{      
-    //     // navigate("/register") 
-    //     setTimeout(()=>{
-    //           navigate('/register');
-    //     },1000)
-    //   }
-    // }
+ 
 
   useEffect(() => {
     //   try {
