@@ -55,7 +55,7 @@ const Home:React.FC=()=>{
                         setTeamRight(result?.managementTeam)
                         setCeoimages(result?.ceoImage)
                     }else{
-                        alert("profile no profile " )
+                        // alert("profile no profile " )
                         deleteCookie("member")
                         deleteCookie("profile")
                         localStorage.removeItem("token")
@@ -66,8 +66,7 @@ const Home:React.FC=()=>{
                         navigate("/") 
                     }
             } catch (error) {
-                
-                alert("error "+ JSON.stringify(error))
+                 
             }
             
             }
