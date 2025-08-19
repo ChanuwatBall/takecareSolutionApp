@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react";
 import { CircleImageUploader } from "./Register";
 import { getCookie, setCookie, updatevillager, userLineid } from "../action";
-import Loading from "../components/Loading"; 
+ 
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "../components/AlertContext";
 import { headersize } from "../components/PageHeader";
 import PullToRefreshComponent from "../components/PullToRefreshComponent";
+import { useDispatch } from "react-redux";
+import { setLoaing } from "../store/appSlice";
 
 const apiUrl = import.meta.env.VITE_API;
 
 const ProfileEdit=()=>{
     const [showAlert] = useAlert();
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     const [image,setImage] = useState<any>(null)
     const [imgFormat , setImgFormat] = useState("jpeg")
     const [firstName , setFirstName] = useState("")
@@ -21,7 +24,7 @@ const ProfileEdit=()=>{
     const [address , setAddress] = useState("")
     const [gender , setGender] = useState("") 
     const [fammember , setFammember] = useState("0") 
-    const [loading,setLoading] = useState(false)
+    // const [loading,setLoading] = useState(false)
     
    const imagesprofile=(e:any)=>{
         console.log("imagesprofile ",e) 
@@ -76,9 +79,8 @@ const ProfileEdit=()=>{
   };
 
      const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-          setLoading(true)
-          
+        e.preventDefault(); 
+        dispatch(setLoaing(true))
          const profile:any = await getCookie("profile")
          const member:any = await getCookie("member")
          let fileprofile = null
@@ -119,14 +121,15 @@ const ProfileEdit=()=>{
           }else{ 
             showAlert( "แก้ไขข้อมูลโปรไฟล์ไม่สำเร็จ กรุณาลองใหม่ภายหลัง ","error")
           } 
-          setLoading(false)
+         dispatch(setLoaing(false))
+          // setLoading(false)
                   
       };
 
     return(
     <PullToRefreshComponent > 
     <div  id="page" className="page">  
-    <Loading open={loading} />
+    {/* <Loading open={loading} /> */}
      <div className="  flex justify-center column items-center pt-5"> 
             <label className="text-primary-light my-5 font-medium"> แก้ไขข้อมูล</label>
             <div className="profile-images" >
