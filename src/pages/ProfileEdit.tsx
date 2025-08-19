@@ -44,6 +44,7 @@ const ProfileEdit=()=>{
                 setBirthDate(member?.birthDate)
                 setAddress(member?.address)
                 setGender(member?.gender) 
+                setFammember(member?.fammilyMember)
             }
         }
         getlocalprofile()

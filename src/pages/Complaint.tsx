@@ -116,7 +116,7 @@ const Complaint=()=>{
                         style={{flexDirection:"column" , justifyContent:"center" , alignItems:"center"}} 
                         onClick={()=>{navigate(`/complaint/add/${menu?.value}}`,{state:{complaintmenu:menu }})}}
                     >
-                        <img src={menu?.icon} alt={menu?.value} className="mt-4" />
+                        <img src={menu?.icon} alt={menu?.value} className="mt-4" style={{maxWidth:"7rem"}} />
                         <label className="text-sm" >{menu?.label}</label>
                     </div>
                     </BouceAnimation>
