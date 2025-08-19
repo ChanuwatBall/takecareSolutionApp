@@ -8,7 +8,7 @@ import Select from 'react-select';
 import { isAuthenticated } from "../auth"; 
 import PullToRefreshComponent from "../components/PullToRefreshComponent";
 import { useDispatch } from "react-redux";
-import { setLoaing } from "../store/appSlice";
+import { setLoaing } from "../store/appSlice"; 
  
  
 interface LineProfile {
@@ -87,8 +87,8 @@ const Register=()=>{
       console.log("userLineid usr ",usr)
       if(usr.result ){
         // window.location.href = "/home"
-        setCookie("member", usr?.villager,30)
-        setCookie("profile", profile ,30)
+        setCookie("member", usr?.villager,{days:30})
+        setCookie("profile", profile ,{days:30})
         localStorage.setItem("token", JSON.stringify(liff.getAccessToken()))  
         navigate("/home")
         setTimeout(()=>{
@@ -175,11 +175,11 @@ const Register=()=>{
         if( (typeof result == "string")){ 
           const usr = await userLineid(lineprofile?.userId)
           console.log("userLineid usr ",usr)
-          setCookie("member", usr?.villager,30)
+          setCookie("member", usr?.villager,{days:30})
         }else{ 
-          setCookie("member", result?.villager,30)
+          setCookie("member", result?.villager,{days:30})
         }
-        setCookie("profile", lineprofile ,30)
+        setCookie("profile", lineprofile ,{days:30})
         localStorage.setItem("token", JSON.stringify(liff.getAccessToken()))  
         navigate("/home")
         window.location.reload()
@@ -224,9 +224,9 @@ const Register=()=>{
                   </label>
                 <label className="block mb-2">วันเกิด*
                    <input 
-                    type="date" name="birthDate" 
+                    type="date" name="birthDate"  style={{minHeight:"2.5rem"}}
                     className="w-full border p-2 rounded border-gray-300" 
-                    onChange={(e)=>{setBirthDate(e.target.value)}} 
+                    onChange={(e)=>{setBirthDate(e.target.value);}} 
                   /></label>
 
                 <label className="block mb-2">จำนวนสมาชิกในครอบครัว

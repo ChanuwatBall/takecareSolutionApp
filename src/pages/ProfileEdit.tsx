@@ -31,7 +31,7 @@ const ProfileEdit=()=>{
     useEffect(()=>{
        headersize()
         const getlocalprofile=async ()=>{
-            const member = await getCookie("member")
+            const member:any = await getCookie("member")
             console.log("member ",member)
             if(member){ 
                 setImage(apiUrl+"/api/file/drive-image/"+member?.profile)
@@ -79,8 +79,8 @@ const ProfileEdit=()=>{
         e.preventDefault();
           setLoading(true)
           
-         const profile = await getCookie("profile")
-         const member = await getCookie("member")
+         const profile:any = await getCookie("profile")
+         const member:any = await getCookie("member")
          let fileprofile = null
          if(image.indexOf("profile.line-scdn.net") > -1 || image.indexOf("/api/file/drive-image/") > -1){
           fileprofile = await fetchImage(image)
@@ -110,9 +110,9 @@ const ProfileEdit=()=>{
           if(result?.result || (typeof result == "string"  && result.indexOf("result\":true,") > -1 ) ){ 
             if( (typeof result == "string")){  
                const usr = await userLineid(profile?.userId)
-               setCookie("member", usr?.villager,30)
+               setCookie("member", usr?.villager,{days:30})
             }else{ 
-              setCookie("member", result?.villager,30)
+              setCookie("member", result?.villager,{days:30})
             }  
             showAlert( "แก้ไขข้อมูลโปรไฟล์สำเร็จ  ","success")
             navigate(-1) 

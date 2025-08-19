@@ -176,7 +176,7 @@ const ComplaintForm=()=>{
         if(isInSide){ 
             dispatch(setLoaing(true))
             const formData = new FormData();
-            const villager = await getCookie("member")
+            const villager:any = await getCookie("member")
             console.log("villager ",villager)
             let files: any[] = []
             await Promise.all ( await images.map( async (e,index)=>{
@@ -186,7 +186,7 @@ const ComplaintForm=()=>{
             })
             )
             // const line = await liff.getProfile() 
-            const line = await getCookie("profile")
+            const line:any = await getCookie("profile")
             formData.append('curlocation',curlocation);
             formData.append('topic',topic);
             formData.append('subtitle',subtitle);
@@ -369,7 +369,7 @@ const MapPosition=()=>{
                 
 
                        
-                    const profile= await getCookie("profile") 
+                    const profile:any = await getCookie("profile") 
                     village = await villageuser({lineId:profile?.userId})
                  
                     villagePoly = await createAreaLayer(village) 

@@ -11,27 +11,7 @@ const api = axios.create({
         // 'Content-Type': 'application/json',
     }, 
 })
-
-
-export async function setCookie(name: string, value: any, days: number) {
-  const d = new Date();
-  d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
-  const expires = `expires=${d.toUTCString()}`;
-  document.cookie = `${name}=${JSON.stringify(value)};${expires};path=/`;
-}
-
-export async function getCookie(name: string)  {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) {
-    const parse:any = parts.pop()?.split(';').shift() || null;
-    return JSON.parse(parse)
-  }
-  return null;
-}
-export async function deleteCookie(name:string) {
-  document.cookie = name + '=; Max-Age=0; path=/';
-}
+ 
 export function encodeBase64(str: string): string {
   return btoa(unescape(encodeURIComponent(str)));
 } 
@@ -186,3 +166,62 @@ export async function policyandterms() {
 
 
 export default {}
+
+
+
+type CookieOptions = {
+  days?: number;
+  path?: string;
+  sameSite?: 'Lax' | 'Strict' | 'None';
+  secure?: boolean; // required if sameSite=None
+  domain?: string;
+};
+
+export function setCookie(name: string, value: unknown, opts: CookieOptions = {}) {
+  const {
+    days = 365,
+    path = '/',
+    sameSite = 'Lax',
+    secure = false,
+    domain,
+  } = opts;
+
+  const d = new Date();
+  d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);
+
+  // Encode JSON so Safari/iOS won’t break it
+  const encoded = encodeURIComponent(JSON.stringify(value));
+
+  let cookie = `${name}=${encoded}; expires=${d.toUTCString()}; path=${path}; SameSite=${sameSite}`;
+  if (secure) cookie += `; Secure`;
+  if (domain) cookie += `; Domain=${domain}`;
+
+  document.cookie = cookie;
+}
+
+export function getCookie<T = unknown>(name: string): T | null {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length < 2) return null;
+
+  // Grab the raw encoded cookie value
+  let raw = parts.pop()!.split(';').shift() ?? '';
+
+  // Some Safari builds wrap values in quotes — trim them
+  if (raw.startsWith('"') && raw.endsWith('"')) {
+    raw = raw.slice(1, -1);
+  }
+
+  try {
+    const decoded = decodeURIComponent(raw);
+    return JSON.parse(decoded) as T;
+  } catch (e) {
+    // If parsing fails, the cookie might be corrupt or not JSON
+    console.warn('Failed to parse cookie', e);
+    return null;
+  }
+}
+
+export function deleteCookie(name: string, path: string = '/') {
+  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=${path}`;
+}

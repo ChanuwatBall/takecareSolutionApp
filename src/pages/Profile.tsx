@@ -45,11 +45,11 @@ const Profile:React.FC=()=>{
 
     useEffect(()=>{
             const checkmemberregis=async ()=>{
-                const profilecookie = await getCookie("profile") 
+                const profilecookie:any = await getCookie("profile") 
                 const usr = await userLineid(profilecookie?.userId)  
                 if(usr?.result &&( profilecookie === null || profilecookie === undefined)){
                      const profile:any = await liff.getProfile()
-                     setCookie("profile",profile,30) 
+                     setCookie("profile",profile,{days:30})
                 }
                 if(!usr?.result){
                     deleteCookie("member")
@@ -61,7 +61,7 @@ const Profile:React.FC=()=>{
             }
             checkmemberregis()
         const getuservillager=async ()=>{ 
-            const member = await getCookie("member")
+            const member:any = await getCookie("member")
             console.log("member ",member)
             if(member ){
                 setFammember(member?.fammilyMember != undefined &&member?.fammilyMember !=null? member?.fammilyMember : 0 )
@@ -69,8 +69,8 @@ const Profile:React.FC=()=>{
             try {
                 
                 // const profile:any = await liff.getProfile() 
-                const profile = await getCookie("profile")
-                const usr = await userLineid(profile?.userId)
+                const profile:any = await getCookie("profile")
+                const usr:any = await userLineid(profile?.userId)
                 console.log(" usr ",usr)
                 setProfile(usr?.villager)
                 const complaintsumm = await complaintsumbyuser({ id: usr.id , lineId: profile?.userId});

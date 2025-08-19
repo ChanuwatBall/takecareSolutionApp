@@ -39,26 +39,36 @@ const Home:React.FC=()=>{
         headersize()
         dispatch(setLoaing(true))
          const getCDetal=async ()=>{
-            const profile = await getCookie("profile")
-            const result =await companydetail({  lineId: profile?.userId})
-        
-            if(result?.name || result?.name){
-                setCeoName(result?.ceoName)
-                setceonickname(result?.ceoNickName)
-                setHistory(result?.history)
-                setSlogan(result?.slogan)
-                setComname(result?.name)
-                setTeamLeft(result?.teamMembers)
-                setTeamRight(result?.managementTeam)
-                setCeoimages(result?.ceoImage)
-            }else{
-                deleteCookie("member")
-                deleteCookie("profile")
-                localStorage.removeItem("token")
+            try {
+                const profile:any = await getCookie("profile")
+ 
+                if(profile != null && profile != undefined){
+
+                    const result =await companydetail({  lineId: profile?.userId})
                 
-                navigate("/")
+                    if(result?.name){
+                        setCeoName(result?.ceoName)
+                        setceonickname(result?.ceoNickName)
+                        setHistory(result?.history)
+                        setSlogan(result?.slogan)
+                        setComname(result?.name)
+                        setTeamLeft(result?.teamMembers)
+                        setTeamRight(result?.managementTeam)
+                        setCeoimages(result?.ceoImage)
+                    }else{
+                        deleteCookie("member")
+                        deleteCookie("profile")
+                        localStorage.removeItem("token")
+                        
+                        navigate("/")
+                    }
+                }
+            } catch (error) {
+                
+                alert("error "+ error)
             }
-         }
+            
+            }
          getCDetal() 
          setTimeout(()=>{ 
             dispatch(setLoaing(false))
