@@ -97,7 +97,11 @@ const ComplaintForm=()=>{
 
     const takePicture = async () => {
         if(images?.length < maxLengthImage){
-            try { 
+            try {   
+                const dpermit = await  Camera.checkPermissions() //.requestPermissions()
+                if(dpermit.camera === "denied"){
+                    await Camera.requestPermissions()
+                }
                 const image:Photo = await Camera.getPhoto({
                     quality: 70,
                     allowEditing: true,
