@@ -1,7 +1,7 @@
 
 
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Swiper ,SwiperSlide } from 'swiper/react';  
 import { Camera, CameraResultType, type GalleryPhotos, type Photo } from '@capacitor/camera';
@@ -94,9 +94,16 @@ const ComplaintForm=()=>{
         setOpen(true) 
     }
 
-
+    const isInLINE = () => / line\//i.test(navigator.userAgent); 
+    const fileRef = useRef<HTMLInputElement>(null);
     const takePicture = async () => {
+        console.log("isInLINE() ",navigator.userAgent ,isInLINE())
         if(images?.length < maxLengthImage){
+            if(isInLINE()){
+                
+                fileRef.current?.click();
+                return;
+            }
             try {   
                 const dpermit = await  Camera.checkPermissions() //.requestPermissions()
                 if(dpermit.camera === "denied"){
@@ -146,11 +153,11 @@ const ComplaintForm=()=>{
                 image?.photos.map((p)=>{
                     imageUrl = [...imageUrl , p]
                 })  
-                console.log("addimg ",imageUrl)
+                console.log("addimg ",imageUrl) 
                  
                 const imagesall =[...images , imageUrl ]
                 const flatimg = imagesall.flat() 
-                console.log("flatimg ",flatimg)
+                console.log("flatimg ",flatimg) 
                 setImages(flatimg  )
             }
         } catch (error) {
@@ -225,10 +232,27 @@ const ComplaintForm=()=>{
         setImages(filteredArray)
     }
 
+   const onFileChange: React.ChangeEventHandler<HTMLInputElement> = async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;  
+        const fileurl =  URL.createObjectURL(file) 
+         
+        const addimg = [...images ,{webPath: fileurl , format:"jpeg"} ]  
+        setImages(addimg) 
+    };
+
     return(
     <PullToRefreshComponent > 
         <div  id="page" className="page  " style={{position:"relative"}} >
- 
+         <input
+            ref={fileRef}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            onChange={onFileChange}
+            style={{ display: "none" }}
+        />
+          {/* {preview && <img src={preview} alt="preview" style={{maxWidth:"100%"}} />} */}
         <ModalDialog 
          open={openmodal} setOpen={(e:any)=>{setOpen(e)}}
          complaint={ {topic, subtitle , phone, detail, images} }
