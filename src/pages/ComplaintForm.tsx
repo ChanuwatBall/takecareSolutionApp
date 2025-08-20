@@ -1,10 +1,10 @@
 
 
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Swiper ,SwiperSlide } from 'swiper/react';  
-import { Camera, CameraResultType, CameraSource, type GalleryPhotos } from '@capacitor/camera';
+import { Camera, CameraResultType, CameraSource, type GalleryPhotos, type Photo } from '@capacitor/camera';
  
 // import {type Marker as MarkerType }from "leaflet"
 
@@ -94,38 +94,37 @@ const ComplaintForm=()=>{
         setOpen(true) 
     }
 
-    const isInLINE = () => / line\//i.test(navigator.userAgent); 
-    const fileRef = useRef<HTMLInputElement>(null);
-    const takePicture = async () => { 
-        if (images?.length >= maxLengthImage) return; 
-         
-           try {   
-            const perm = await Camera.checkPermissions();
-            if (perm.camera === "denied") {
-             await Camera.requestPermissions();
-              await navigator.mediaDevices.getUserMedia({
-                video: { facingMode: { ideal: "environment" } },
-                audio: false,
-                });
 
+    const takePicture = async () => {
+        if(images?.length < maxLengthImage){
+            try { 
+                // const reqpermitt = await Camera.requestPermissions()
+                // console.log( "reqpermitt: ",JSON.stringify(reqpermitt))
+                const image:Photo = await Camera.getPhoto({
+                    quality: 70,
+                    allowEditing: true,
+                    resultType: CameraResultType.Uri,
+                    source: CameraSource.Camera,
+                }).then(e =>{
+                    console.log(" image ", e)
+                    return e
+                }).catch(err=>{
+                    console.log(" err",err)
+                    return err
+                })
+     
+                // let imageUrl = image.webPath; 
+                const addimg = [...images ,  image ] 
+                console.log("addimg ",addimg)
+                setImages(addimg)
+            
+            } catch (error) {
+               console.log("err ", error) 
+               alert("err:  "+JSON.stringify(error))
             }
+        }else{
 
-            const image = await Camera.getPhoto({
-            quality: 70,
-            resultType: CameraResultType.Uri, // หรือ DataUrl ถ้าจะเก็บเป็น base64
-            allowEditing: false,
-            // เวิร์กดีบน web ส่วนใหญ่
-            source: CameraSource.Prompt, // ให้ระบบถาม: กล้อง/แกลเลอรี
-            // webUseInput: true,           // บนเว็บจะ fallback เป็น file input
-            });
-
-            setImages([...(images || []), image]);
-        } catch (err) {
-            console.log("Camera error", err);
-            // fallback: เปิด input ธรรมดา
-            fileRef.current?.click();
         }
-                
     };
 
     const pickImages=async ()=>{
@@ -146,11 +145,11 @@ const ComplaintForm=()=>{
                 image?.photos.map((p)=>{
                     imageUrl = [...imageUrl , p]
                 })  
-                console.log("addimg ",imageUrl) 
+                console.log("addimg ",imageUrl)
                  
                 const imagesall =[...images , imageUrl ]
                 const flatimg = imagesall.flat() 
-                console.log("flatimg ",flatimg) 
+                console.log("flatimg ",flatimg)
                 setImages(flatimg  )
             }
         } catch (error) {
@@ -225,20 +224,10 @@ const ComplaintForm=()=>{
         setImages(filteredArray)
     }
 
-   const onFileChange: React.ChangeEventHandler<HTMLInputElement> = async (e) => {
-        const file = e.target.files?.[0];
-        if (!file) return;  
-        const fileurl =  URL.createObjectURL(file) 
-         
-        const addimg = [...images ,{webPath: fileurl , format:"jpeg"} ]  
-        setImages(addimg)  
-    };
-
     return(
     <PullToRefreshComponent > 
         <div  id="page" className="page  " style={{position:"relative"}} >
-       
-          {/* {preview && <img src={preview} alt="preview" style={{maxWidth:"100%"}} />} */}
+ 
         <ModalDialog 
          open={openmodal} setOpen={(e:any)=>{setOpen(e)}}
          complaint={ {topic, subtitle , phone, detail, images} }
@@ -304,40 +293,13 @@ const ComplaintForm=()=>{
                         </div>
                         <div className="row-input flex row " >
                             <label className="title" > 
-                                แนบรูป (ไม่เกิน 5 รูป) <span><br/>อัพโหลดแล้ว&nbsp; {images.length}/{maxLengthImage} </span> 
+                                แนบรูป (ไม่เกิน 5 รูป) <span><br/>อัพโหลดแล้ว&nbsp; {images.length}/{maxLengthImage} </span>
+                                
                             </label>
-                            {/iPhone|iPad|iPod/i.test(navigator.userAgent) && isInLINE() ? <div style={{ position: "relative", display: "inline-block" }}>
-                                    <button type="button" style={{ padding: 0, border: "none", background: "transparent" }}>
-                                        <img src={apiUrl + "/images/camera.png"} alt="" />
-                                        <div>ถ่ายรูป</div>
-                                    </button>
-
-                                    {/* input ซ้อนทับปุ่ม (ห้าม display:none) */}
-                                    <input
-                                    ref={fileRef}
-                                    id="cam"
-                                    type="file"
-                                    accept="image/*"
-                                    capture="environment"
-                                    onChange={onFileChange}
-                                    style={{
-                                        position: "absolute",
-                                        inset: 0,           // ครอบเต็มปุ่ม
-                                        opacity: 0,         // โปร่งใส
-                                        cursor: "pointer",
-                                        zIndex: 20,
-                                        // บาง iOS ต้องการขนาดคลิกที่ชัดเจน
-                                        width: "100%",
-                                        height: "100%",
-                                        // กัน iOS ปรับ zoom ตอนโฟกัส
-                                        fontSize: 16
-                                    }}
-                                    />
-                             </div>:  <button onClick={()=>{takePicture()}} >
+                            <button onClick={()=>{takePicture()}} >
                                 <img src={apiUrl+"/images/camera.png"}  />
                                 <label>ถ่ายรูป</label>
-                            </button>}
-                          
+                            </button>
                             
                             <button onClick={()=>{pickImages()}} >
                                 <img src={apiUrl+"/images/picture.png"}  />
