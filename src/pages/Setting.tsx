@@ -1,37 +1,40 @@
 
 import { useNavigate } from "react-router-dom";
-import { ActionSheet, ActionSheetButtonStyle } from "@capacitor/action-sheet";
+// import { ActionSheet } from "@capacitor/action-sheet";
 import "./css/Setting.css"
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { deleteCookie, getCookie, policyandterms, setCookie, userLineid } from "../action";
 
 import DOMPurify from 'dompurify';
 import liff from "@line/liff";
 import PullToRefreshComponent from "../components/PullToRefreshComponent";
 import { BouceAnimation } from "../components/Animations";
-import { headersize } from "../components/PageHeader";
-
+import { headersize } from "../components/PageHeader";  
+import { useModal } from "../components/ModalContext";
 
 const Setting=()=>{
     const navigate = useNavigate()
     const [termsservice , setTermsService] = useState("")
     const [policy , setPolicy] = useState("")
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [termsModal, setTemsModal] = useState(false);
+    const [termsModal, setTemsModal] = useState(false); 
+  const { openComponent } = useModal();
+    // const [languaeSelected,setSelectedOption] = useState({value:"th", label:"ภาษาไทย"}) 
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
 
-    const settingLanguage=async ()=>{
-       await ActionSheet.showActions({
-        title: 'ตั้งค่าภาษา',
-        message: 'เลือกการทำงาน', 
-        options: [
-          { title: 'ภาษาไทย' }, 
-          { title: 'ยกเลิก', style: ActionSheetButtonStyle.Cancel }
-        ]
-      });
-    }
+    // const settingLanguage=async ()=>{
+    //    await ActionSheet.showActions({
+    //     title: 'ตั้งค่าภาษา',
+    //     message: 'เลือกการทำงาน', 
+    //     //  backdropDismiss: false ,
+    //     options: [
+    //       { title: 'ภาษาไทย' }, 
+    //       // { title: 'ยกเลิก', style: ActionSheetButtonStyle.Cancel }
+    //     ]
+    //   });
+    // }
 
     useEffect(()=>{
       headersize() 
@@ -94,13 +97,17 @@ const Setting=()=>{
                 <img src="../assets/images/person-setting.png" className="icon" />
                 <label className="title">ข้อมูลส่วนตัว</label>
             </div>
-            <div className="setting-menu flex">
+            <div className="setting-menu flex" onClick={(()=>{navigate("/profile/edit")})}>
                 <img src="../assets/images/setting-pin.png" className="icon" />
-                <label className="title">ที่อยู่</label>
-            </div>
-            <div className="setting-menu flex" onClick={()=>{settingLanguage()}}>
+                <label className="title">แก้ไขข้อมูลส่วนตัว</label>
+            </div> 
+            <div className="setting-menu flex"  onClick={()=>{openComponent(Confirm, {
+      title: "Delete item?",
+      message: "This action cannot be undone.",
+      onConfirm: () => console.log("confirmed!"),
+    }) }} >
                 <img src="../assets/images/setting-language.png" className="icon" style={{width:"1.4rem"}} />
-                <label className="title">ตั้งค่าภาษา</label>
+                <label className="title">ตั้งค่าภาษา</label>  
             </div>
             <div className="setting-menu flex"  onClick={openModal}>
                 <img src="../assets/images/setting-privacy.png" className="icon" />
@@ -110,14 +117,15 @@ const Setting=()=>{
                 <img src="../assets/images/setting-policy.png" className="icon" style={{width:"1.3rem"}}/>
                 <label className="title">ข้อกำหนดการบริการ</label>
             </div>
-            <div className="setting-menu flex" style={{border:"none"}}  onClick={()=>  signout() }>
+            {/* <div className="setting-menu flex" style={{border:"none"}}  onClick={()=>  signout() }>
                 <img src="../assets/images/signout.png" className="icon" style={{width:"1.3rem"}}/>
                 <label className="title">ออกจากระบบ</label>
-            </div>
+            </div> */}
 
         </div>
-        </BouceAnimation>
+        </BouceAnimation> 
 
+    </div>
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <div className="flex items-start justify-between p-5 border-b border-solid border-gray-300 rounded-t"> 
           <button
@@ -162,14 +170,67 @@ const Setting=()=>{
             Close
           </button> 
         </div>
-      </Modal>
-
-    </div>
+      </Modal>   
     </PullToRefreshComponent>
     )
 }
 export default Setting;
 
+//  export function ModalCenter({children , title}:{children:ReactNode , title:ReactNode }) {
+//   const { open } = useModal();
+
+//   const showCustom = () => {
+//     open(
+//       <div style={{
+//         background: "white",
+//         borderRadius: 16,
+//         padding: 20,
+//         minWidth: 320,
+//         boxShadow: "0 20px 50px rgba(0,0,0,0.25)"
+//       }}>
+//         {/* <h3 style={{ marginTop: 0 }}>Hello!</h3>
+//         <p>This is any content you want.</p> */}
+//         {children}
+//       </div>
+//     );
+//   };
+
+//   return <div onClick={showCustom}> {title} </div>;
+// }
+
+type ConfirmProps = {
+  title: string;
+  message: string;
+  onConfirm: () => void;
+  onCancel?: () => void;
+};
+
+function Confirm({ title, message, onConfirm, onCancel }: ConfirmProps) {
+  const { closeAll } = useModal();
+  return (
+    <div style={{ background: "white", borderRadius: 16, padding: 20, minWidth: 340 }}>
+      <h3 style={{ marginTop: 0 }}>{title}</h3>
+      <p>{message}</p>
+      <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+        <button onClick={() => { onCancel?.(); closeAll(); }}>Cancel</button>
+        <button onClick={() => { onConfirm(); closeAll(); }}>OK</button>
+      </div>
+    </div>
+  );
+}
+
+export function DangerAction() {
+  const { openComponent } = useModal();
+
+  const ask = () => {
+    openComponent(Confirm, {
+      title: "Delete item?",
+      message: "This action cannot be undone.",
+      onConfirm: () => console.log("confirmed!"),
+    });
+  };
+
+}
 
 
 const Modal = ({ isOpen, onClose, children }:any) => {

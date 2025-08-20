@@ -21,6 +21,7 @@ import ProfileEdit from './pages/ProfileEdit';
 import { useDispatch, useSelector } from 'react-redux';
 import { getLoading, setLoaing } from './store/appSlice';
 import Loading from './components/Loading';
+import { ModalProvider } from './components/ModalContext';
 
 
 function App() {   
@@ -34,6 +35,7 @@ function App() {
 
   return ( 
     <   >  
+    <ModalProvider> 
           
     { loading && <Loading open={false} />}
      <Routes> 
@@ -57,6 +59,7 @@ function App() {
          <PageHeader /> 
          <NavApp /> </>)
        } 
+       </ModalProvider>
 {/* </ScrollBounceDemo> */}
     </>
   )
