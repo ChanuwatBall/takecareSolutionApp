@@ -104,6 +104,7 @@ const ComplaintForm=()=>{
                 }
                 const image:Photo = await Camera.getPhoto({
                     quality: 70,
+                    webUseInput:true ,
                     allowEditing: true,
                     resultType: CameraResultType.Uri
                 }).then(e =>{
