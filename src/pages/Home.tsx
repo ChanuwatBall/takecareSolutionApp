@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./css/Home.css"
 import   { SwiperSlide ,Swiper } from "swiper/react"; 
-import { companydetail, deleteCookie,  getStorage } from "../action"; 
+import { companydetail, deleteCookie,  getCookie } from "../action"; 
 import { useNavigate } from "react-router-dom";
 import { BouceAnimation  } from "../components/Animations"; 
 import PullToRefreshComponent from "../components/PullToRefreshComponent";
@@ -40,9 +40,9 @@ const Home:React.FC=()=>{
         dispatch(setLoaing(true))
          const getCDetal=async ()=>{
             try {
-                // const profile:any = await getCookie("profile")  
+                const profile:any = await getCookie("profile")  
 
-                const profile:any = await  getStorage("profile")
+                // const profile:any = await  getStorage("profile")
                 if(profile != null && profile != undefined){
 
                     const result =await companydetail({  lineId: profile?.userId})

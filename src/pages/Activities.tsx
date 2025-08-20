@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./css/Activities.css"
 import { useNavigate } from "react-router-dom"; 
-import { activity,  deleteCookie, getCookie, getStorage, setCookie, userLineid } from "../action";
+import { activity,  deleteCookie, getCookie , setCookie, userLineid } from "../action";
 import liff from "@line/liff";
 import PullToRefreshComponent from "../components/PullToRefreshComponent";
 import { BouceAnimation } from "../components/Animations";
@@ -17,8 +17,8 @@ const Activities=()=>{
     useEffect(()=>{ 
 
          const checkmemberregis=async ()=>{
-            // const profilecookie:any = await getCookie("profile") 
-            const profilecookie:any = await  getStorage("profile")
+            const profilecookie:any = await getCookie("profile") 
+            // const profilecookie:any = await  getStorage("profile")
             const usr = await userLineid(profilecookie?.userId) 
             if(usr?.result &&( profilecookie === null || profilecookie === undefined)){
                  const profile:any = await liff.getProfile()
