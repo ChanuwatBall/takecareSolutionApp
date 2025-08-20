@@ -96,14 +96,9 @@ const ComplaintForm=()=>{
 
     const isInLINE = () => / line\//i.test(navigator.userAgent); 
     const fileRef = useRef<HTMLInputElement>(null);
-    const takePicture = async () => {
-        console.log("isInLINE() ",navigator.userAgent ,isInLINE())
+    const takePicture = async () => { 
         if(images?.length < maxLengthImage){
-            if(isInLINE()){
-                
-                fileRef.current?.click();
-                return;
-            }
+          
             try {   
                 const dpermit = await  Camera.checkPermissions() //.requestPermissions()
                 if(dpermit.camera === "denied"){
@@ -238,20 +233,13 @@ const ComplaintForm=()=>{
         const fileurl =  URL.createObjectURL(file) 
          
         const addimg = [...images ,{webPath: fileurl , format:"jpeg"} ]  
-        setImages(addimg) 
+        setImages(addimg)  
     };
 
     return(
     <PullToRefreshComponent > 
         <div  id="page" className="page  " style={{position:"relative"}} >
-         <input
-            ref={fileRef}
-            type="file"
-            accept="image/*"
-            capture="environment"
-            onChange={onFileChange}
-            style={{ display: "none" }}
-        />
+       
           {/* {preview && <img src={preview} alt="preview" style={{maxWidth:"100%"}} />} */}
         <ModalDialog 
          open={openmodal} setOpen={(e:any)=>{setOpen(e)}}
@@ -318,13 +306,27 @@ const ComplaintForm=()=>{
                         </div>
                         <div className="row-input flex row " >
                             <label className="title" > 
-                                แนบรูป (ไม่เกิน 5 รูป) <span><br/>อัพโหลดแล้ว&nbsp; {images.length}/{maxLengthImage} </span>
-                                
+                                แนบรูป (ไม่เกิน 5 รูป) <span><br/>อัพโหลดแล้ว&nbsp; {images.length}/{maxLengthImage} </span> 
                             </label>
-                            <button onClick={()=>{takePicture()}} >
+                            {/iPhone|iPad|iPod/i.test(navigator.userAgent) && isInLINE() ? <div style={{ position: "relative", display: "inline-block" }}>
+                                  <input
+                                    ref={fileRef}
+                                    type="file"
+                                    id="cam"
+                                    accept="image/*"
+                                    capture="environment"
+                                    onChange={onFileChange}
+                                    style={{ display: "none",zIndex:20 }}
+                                />
+                                  <button  >
+                                    <img src={apiUrl+"/images/camera.png"}  />
+                                    <label htmlFor="cam" >ถ่ายรูป</label>
+                                </button>
+                             </div>:  <button onClick={()=>{takePicture()}} >
                                 <img src={apiUrl+"/images/camera.png"}  />
                                 <label>ถ่ายรูป</label>
-                            </button>
+                            </button>}
+                          
                             
                             <button onClick={()=>{pickImages()}} >
                                 <img src={apiUrl+"/images/picture.png"}  />
