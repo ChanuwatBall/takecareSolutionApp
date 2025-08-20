@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./css/Profile.css"
-import {  complaintsumbyuser,   deleteCookie,   getCookie,   setCookie,   userLineid } from "../action";
+import {  complaintsumbyuser,   deleteCookie,   getCookie,   getStorage,   setCookie,   userLineid } from "../action";
 // import liff from "@line/liff";  
 import liff from "@line/liff";
 import { useNavigate } from "react-router-dom";
@@ -45,7 +45,8 @@ const Profile:React.FC=()=>{
 
     useEffect(()=>{
             const checkmemberregis=async ()=>{
-                const profilecookie:any = await getCookie("profile")
+                // const profilecookie:any = await getCookie("profile")
+                                const profilecookie:any = await  getStorage("profile")
                 const usr = await userLineid(profilecookie?.userId)  
                 if(usr?.result &&( profilecookie === null || profilecookie === undefined)){
                      const profile:any = await liff.getProfile()

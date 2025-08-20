@@ -177,6 +177,28 @@ type CookieOptions = {
   domain?: string;
 };
 
+
+
+export function getStorage(keyStore: any) {
+  try {
+    let value = localStorage.getItem(keyStore);
+    return JSON.parse(value||'');
+  } catch {
+    return "";
+  }
+}
+
+export function setStorage(keyStore: any, valueStore: any) {
+  try {
+    localStorage.setItem(keyStore, JSON.stringify(valueStore));
+    console.log("set done");
+  } catch {
+    return "";
+  }
+}
+ 
+
+
 export function setCookie(name: string, value: unknown, opts: CookieOptions = {}) {
   const {
     days = 365,

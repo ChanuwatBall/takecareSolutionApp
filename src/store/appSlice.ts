@@ -29,9 +29,9 @@ export const appSlice = createSlice({
     },
     setLoaing:(state , action) =>{
         state.loading = action.payload
-        if(!state.loading){
-            setTimeout(()=>{ state.loading = false},2000)
-        }
+        // if(!state.loading){
+        //     setTimeout(()=>{ state.loading = false},2000)
+        // }
     } 
   }
 })

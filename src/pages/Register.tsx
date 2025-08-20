@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { ActionSheet, ActionSheetButtonStyle } from '@capacitor/action-sheet';
 import { useNavigate } from "react-router-dom";
 import liff from "@line/liff";
-import { getDefaultCompay, registerNewMember, setCookie, userLineid, villageoption } from "../action";
+import { getDefaultCompay, registerNewMember, setCookie, setStorage, userLineid, villageoption } from "../action";
 import Select from 'react-select';
 import { isAuthenticated } from "../auth"; 
 import PullToRefreshComponent from "../components/PullToRefreshComponent";
@@ -176,10 +176,13 @@ const Register=()=>{
           const usr = await userLineid(lineprofile?.userId)
           console.log("userLineid usr ",usr)
           setCookie("member", usr?.villager,{days:30})
+          setStorage("member", usr?.villager)
         }else{ 
           setCookie("member", result?.villager,{days:30})
+          setStorage("member", result?.villager)
         }
         setCookie("profile", lineprofile ,{days:30})
+          setStorage("profile", lineprofile)
         localStorage.setItem("token", JSON.stringify(liff.getAccessToken()))  
         navigate("/home")
         window.location.reload()
