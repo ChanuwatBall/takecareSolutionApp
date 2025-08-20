@@ -100,9 +100,14 @@ const ComplaintForm=()=>{
         if (images?.length >= maxLengthImage) return; 
          
            try {   
-                        const perm = await Camera.checkPermissions();
+            const perm = await Camera.checkPermissions();
             if (perm.camera === "denied") {
              await Camera.requestPermissions();
+              await navigator.mediaDevices.getUserMedia({
+                video: { facingMode: { ideal: "environment" } },
+                audio: false,
+                });
+
             }
 
             const image = await Camera.getPhoto({
@@ -111,7 +116,7 @@ const ComplaintForm=()=>{
             allowEditing: false,
             // เวิร์กดีบน web ส่วนใหญ่
             source: CameraSource.Prompt, // ให้ระบบถาม: กล้อง/แกลเลอรี
-            webUseInput: true,           // บนเว็บจะ fallback เป็น file input
+            // webUseInput: true,           // บนเว็บจะ fallback เป็น file input
             });
 
             setImages([...(images || []), image]);
