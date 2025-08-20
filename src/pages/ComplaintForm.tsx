@@ -4,7 +4,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Swiper ,SwiperSlide } from 'swiper/react';  
-import { Camera, CameraResultType, type GalleryPhotos, type Photo } from '@capacitor/camera';
+import { Camera, CameraResultType, CameraSource, type GalleryPhotos } from '@capacitor/camera';
  
 // import {type Marker as MarkerType }from "leaflet"
 
@@ -97,37 +97,30 @@ const ComplaintForm=()=>{
     const isInLINE = () => / line\//i.test(navigator.userAgent); 
     const fileRef = useRef<HTMLInputElement>(null);
     const takePicture = async () => { 
-        if(images?.length < maxLengthImage){
-          
-            try {   
-                const dpermit = await  Camera.checkPermissions() //.requestPermissions()
-                if(dpermit.camera === "denied"){
-                    await Camera.requestPermissions()
-                }
-                const image:Photo = await Camera.getPhoto({
-                    quality: 70,
-                    webUseInput:true ,
-                    allowEditing: true,
-                    resultType: CameraResultType.Uri
-                }).then(e =>{
-                    console.log(" image ", e)
-                    return e
-                }).catch(err=>{
-                    console.log(" err",err)
-                    return err
-                })
-     
-                // let imageUrl = image.webPath; 
-                const addimg = [...images ,  image ] 
-                console.log("addimg ",addimg)
-                setImages(addimg)
-            
-            } catch (error) {
-               console.log("err ", error) 
+        if (images?.length >= maxLengthImage) return; 
+         
+           try {   
+                        const perm = await Camera.checkPermissions();
+            if (perm.camera === "denied") {
+             await Camera.requestPermissions();
             }
-        }else{
 
+            const image = await Camera.getPhoto({
+            quality: 70,
+            resultType: CameraResultType.Uri, // หรือ DataUrl ถ้าจะเก็บเป็น base64
+            allowEditing: false,
+            // เวิร์กดีบน web ส่วนใหญ่
+            source: CameraSource.Prompt, // ให้ระบบถาม: กล้อง/แกลเลอรี
+            webUseInput: true,           // บนเว็บจะ fallback เป็น file input
+            });
+
+            setImages([...(images || []), image]);
+        } catch (err) {
+            console.log("Camera error", err);
+            // fallback: เปิด input ธรรมดา
+            fileRef.current?.click();
         }
+                
     };
 
     const pickImages=async ()=>{
@@ -309,19 +302,32 @@ const ComplaintForm=()=>{
                                 แนบรูป (ไม่เกิน 5 รูป) <span><br/>อัพโหลดแล้ว&nbsp; {images.length}/{maxLengthImage} </span> 
                             </label>
                             {/iPhone|iPad|iPod/i.test(navigator.userAgent) && isInLINE() ? <div style={{ position: "relative", display: "inline-block" }}>
-                                  <input
+                                    <button type="button" style={{ padding: 0, border: "none", background: "transparent" }}>
+                                        <img src={apiUrl + "/images/camera.png"} alt="" />
+                                        <div>ถ่ายรูป</div>
+                                    </button>
+
+                                    {/* input ซ้อนทับปุ่ม (ห้าม display:none) */}
+                                    <input
                                     ref={fileRef}
-                                    type="file"
                                     id="cam"
+                                    type="file"
                                     accept="image/*"
                                     capture="environment"
                                     onChange={onFileChange}
-                                    style={{ display: "none",zIndex:20 }}
-                                />
-                                  <button  >
-                                    <img src={apiUrl+"/images/camera.png"}  />
-                                    <label htmlFor="cam" >ถ่ายรูป</label>
-                                </button>
+                                    style={{
+                                        position: "absolute",
+                                        inset: 0,           // ครอบเต็มปุ่ม
+                                        opacity: 0,         // โปร่งใส
+                                        cursor: "pointer",
+                                        zIndex: 20,
+                                        // บาง iOS ต้องการขนาดคลิกที่ชัดเจน
+                                        width: "100%",
+                                        height: "100%",
+                                        // กัน iOS ปรับ zoom ตอนโฟกัส
+                                        fontSize: 16
+                                    }}
+                                    />
                              </div>:  <button onClick={()=>{takePicture()}} >
                                 <img src={apiUrl+"/images/camera.png"}  />
                                 <label>ถ่ายรูป</label>
