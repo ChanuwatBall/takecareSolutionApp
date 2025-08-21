@@ -138,7 +138,7 @@ type ConfirmProps = {
   onCancel?: () => void;
 };
 
-function Confirm({ title, message, onConfirm, onCancel }: ConfirmProps) {
+function Confirm({ title, message, onConfirm  }: ConfirmProps) {
   const { closeAll } = useModal();
   return (
     <div style={{ background: "white", borderRadius: 16, padding: 20, minWidth: 340 }}>

@@ -118,7 +118,7 @@ const Complaint=()=>{
                         onClick={()=>{navigate(`/complaint/add/${menu?.value}}`,{state:{complaintmenu:menu }})}}
                     >
                         <img src={menu?.icon} alt={menu?.value} className="mt-4" style={{maxWidth:"7rem"}} />
-                        <label className="text-sm" >{menu?.label}</label>
+                        <label className="text-sm text-black" >{menu?.label}</label>
                     </div>
                     </BouceAnimation>
                 )

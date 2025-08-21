@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import "./css/Profile.css"
 import {  complaintsumbyuser,   deleteCookie,   getCookie,   setCookie,   userLineid } from "../action";
 // import liff from "@line/liff";  
@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import PullToRefreshComponent from "../components/PullToRefreshComponent";
 import { BouceAnimation } from "../components/Animations";
 import { headersize } from "../components/PageHeader"; 
+import { useModal } from "../components/ModalContext";
  
 const apiUrl = import.meta.env.VITE_API;
 
@@ -14,6 +15,7 @@ const apiUrl = import.meta.env.VITE_API;
 const Profile:React.FC=()=>{
     const navigate = useNavigate() 
     // const [loading,setLoading] = useState(false)
+    const { openComponent } = useModal();
     const [profile , setProfile]  = useState<any>(null) 
     const [familyMember , setFammember] = useState(0)
     const [complaintStatus  , setComplaintSumm] = useState({
@@ -86,6 +88,56 @@ const Profile:React.FC=()=>{
         getuservillager()
     },[])  
 
+
+    const viewComplaint = () => {
+        // setOpen(true)
+        openComponent(Confirm, {
+            title: "ภาพรวมการแจ้งปัญหา",
+            message: <div style={{width:"100%"}} >
+                <div className="grid grid-cols-2  gradient-primary rounded-md py-1" >
+                    <div className="complaint-status-name flex  items-center justify-center">หัวข้อเรื่อง</div>
+                    {/* <div className="complaint-status-name flex  items-center justify-center">ผู้ดูแล</div> */}
+                    <div className="complaint-status-name flex  items-center justify-center">สถานะ</div>
+                </div>
+                {
+                    complaints.map((e:any , index:any)=>
+                    <div key={index} style={{marginBottom:"1rem" , borderBottom:"1px solid #ddd" , paddingBottom:".5rem"}}>
+                        <div className="grid grid-cols-3  ">
+                            <div className="text-left text-sm col-span-2 dark:text-black" >
+                                <ul style={{paddingLeft:"1rem"}}>
+                                    <li> {e?.topic}</li>
+                                    <li>{e?.supTitle} </li>
+                                    <li> {e?.detail}</li>
+                                </ul>
+                                
+                               
+                            </div>
+                            {/* <div  className="text-center text-sm dark:text-black" >{e?.admin}</div> */}
+                            <div className="text-center text-sm dark:text-black" >
+                                {e?.status?.match("pending") ? "รอดำเนินการ" :
+                                e?.status?.match("in-progress") ? "กำลังดำเนินการ" :
+                                e?.status?.match("done") ? "เสร็จสิ้น" :
+                                "ตรวจสอบ" }
+                            </div>
+                            
+                        </div>
+                        <div  className="grid grid-cols-6">
+                            {e?.imageIds.map((id:any)=> 
+                            <img
+                                src={apiUrl+"/api/file/drive-image/"+id}
+                                alt={`Image ${index}`}
+                                className="w-full h-full object-cover rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105"
+                            />
+                            )}
+                        </div> 
+                    </div>)
+                }
+            </div> ,
+            onConfirm: () => { console.log("confirmed!")},
+        })
+    }
+
+
     return(
     <PullToRefreshComponent > 
     <div  id="page" className="page"> 
@@ -112,7 +164,7 @@ const Profile:React.FC=()=>{
         </BouceAnimation>
 
         <BouceAnimation duration={0.3}> 
-        <div className="card-complaint-count flex  items-center justify-center " >
+        <div className="card-complaint-count flex  items-center justify-center " onClick={()=>{viewComplaint()}} >
            <img src="../assets/images/complaint-alert.png" alt="" />
            <label>จำนวนเรื่องร้องเรียน: {complaintStatus && complaintStatus?.total} เรื่อง</label>
         </div>
@@ -140,18 +192,18 @@ const Profile:React.FC=()=>{
              </div>
              <div className="grid grid-cols-4  " >
                 <div className="col-span-3 grid grid-cols-3  ">
-                   <div className="text-center flex  items-center justify-center">
+                   <div className="text-center flex  items-center justify-center dark:text-black">
                      {complaintStatus && complaintStatus?.wait}
                    </div>
-                   <div className="text-center  flex  items-center justify-center">
+                   <div className="text-center  flex  items-center justify-center dark:text-black">
                      {complaintStatus &&complaintStatus?.pending}
                    </div>
-                   <div className="text-center flex  items-center justify-center">
+                   <div className="text-center flex  items-center justify-center dark:text-black">
                      {complaintStatus &&complaintStatus?.inProgress}
                    </div>
                 </div>
                 <div  style={{margin:"0px",paddingLeft:".3rem"}}>
-                    <div className="text-center" style={{padding:".67rem 0 .67rem",margin:"0"}}>
+                    <div className="text-center dark:text-black" style={{padding:".67rem 0 .67rem",margin:"0"}}>
                         {complaintStatus && complaintStatus?.done}
                     </div> 
                 </div>
@@ -169,9 +221,9 @@ const Profile:React.FC=()=>{
              {
                 complaints && complaints.map((e,index)=>
                 <div key={index} className="grid grid-cols-3  py-1" >
-                    <div className="text-center text-sm" >{e?.topic}</div>
-                    <div  className="text-center text-sm" >{e?.admin}</div>
-                    <div className="text-center text-sm" >
+                    <div className="text-center text-sm dark:text-black" >{e?.topic}</div>
+                    <div  className="text-center text-sm dark:text-black" >{e?.admin}</div>
+                    <div className="text-center text-sm dark:text-black" >
                         {e?.status?.match("pending") ? "รอดำเนินการ" :
                          e?.status?.match("in-progress") ? "กำลังดำเนินการ" :
                          e?.status?.match("done") ? "เสร็จสิ้น" :
@@ -187,3 +239,25 @@ const Profile:React.FC=()=>{
     )
 }
 export default Profile;
+
+
+type ConfirmProps = {
+  title: string;
+  message: ReactNode;
+  onConfirm: () => void;
+  onCancel?: () => void;
+};
+function Confirm({ title, message, onConfirm  }: ConfirmProps) {
+  const { closeAll } = useModal();
+  return (
+    <div style={{ background: "white", borderRadius: 16, padding: 20, minWidth: 340 }}>
+      <h3 style={{ marginTop: 0 , marginBottom:"1rem" }}>{title}</h3>
+      <p>{message}</p>
+      <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" ,paddingTop:"1rem" }}>
+        {/* <button onClick={() => { onCancel?.(); closeAll(); }}>Cancel</button> */}
+        <button onClick={() => { onConfirm(); closeAll(); }}>ปิด</button>
+      </div>
+    </div>
+  );
+}
+ 

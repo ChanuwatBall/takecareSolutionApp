@@ -159,43 +159,43 @@ const ProfileEdit=()=>{
                 <CircleImageUploader onChange={imagesprofile} image={image} />
             </div>
              <div className="w-full max-w-md bg-white mt-4 p-4 rounded-xl shadow"  >
-                <label className="block mb-2">ชื่อ*
+                <label className="block mb-2 text-black">ชื่อ*
                   <input 
                     type="text" name="firstName"  value={firstName}
                     className="w-full border p-2 rounded border-gray-300"
                     onChange={(e:any)=>{setFirstName(e.target.value)}} />
                   </label>
-                <label className="block mb-2">นามสกุล*
+                <label className="block mb-2 text-black">นามสกุล*
                   <input 
                    type="text" name="lastName" value={lastName}
                    className="w-full border p-2 rounded border-gray-300" 
                    onChange={(e)=>{setLastName(e.target.value)}} 
                   /></label>
-                <label className="block mb-2">หมายเลขโทรศัพท์*
+                <label className="block mb-2 text-black">หมายเลขโทรศัพท์*
                   <input 
                     type="tel" name="phone" value={phone} maxLength={10} 
                     className="w-full border p-2 rounded border-gray-300" 
                     onChange={(e)=>{setPhone(e.target.value)}} />
                   </label>
-                <label className="block mb-2">วันเกิด*
+                <label className="block mb-2 text-black">วันเกิด*
                    <input 
                     type="date" name="birthDate" value={birthDate}
                     className="w-full border p-2 rounded border-gray-300" 
                     onChange={(e)=>{setBirthDate(e.target.value)}} 
                   /></label>
-                <label className="block mb-2">จำนวนสมาชิกในครอบครัว
+                <label className="block mb-2 text-black">จำนวนสมาชิกในครอบครัว
                    <input 
                     type="number" name="fammiltMember" value={fammember} min={0} max={100}
                     className="w-full border p-2 rounded border-gray-300" 
                     onChange={(e)=>{setFammember(e.target.value)}} 
                 /></label>
-                <label className="block mb-2">ที่อยู่
+                <label className="block mb-2 text-black">ที่อยู่
                    <textarea 
                       name="address" value={address}
                       className="w-full border p-2 rounded border-gray-300" 
                       onChange={(e)=>{setAddress(e.target.value)}}
                    ></textarea></label> 
-                <label className="block mb-2">หมู่บ้าน
+                <label className="block mb-2 text-black">หมู่บ้าน
                   <Select
                     options={options}
                     value={selectedOption}
@@ -206,7 +206,7 @@ const ProfileEdit=()=>{
                 </label> 
             </div>
             <div className="w-full max-w-md bg-white mt-4 p-4 mb-4 rounded-xl shadow"> 
-                <div className="mb-2">เพศ*<div>
+                <div className="mb-2 text-black">เพศ*<div>
                 <label className="mr-4">
                   <input 
                     type="radio" name="gender" value="ชาย" checked={gender?.match("male")?true:false}

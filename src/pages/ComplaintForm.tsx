@@ -279,14 +279,14 @@ const ComplaintForm = () => {
                             style={{ width: "100%" }}
                         >
                             <SwiperSlide style={{ width: "100%" }}>
-                                <div className="row-input row" >
+                                <div className="row-input row text-black" >
                                     <label className="title" >หัวข้อเรื่อง: </label>
                                     <div className="input" >
                                         <input placeholder="หัวข้อเรื่อง" value={topic} onChange={(e) => { setTopic(e.target.value) }}>
                                         </input>
                                     </div>
                                 </div>
-                                <div className="row-input flex column " style={{ alignItems: "flex-start" }} >
+                                <div className="row-input flex column text-black" style={{ alignItems: "flex-start" }} >
                                     <label className="title" >หัวข้อเรื่องย่อย* </label>
                                     <div className="input" >
                                         <input
@@ -295,7 +295,7 @@ const ComplaintForm = () => {
                                         </input>
                                     </div>
                                 </div>
-                                <div className="row-input row" >
+                                <div className="row-input row text-black" >
                                     <label className="title" >เบอร์โทรที่สามารถติดต่อได้: </label>
                                     <div className="input" >
                                         <input
@@ -307,14 +307,14 @@ const ComplaintForm = () => {
                                     </div>
                                 </div>
 
-                                <div className="row-input flex column " style={{ alignItems: "flex-start" }} >
+                                <div className="row-input flex column text-black " style={{ alignItems: "flex-start" }} >
                                     <label className="title" >รายละเอียด (ระบุชื่อซอย,ถนน) </label>
                                     <div className="input" >
                                         <textarea value={detail} onChange={(e) => { setDetail(e.target.value) }}>
                                         </textarea>
                                     </div>
                                 </div>
-                                <div className="row-input flex row " >
+                                <div className="row-input flex row text-black" >
                                     <label className="title" >
                                         แนบรูป (ไม่เกิน 5 รูป) <span><br />อัพโหลดแล้ว&nbsp; {images.length}/{maxLengthImage} </span>
 
@@ -350,8 +350,8 @@ const ComplaintForm = () => {
 
                                             {/* Delete Button */}
                                             <button
-                                                onClick={() => removeimage({ image, index })} style={{ padding: "3px 5px 3px  5px" }}
-                                                className="absolute top-2 right-2 bg-red-500 text-black rounded-full text-sm hover:bg-red-700 transition duration-200"
+                                                onClick={() => removeimage({ image, index })} style={{ padding: "3px 5px 3px  5px" , background:"white"}}
+                                                className="absolute top-2 right-2 bg-red-500 text-black rounded-full  text-sm hover:bg-red-700 transition duration-200"
                                             >
                                                 X
                                             </button>
@@ -365,7 +365,7 @@ const ComplaintForm = () => {
                                     <MapPosition userlocation={userlocation} />
                                 </BouceAnimation>
                                 <BouceAnimation duration={0.4}>
-                                    <button className="find-my-loaction" onClick={() => { userlocation() }} >
+                                    <button className="find-my-loaction text-primary" style={{background:"transparent"}} onClick={() => { userlocation() }} >
                                         <img src={apiUrl + "/images/pin-locatiion.png"} />
                                         ตำแหน่งของฉัน
                                     </button>
@@ -428,7 +428,7 @@ const MapPosition = ({ userlocation }: any) => {
 }
 
 
-const ModalDialog = ({ open, setOpen, complaint, acceptform, removeImage }: any) => {
+const ModalDialog = ({  complaint,  removeImage }: any) => {
     useEffect(() => {
         console.log("complaint  ", complaint)
     }, [])
@@ -436,8 +436,8 @@ const ModalDialog = ({ open, setOpen, complaint, acceptform, removeImage }: any)
         // <div className="backdrop flex " style={{ justifyContent: "center", alignItems: "center" }}
         // >
         //     <div className=" flex items-center justify-between p-4 md:p-5 border-b rounded-t   dark:border-gray-600 border-gray-200" >
-                <div className="relative bg-white rounded-lg  dark:bg-gray-700" style={{ minHeight: "70vh", width: "90vw", padding: "1rem" }}>
-                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                <div className="relative  rounded-lg  dark:bg-gray-700 text-black" style={{ minHeight: "70vh", width: "90vw", padding: "1rem" ,background:"white"}}>
+                    <h3 className="text-xl font-semibold text-gray-900 text-black ">
                         ภาพรวมการแจ้งปัญหา
                     </h3><br />
 
