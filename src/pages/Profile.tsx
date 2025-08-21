@@ -91,9 +91,9 @@ const Profile:React.FC=()=>{
     <div  id="page" className="page"> 
         <BouceAnimation duration={0.1}> 
         <div className="card-profile  flex items-center " style={{position: "relative"}}>
-            <div style={{position:"absolute",fontSize:".6em",color:"#FFF", top:"2rem", right:"2rem", opacity:".4"}}
+            <div style={{position:"absolute",width:"1.5rem",color:"#FFF", top:"1rem", right:"1rem", opacity:"1"}}
             onClick={(()=>{navigate("/profile/edit")})}
-            > แก้ไข </div>
+            > <img  src={apiUrl+"/images/svg/pencil.svg"} alt="edit" /> </div>
             <div className="profile-image flex items-center" style={{justifyContent:"center"}}> 
                 <div 
                     className="wrap-member-profile flex items-center justify-center ">

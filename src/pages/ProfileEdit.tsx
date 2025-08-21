@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { CircleImageUploader } from "./Register";
-import { getCookie, setCookie, updatevillager, userLineid } from "../action";
+import { getCookie, getDefaultCompay, setCookie, updatevillager, userLineid, villageoption } from "../action";
  
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "../components/AlertContext";
@@ -8,6 +8,7 @@ import { headersize } from "../components/PageHeader";
 import PullToRefreshComponent from "../components/PullToRefreshComponent";
 import { useDispatch } from "react-redux";
 import { setLoaing } from "../store/appSlice";
+import Select from 'react-select';
 
 const apiUrl = import.meta.env.VITE_API;
 
@@ -24,6 +25,8 @@ const ProfileEdit=()=>{
     const [address , setAddress] = useState("")
     const [gender , setGender] = useState("") 
     const [fammember , setFammember] = useState("0") 
+    const [options , setOptions] = useState([])
+    const [selectedOption, setSelectedOption] = useState<any>(null);
     // const [loading,setLoading] = useState(false)
     
    const imagesprofile=(e:any)=>{
@@ -31,12 +34,18 @@ const ProfileEdit=()=>{
         setImage(e?.dataUrl)
         setImgFormat(e?.format)
     }
+    
     useEffect(()=>{
        headersize()
         const getlocalprofile=async ()=>{
             const member:any = await getCookie("member")
             console.log("member ",member)
             if(member){ 
+               const companyapp = await getDefaultCompay()  
+                const opts= await villageoption(companyapp?.id)
+                console.log("opts ",opts)
+                setOptions(opts)
+        
                 setImage(apiUrl+"/api/file/drive-image/"+member?.profile)
                 setFirstName(member?.firstName)
                 setLastName(member?.lastName)
@@ -45,8 +54,13 @@ const ProfileEdit=()=>{
                 setAddress(member?.address)
                 setGender(member?.gender) 
                 setFammember(member?.fammilyMember)
-            }
+                const villSelect = opts.find((e:any)=> e.value === member?.villageId)
+                console.log("villSelect ",villSelect)
+                setSelectedOption(villSelect)
+            } 
         }
+
+           
         getlocalprofile()
     },[])
 
@@ -79,10 +93,8 @@ const ProfileEdit=()=>{
     return new File([blob], filename, { type: 'image/'+imgFormat  });
   };
 
-     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault(); 
-        dispatch(setLoaing(true))
-         const profile:any = await getCookie("profile")
+  const updatevillagerdata=async ()=>{
+ const profile:any = await getCookie("profile")
          const member:any = await getCookie("member")
          let fileprofile = null
          if(image.indexOf("profile.line-scdn.net") > -1 || image.indexOf("/api/file/drive-image/") > -1){
@@ -103,6 +115,7 @@ const ProfileEdit=()=>{
           formData.append('gender',gender);  
           formData.append('familyMember',fammember);  
           formData.append('id',member?.id);  
+          formData.append('villageId', selectedOption?.value );
           
           let lineUserId:any =profile?.userId 
           formData.append('lineUserId', lineUserId ); 
@@ -113,19 +126,28 @@ const ProfileEdit=()=>{
           if(result?.result || (typeof result == "string"  && result.indexOf("result\":true,") > -1 ) ){ 
             if( (typeof result == "string")){  
                const usr = await userLineid(profile?.userId)
-               setCookie("member", usr?.villager,{days:30})
+              await setCookie("member", usr?.villager,{days:30})
             }else{ 
-              setCookie("member", result?.villager,{days:30})
+              await setCookie("member", result?.villager,{days:30})
             }  
-            showAlert( "แก้ไขข้อมูลโปรไฟล์สำเร็จ  ","success")
-            navigate(-1) 
+            await showAlert( "แก้ไขข้อมูลโปรไฟล์สำเร็จ  ","success")
+            navigate(-1)  
           }else{ 
-            showAlert( "แก้ไขข้อมูลโปรไฟล์ไม่สำเร็จ กรุณาลองใหม่ภายหลัง ","error")
+            await showAlert( "แก้ไขข้อมูลโปรไฟล์ไม่สำเร็จ กรุณาลองใหม่ภายหลัง ","error")
+            // dispatch(setLoaing(false))
           } 
-         dispatch(setLoaing(false))
-          // setLoading(false)
-                  
+  }
+  const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault(); 
+        dispatch(setLoaing(true))
+        await updatevillagerdata()
+        dispatch(setLoaing(false)) 
       };
+
+    const handleChangeOpt = (selectedOption:any) => {
+      setSelectedOption(selectedOption);
+    };
+
 
     return(
     <PullToRefreshComponent > 
@@ -173,6 +195,15 @@ const ProfileEdit=()=>{
                       className="w-full border p-2 rounded border-gray-300" 
                       onChange={(e)=>{setAddress(e.target.value)}}
                    ></textarea></label> 
+                <label className="block mb-2">หมู่บ้าน
+                  <Select
+                    options={options}
+                    value={selectedOption}
+                    onChange={handleChangeOpt}
+                    placeholder="เลือกหมู่บ้าน..."
+                  />
+                 
+                </label> 
             </div>
             <div className="w-full max-w-md bg-white mt-4 p-4 mb-4 rounded-xl shadow"> 
                 <div className="mb-2">เพศ*<div>

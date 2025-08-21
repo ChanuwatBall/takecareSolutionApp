@@ -24,3 +24,7 @@
     font-size: .9em;
     color: #4A4A4C;
 }
+.list-language li{
+  padding: .5rem 1rem !important;
+  border-bottom: 1px solid #eee;
+}

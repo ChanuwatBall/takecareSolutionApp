@@ -18,20 +18,20 @@ import ActivitieDetail from './pages/ActivitieDetail';
 import Register from './pages/Register';
 import { isAuthenticated } from './auth'; 
 import ProfileEdit from './pages/ProfileEdit';  
-import { useDispatch, useSelector } from 'react-redux';
-import { getLoading, setLoaing } from './store/appSlice';
+import {  useSelector } from 'react-redux';
+import { getLoading } from './store/appSlice';
 import Loading from './components/Loading';
 import { ModalProvider } from './components/ModalContext';
 
 
 function App() {   
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
   const loading = useSelector(getLoading)
   useEffect(()=>{ 
-    setTimeout(()=>{
-      dispatch(setLoaing(false))
-    },2000)
-  },[loading])
+    // setTimeout(()=>{
+    //   dispatch(setLoaing(false))
+    // },2000)
+  },[ ])
 
   return ( 
     <   >  

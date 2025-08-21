@@ -9,7 +9,7 @@ export interface CounterState {
 // Define the initial state using that type
 const initialState: CounterState = {
   value: 0 ,
-  loading:true
+  loading:false
 }
 
 export const appSlice = createSlice({
