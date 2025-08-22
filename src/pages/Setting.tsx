@@ -16,7 +16,8 @@ const Setting=()=>{
     const navigate = useNavigate()
     const [termsservice , setTermsService] = useState("")
     const [policy , setPolicy] = useState("") 
-    const { openComponent } = useModal();
+    const { openComponent ,closeAll } = useModal();
+  // const { closeAll } = useModal();
      
 
     useEffect(()=>{
@@ -88,13 +89,13 @@ const Setting=()=>{
               title: "เปลี่ยนภาษา",
               message: <div style={{marginTop:"1px solid #ddd"}}>
                 <ul className="list-language" >
-                  <li>ภาษาไทย</li> 
+                  <li className="text-primary" onClick={()=>{closeAll()}}>ภาษาไทย</li> 
                 </ul>
               </div>,
               onConfirm: () => console.log("confirmed!"),
             }) }} >
                 <img src="../assets/images/setting-language.png" className="icon" style={{width:"1.4rem"}} />
-                <label className="title">ตั้งค่าภาษา</label>  
+                <label className="title text-black">ตั้งค่าภาษา</label>  
             </div>
             <div className="setting-menu flex"   
               onClick={()=>{openComponent(Confirm, {
@@ -142,8 +143,8 @@ function Confirm({ title, message, onConfirm  }: ConfirmProps) {
   const { closeAll } = useModal();
   return (
     <div style={{ background: "white", borderRadius: 16, padding: 20, minWidth: 340 }}>
-      <h3 style={{ marginTop: 0 , marginBottom:"1rem" }}>{title}</h3>
-      <p>{message}</p>
+      <h3 className="text-black text-bold" style={{ marginTop: 0 , marginBottom:"1rem" }}>{title}</h3>
+      <p className="text-black">{message}</p>
       <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" ,paddingTop:"1rem" }}>
         {/* <button onClick={() => { onCancel?.(); closeAll(); }}>Cancel</button> */}
         <button onClick={() => { onConfirm(); closeAll(); }}>ปิด</button>

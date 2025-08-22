@@ -34,9 +34,7 @@ const apiUrl = import.meta.env.VITE_API;
 //@ts-ignore
 let L = window?.leaflet
 var map: any = null
-let marker: any = null
-let villagePoly: any = null
-let village: any = null
+let marker: any = null 
 
 const ComplaintForm = () => {
     const [showAlert] = useAlert();
@@ -49,8 +47,7 @@ const ComplaintForm = () => {
     const [complainTopic, setComplainTopic] = useState<any>("")
     const maxLengthImage = 5;
     const [curlocation, setCurLocation] = useState<any>(null)
-    const [point , setPoint] = useState([0,0])
-    const [isInSide, setIsInSide] = useState(true)
+    const [point , setPoint] = useState([0,0]) 
     const dispatch = useDispatch()
 
     const { openComponent } = useModal();
@@ -67,7 +64,7 @@ const ComplaintForm = () => {
         await Geolocation.getCurrentPosition({ enableHighAccuracy: true }).then((e) => {
             console.log("coord ", e?.coords)
             if (e.coords) {
-                setCurLocation(e.coords)
+                setCurLocation([e.coords.latitude, e.coords.longitude])
                 if (marker == null) {
                     marker = L.marker([e.coords.latitude, e.coords.longitude],{draggable:true}).bindPopup('จุดเกิดเหตุ');
                     map?.setView([e.coords.latitude, e.coords.longitude], 16)
@@ -81,21 +78,14 @@ const ComplaintForm = () => {
                     
                 } else {
                     marker?.setLatLng([e.coords.latitude, e.coords.longitude], 16);
-                }
-
-                const feature = areaInputToFeature(village);
-                const inside = isLatLonInsideGeoJSON(e.coords.latitude, e.coords.longitude, feature);
-                setIsInSide(inside)
-                if (!inside) {
-                    showAlert("ไม่สามารถแจ้งปัญหา ท่านอยู่นอกพื้นที่ร้องเรียน ", "error")
-                }
+                }   
             }
         }).catch((e)=>{
             console.log("err ",e)
             // window.navigator.geolocation() 
               navigator.geolocation.getCurrentPosition((e)=>{ 
-                    console.log("geolocation ", e)
-                   setCurLocation(e.coords)
+                    console.log("navigator geolocation ", e.coords)
+                   setCurLocation([e.coords.latitude, e.coords.longitude])
               },(err)=>{
                 console.log("navigation err ",err)
               });
@@ -208,7 +198,7 @@ const ComplaintForm = () => {
 
     const acceptform = async () => {
         // setOpen(false)
-        if (isInSide) {
+        // if (isInSide) {
             dispatch(setLoaing(true))
             const formData = new FormData();
             const villager: any = await getCookie("member")
@@ -222,7 +212,11 @@ const ComplaintForm = () => {
             )
             // const line = await liff.getProfile() 
             const line: any = await getCookie("profile")
-            formData.append('curlocation', curlocation);
+            console.log("curlocation ",curlocation)
+
+            const userlo = curlocation
+            console.log("set curlocation ",`${userlo[0]}#${userlo[1]}`)
+            formData.append('curlocation', `${userlo[0]}#${userlo[1]}`);
             formData.append("point",`${point[0]}#${point[1]}`)
             formData.append('topic', topic);
             formData.append('subtitle', subtitle);
@@ -234,25 +228,26 @@ const ComplaintForm = () => {
             formData.append('lineId', line?.userId);
 
 
-            // console.log("form ",form) 
+
+            // // console.log("form ",form) 
             const result = await createComplaint(formData)
 
-            // setLoading(false)
+            // // setLoading(false)
             if (result?.result) {
                 showAlert(result?.description + " สามรถติดตามสถานะเรื่องร้องเรียนได้ที่หน้าโปรไฟล์ของท่าน ", "success")
                 navigate(-1)
                 setTimeout(() => {
                     dispatch(setLoaing(false))
-                }, 1000);
+                }, 500);
             } else {
                 showAlert(result?.description, "error")
                 setTimeout(() => {
                     dispatch(setLoaing(false))
-                }, 1000);
+                }, 500);
             }
-        }else{ 
-            showAlert("คุณอยู่นอกบริเวณ ไม่สามารถแจ้งปัญหาได้", "error")
-        }
+        // }else{ 
+        //     showAlert("คุณอยู่นอกบริเวณ ไม่สามารถแจ้งปัญหาได้", "error")
+        // }
     }
 
     const removeimage = (e: any) => {
