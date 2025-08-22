@@ -63,6 +63,7 @@ const ComplaintForm = () => {
     const [openmodal, setOpen] = useState(false)
 
     const userlocation = async () => {
+            console.log("กำลังระบุตำแหน่งของคุณ " )
         await Geolocation.getCurrentPosition({ enableHighAccuracy: true }).then((e) => {
             console.log("coord ", e?.coords)
             if (e.coords) {
@@ -89,6 +90,17 @@ const ComplaintForm = () => {
                     showAlert("ไม่สามารถแจ้งปัญหา ท่านอยู่นอกพื้นที่ร้องเรียน ", "error")
                 }
             }
+        }).catch((e)=>{
+            console.log("err ",e)
+            // window.navigator.geolocation() 
+              navigator.geolocation.getCurrentPosition((e)=>{ 
+                    console.log("geolocation ", e)
+                   setCurLocation(e.coords)
+              },(err)=>{
+                console.log("navigation err ",err)
+              });
+             
+
         })
     }
 
@@ -408,6 +420,7 @@ const MapPosition = ({ userlocation }: any) => {
                         center: [e?.coords?.latitude, e?.coords?.longitude],
                         zoom: 13
                     });
+                    console.log("map ",map)
                     //  var marker = L.marker([e.latitude, e.longitude]).bindPopup('Your are here :)');
                     await map?.locate({ setView: true })
                         .on('locationfound', function (e: any) {

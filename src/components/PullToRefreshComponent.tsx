@@ -28,8 +28,8 @@ const PullToRefreshComponent = ({children}:PullContettProp) => {
   const [isLoading, setIsLoading] = useState(false);
 
   // debug HUD
-  const [hud, setHud] = useState({ st: 0, ch: 0, sh: 0, mode: "none" });
-  console.log("hud ",hud)
+  // const [hud, setHud] = useState({ st: 0, ch: 0, sh: 0, mode: "none" });
+  // console.log("hud ",hud)
   const resist = (d: number) => {
     if (d <= 0) return 0;
     const limited = Math.min(d, MAX_PULL);
@@ -72,7 +72,7 @@ const PullToRefreshComponent = ({children}:PullContettProp) => {
     startScrollTopRef.current = el.scrollTop;
     maxScrollRef.current = Math.max(0, el.scrollHeight - el.clientHeight);
 
-    setHud({ st: el.scrollTop, ch: el.clientHeight, sh: el.scrollHeight, mode: "none" });
+    // setHud({ st: el.scrollTop, ch: el.clientHeight, sh: el.scrollHeight, mode: "none" });
   }, [isRefreshing, isLoading]);
 
   const handleTouchMove = useCallback((e: TouchEvent) => {
@@ -94,7 +94,7 @@ const PullToRefreshComponent = ({children}:PullContettProp) => {
       else if (bottomSnapshotOk || bottomLiveOk) modeRef.current = "up";
       else {
         // not pulling; update HUD and let native scroll run
-        setHud({ st: el.scrollTop, ch: el.clientHeight, sh: el.scrollHeight, mode: "none" });
+        // setHud({ st: el.scrollTop, ch: el.clientHeight, sh: el.scrollHeight, mode: "none" });
         return;
       }
       // as soon as we lock, stop native vertical scrolling
@@ -119,12 +119,12 @@ const PullToRefreshComponent = ({children}:PullContettProp) => {
       }
     }
 
-    setHud({
-      st: el.scrollTop,
-      ch: el.clientHeight,
-      sh: el.scrollHeight,
-      mode: modeRef.current,
-    });
+    // setHud({
+    //   st: el.scrollTop,
+    //   ch: el.clientHeight,
+    //   sh: el.scrollHeight,
+    //   mode: modeRef.current,
+    // });
   }, []);
 
   const handleTouchEnd = useCallback(async () => {
