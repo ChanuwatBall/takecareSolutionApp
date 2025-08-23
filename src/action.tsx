@@ -105,6 +105,21 @@ export const complaintbyuser=async(form:any)=>{
         return {result:false , description: err?.message}
     })
 }
+ 
+///complaintid/id
+export const complaintid=async({body , id}:any)=>{
+    return await api.post("complaintid",body,{
+      params:{id: id}
+    }).then((res)=>{
+        console.log("complaintid res ",res)
+        return res.data
+    }).catch((err)=>{
+        console.log("complaintid err ",err)
+        return {result:false , description: err?.message}
+    })
+}
+
+
 ///complaintsumbyuser 
 export const complaintsumbyuser=async(form:any)=>{
     return await api.post("complaintsumbyuser",form).then((res)=>{

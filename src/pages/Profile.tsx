@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 import "./css/Profile.css"
-import {  complaintsumbyuser,   deleteCookie,   getCookie,   setCookie,   userLineid } from "../action";
+import {  complaintsumbyuser,   deleteCookie,   encodeBase64,   getCookie,   setCookie,   userLineid } from "../action";
 // import liff from "@line/liff";  
 import liff from "@line/liff";
 import { useNavigate } from "react-router-dom";
@@ -8,16 +8,16 @@ import PullToRefreshComponent from "../components/PullToRefreshComponent";
 import { BouceAnimation } from "../components/Animations";
 import { headersize } from "../components/PageHeader"; 
 import { useModal } from "../components/ModalContext";
- 
+
 const apiUrl = import.meta.env.VITE_API;
 
  
 const Profile:React.FC=()=>{
-    const navigate = useNavigate() 
-    // const [loading,setLoading] = useState(false)
+    const navigate = useNavigate()  
     const { openComponent } = useModal();
     const [profile , setProfile]  = useState<any>(null) 
     const [familyMember , setFammember] = useState(0)
+     const { closeAll } = useModal();
     const [complaintStatus  , setComplaintSumm] = useState({
         total: 0,
         wait: 0 ,
@@ -94,15 +94,16 @@ const Profile:React.FC=()=>{
         openComponent(Confirm, {
             title: "ภาพรวมการแจ้งปัญหา",
             message: <div style={{width:"100%"}} >
-                <div className="grid grid-cols-2  gradient-primary rounded-md py-1" >
-                    <div className="complaint-status-name flex  items-center justify-center">หัวข้อเรื่อง</div>
+                <div className="grid grid-cols-3  gradient-primary rounded-md py-1" >
+                    <div className="complaint-status-name flex col-span-2  items-center justify-center">หัวข้อเรื่อง</div>
                     {/* <div className="complaint-status-name flex  items-center justify-center">ผู้ดูแล</div> */}
                     <div className="complaint-status-name flex  items-center justify-center">สถานะ</div>
                 </div>
                 {
                     complaints.map((e:any , index:any)=>
-                    <div key={index} style={{marginBottom:"1rem" , borderBottom:"1px solid #ddd" , paddingBottom:".5rem"}}>
-                        <div className="grid grid-cols-3  ">
+                    <div key={index} style={{marginBottom:"1rem" , borderBottom:"1px solid #ddd" , paddingBottom:".5rem"}} 
+                     onClick={()=>{navigate("/complaint/detail/"+encodeBase64( e.id ) );closeAll()}}>
+                        <div className="grid grid-cols-3  "  onClick={()=>{}} >
                             <div className="text-left text-sm col-span-2 dark:text-black" >
                                 <ul style={{paddingLeft:"1rem"}}>
                                     <li> {e?.topic}</li>
@@ -113,7 +114,7 @@ const Profile:React.FC=()=>{
                                
                             </div>
                             {/* <div  className="text-center text-sm dark:text-black" >{e?.admin}</div> */}
-                            <div className="text-center text-sm dark:text-black" >
+                            <div className="text-center text-sm dark:text-black  flex  items-center justify-center" >
                                 {e?.status?.match("pending") ? "รอดำเนินการ" :
                                 e?.status?.match("in-progress") ? "กำลังดำเนินการ" :
                                 e?.status?.match("done") ? "เสร็จสิ้น" :
@@ -122,10 +123,10 @@ const Profile:React.FC=()=>{
                             
                         </div>
                         <div  className="grid grid-cols-6">
-                            {e?.imageIds.map((id:any)=> 
+                            {e?.imageIds.map((id:any  )=> 
                             <img
                                 src={apiUrl+"/api/file/drive-image/"+id}
-                                alt={`Image ${index}`}
+                                alt={`Image ${id}`}
                                 className="w-full h-full object-cover rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105"
                             />
                             )}

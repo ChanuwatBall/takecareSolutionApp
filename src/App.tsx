@@ -22,6 +22,7 @@ import {  useSelector } from 'react-redux';
 import { getLoading } from './store/appSlice';
 import Loading from './components/Loading';
 import { ModalProvider } from './components/ModalContext';
+import ComaplaintDetail from './pages/ComaplaintDetail';
 
 
 function App() {   
@@ -48,6 +49,7 @@ function App() {
         <Route path="/profile/edit" element={<ProfileEdit />} />
         <Route path="/complaint" element={<Complaint />} /> 
         <Route path="/complaint/add/:type" element={<ComplaintForm />} /> 
+        <Route path="/complaint/detail/:complaintId" element={<ComaplaintDetail />} /> 
         <Route path="/setting" element={<Setting />} /> 
         <Route path="/activities" element={<Activities />} /> 
         <Route path='/activities/detail' element={<ActivitieDetail/>} />

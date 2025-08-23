@@ -2,7 +2,7 @@
 import { useNavigate } from "react-router-dom";
 // import { ActionSheet } from "@capacitor/action-sheet";
 import { useEffect,  useState, type ReactNode } from "react";
-import { deleteCookie, getCookie, policyandterms, setCookie, userLineid } from "../action";
+import { deleteCookie, getStorage, policyandterms, setCookie, userLineid } from "../action";
 import "./css/Setting.css"
 
 import DOMPurify from 'dompurify';
@@ -23,7 +23,8 @@ const Setting=()=>{
     useEffect(()=>{
       headersize() 
       const checkmemberregis=async ()=>{
-          const profilecookie:any = await getCookie("profile") 
+          // const profilecookie:any = await getCookie("profile") 
+          const profilecookie:any = await getStorage("profile")  
           const usr = await userLineid(profilecookie?.userId) 
           if(usr?.result &&( profilecookie === null || profilecookie === undefined)){
                 const profile:any = await liff.getProfile()
@@ -51,19 +52,19 @@ const Setting=()=>{
         gettermcondition()
     },[])
 
-    const signout=()=>{ 
-        deleteCookie("member")
-        deleteCookie("profile")
-        localStorage.removeItem("token")
+    // const signout=()=>{ 
+    //     deleteCookie("member")
+    //     deleteCookie("profile")
+    //     localStorage.removeItem("token")
 
-        try {
-            liff.logout()
-        } catch (error) {
-            console.log("error")
-        }
+    //     try {
+    //         liff.logout()
+    //     } catch (error) {
+    //         console.log("error")
+    //     }
         
-        navigate("/")
-    }
+    //     navigate("/")
+    // }
 
     return(
     <PullToRefreshComponent > 

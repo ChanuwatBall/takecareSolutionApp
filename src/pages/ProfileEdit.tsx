@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { CircleImageUploader } from "./Register";
-import { getCookie, getDefaultCompay, setCookie, updatevillager, userLineid, villageoption } from "../action";
+import { getCookie, getDefaultCompay, getStorage, setCookie, updatevillager, userLineid, villageoption } from "../action";
  
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "../components/AlertContext";
@@ -94,8 +94,10 @@ const ProfileEdit=()=>{
   };
 
   const updatevillagerdata=async ()=>{
- const profile:any = await getCookie("profile")
-         const member:any = await getCookie("member")
+      //  const profile:any = await getCookie("profile")
+         const profile:any = await getStorage("member")  
+         const member:any = await getStorage("profile")  
+        //  const member:any = await getCookie("member")
          let fileprofile = null
          if(image.indexOf("profile.line-scdn.net") > -1 || image.indexOf("/api/file/drive-image/") > -1){
           fileprofile = await fetchImage(image)

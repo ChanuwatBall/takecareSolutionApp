@@ -82,8 +82,8 @@ button.next{
 
 #mapposition{
     width: 100%;
-    height: 35vh !important;
-    border-radius: var(--border-radius) !important;
+    height: 35vh ;
+    border-radius: var(--border-radius) ;
 }
 .find-my-loaction{
     width: 100%;

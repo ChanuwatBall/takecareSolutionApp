@@ -35,6 +35,7 @@ const apiUrl = import.meta.env.VITE_API;
 let L = window?.leaflet
 var map: any = null
 let marker: any = null 
+let village: any = null
 
 const ComplaintForm = () => {
     const [showAlert] = useAlert();
@@ -47,7 +48,8 @@ const ComplaintForm = () => {
     const [complainTopic, setComplainTopic] = useState<any>("")
     const maxLengthImage = 5;
     const [curlocation, setCurLocation] = useState<any>(null)
-    const [point , setPoint] = useState([0,0]) 
+    const [point , setPoint] = useState([0,0])
+    const [isInSide, setIsInSide] = useState(true)
     const dispatch = useDispatch()
 
     const { openComponent } = useModal();
@@ -63,8 +65,9 @@ const ComplaintForm = () => {
             console.log("กำลังระบุตำแหน่งของคุณ " )
         await Geolocation.getCurrentPosition({ enableHighAccuracy: true }).then((e) => {
             console.log("coord ", e?.coords)
-            if (e.coords) {
-                setCurLocation([e.coords.latitude, e.coords.longitude])
+            if (e.coords != null) {
+                setCurLocation(e.coords.latitude+"#"+e.coords.longitude)
+                console.log("marker ", marker)
                 if (marker == null) {
                     marker = L.marker([e.coords.latitude, e.coords.longitude],{draggable:true}).bindPopup('จุดเกิดเหตุ');
                     map?.setView([e.coords.latitude, e.coords.longitude], 16)
@@ -78,18 +81,43 @@ const ComplaintForm = () => {
                     
                 } else {
                     marker?.setLatLng([e.coords.latitude, e.coords.longitude], 16);
-                }   
+                }
+
+                const feature = areaInputToFeature(village);
+                const inside = isLatLonInsideGeoJSON(e.coords.latitude, e.coords.longitude, feature);
+                setIsInSide(inside)
+                if (!inside) {
+                    showAlert("ไม่สามารถแจ้งปัญหา ท่านอยู่นอกพื้นที่ร้องเรียน ", "error")
+                }
+            }else{
+                navigator.geolocation.getCurrentPosition((e)=>{ 
+                        console.log("geolocation ", e)
+                        console.log("e.coords.latitude e.coords.longitude ",e.coords.latitude+"#"+e.coords.longitude);
+                        setCurLocation(e.coords.latitude+"#"+e.coords.longitude)
+                },(err)=>{
+                    console.log("navigation err ",err)
+                });
             }
         }).catch((e)=>{
             console.log("err ",e)
-            // window.navigator.geolocation() 
-              navigator.geolocation.getCurrentPosition((e)=>{ 
-                    console.log("navigator geolocation ", e.coords)
-                   setCurLocation([e.coords.latitude, e.coords.longitude])
-              },(err)=>{
-                console.log("navigation err ",err)
-              });
-             
+            function success(pos:any) {
+                const crd = pos.coords;
+                setCurLocation(crd.latitude+"#"+crd.longitude)
+            }
+            function error(err:any) {
+                console.warn(`ERROR(${err.code}): ${err.message}`);
+            }
+            navigator.permissions.query({ name: "geolocation" }).then((result) => {
+                 if (result.state === "granted") {
+                    navigator.geolocation.getCurrentPosition(success, error, {
+                        enableHighAccuracy: true,
+                        timeout: 5000,
+                        maximumAge: 0,
+                    }); 
+                }
+            })
+          
+ 
 
         })
     }
@@ -198,7 +226,7 @@ const ComplaintForm = () => {
 
     const acceptform = async () => {
         // setOpen(false)
-        // if (isInSide) {
+        if (isInSide) {
             dispatch(setLoaing(true))
             const formData = new FormData();
             const villager: any = await getCookie("member")
@@ -211,12 +239,9 @@ const ComplaintForm = () => {
             })
             )
             // const line = await liff.getProfile() 
+            console.log('curlocation', curlocation);
             const line: any = await getCookie("profile")
-            console.log("curlocation ",curlocation)
-
-            const userlo = curlocation
-            console.log("set curlocation ",`${userlo[0]}#${userlo[1]}`)
-            formData.append('curlocation', `${userlo[0]}#${userlo[1]}`);
+            formData.append('curlocation', curlocation);
             formData.append("point",`${point[0]}#${point[1]}`)
             formData.append('topic', topic);
             formData.append('subtitle', subtitle);
@@ -228,26 +253,25 @@ const ComplaintForm = () => {
             formData.append('lineId', line?.userId);
 
 
-
-            // // console.log("form ",form) 
+            // console.log("form ",form) 
             const result = await createComplaint(formData)
 
-            // // setLoading(false)
+            // setLoading(false)
             if (result?.result) {
                 showAlert(result?.description + " สามรถติดตามสถานะเรื่องร้องเรียนได้ที่หน้าโปรไฟล์ของท่าน ", "success")
                 navigate(-1)
                 setTimeout(() => {
                     dispatch(setLoaing(false))
-                }, 500);
+                }, 1000);
             } else {
                 showAlert(result?.description, "error")
                 setTimeout(() => {
                     dispatch(setLoaing(false))
-                }, 500);
+                }, 1000);
             }
-        // }else{ 
-        //     showAlert("คุณอยู่นอกบริเวณ ไม่สามารถแจ้งปัญหาได้", "error")
-        // }
+        }else{ 
+            showAlert("คุณอยู่นอกบริเวณ ไม่สามารถแจ้งปัญหาได้", "error")
+        }
     }
 
     const removeimage = (e: any) => {
@@ -522,50 +546,50 @@ const ModalDialog = ({  complaint,  removeImage }: any) => {
 }
 
 
-async function createAreaLayer(
-    data: any,
-    options?: L.GeoJSONOptions
-): Promise<L.GeoJSON> {
-    // 1) แปลง [lat, lng] -> [lng, lat] ตามสเปค GeoJSON
-    const ring: [number, number][] = data.area.map(([lat, lng]: any) => [lng, lat]);
+// async function createAreaLayer(
+//     data: any,
+//     options?: L.GeoJSONOptions
+// ): Promise<L.GeoJSON> {
+//     // 1) แปลง [lat, lng] -> [lng, lat] ตามสเปค GeoJSON
+//     const ring: [number, number][] = data.area.map(([lat, lng]: any) => [lng, lat]);
 
-    // 2) ปิดรูปรอบ polygon ถ้าจุดสุดท้ายไม่เท่าจุดแรก
-    const first = ring[0];
-    const last = ring[ring.length - 1];
-    if (!first || !last) {
-        throw new Error("area is empty");
-    }
-    if (first[0] !== last[0] || first[1] !== last[1]) {
-        ring.push([first[0], first[1]]);
-    }
+//     // 2) ปิดรูปรอบ polygon ถ้าจุดสุดท้ายไม่เท่าจุดแรก
+//     const first = ring[0];
+//     const last = ring[ring.length - 1];
+//     if (!first || !last) {
+//         throw new Error("area is empty");
+//     }
+//     if (first[0] !== last[0] || first[1] !== last[1]) {
+//         ring.push([first[0], first[1]]);
+//     }
 
-    // 3) สร้าง GeoJSON Feature (Polygon)
-    const feature: GeoJSON.Feature<GeoJSON.Polygon, { id: number; name: string }> = {
-        type: "Feature",
-        properties: { id: data.id, name: data.name },
-        geometry: {
-            type: "Polygon",
-            coordinates: [ring], // Polygon ต้องเป็น array ของ "linear ring"
-        },
-    };
+//     // 3) สร้าง GeoJSON Feature (Polygon)
+//     const feature: GeoJSON.Feature<GeoJSON.Polygon, { id: number; name: string }> = {
+//         type: "Feature",
+//         properties: { id: data.id, name: data.name },
+//         geometry: {
+//             type: "Polygon",
+//             coordinates: [ring], // Polygon ต้องเป็น array ของ "linear ring"
+//         },
+//     };
 
-    // 4) สร้าง Leaflet GeoJSON Layer
-    const layer = L.geoJSON(feature, {
-        // style เริ่มต้น (แก้ได้ผ่าน options)
-        style: () => ({
-            color: "#1976d2",
-            weight: 2,
-            fillColor: "#1976d2",
-            fillOpacity: 0.2,
-        }),
-        onEachFeature: (_f: any, lyr: any) => {
-            lyr.bindPopup(`<b>${data.name}</b>`);
-        },
-        ...options,
-    });
+//     // 4) สร้าง Leaflet GeoJSON Layer
+//     const layer = L.geoJSON(feature, {
+//         // style เริ่มต้น (แก้ได้ผ่าน options)
+//         style: () => ({
+//             color: "#1976d2",
+//             weight: 2,
+//             fillColor: "#1976d2",
+//             fillOpacity: 0.2,
+//         }),
+//         onEachFeature: (_f: any, lyr: any) => {
+//             lyr.bindPopup(`<b>${data.name}</b>`);
+//         },
+//         ...options,
+//     });
 
-    return layer;
-}
+//     return layer;
+// }
 
 
 type ConfirmProps = {
@@ -575,7 +599,7 @@ type ConfirmProps = {
     onCancel?: () => void;
 };
 
-function Confirm({ title, message, onConfirm, onCancel }: ConfirmProps) {
+function Confirm({  message, onConfirm, onCancel }: ConfirmProps) {
     const { closeAll } = useModal();
     return (
         <div style={{ background: "white", borderRadius: 16, padding: 20, minWidth: 340 }}>

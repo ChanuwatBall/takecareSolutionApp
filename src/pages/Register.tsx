@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { ActionSheet, ActionSheetButtonStyle } from '@capacitor/action-sheet';
 import { useNavigate } from "react-router-dom";
 import liff from "@line/liff";
-import { getDefaultCompay, registerNewMember, setCookie, userLineid, villageoption } from "../action";
+import { getDefaultCompay, registerNewMember, setCookie, setStorage, userLineid, villageoption } from "../action";
 import Select from 'react-select';
 import { isAuthenticated } from "../auth"; 
 import PullToRefreshComponent from "../components/PullToRefreshComponent";
@@ -54,8 +54,7 @@ const Register=()=>{
         console.log("companyapp ",companyapp)
           if(companyapp && companyapp?.liffId){
           liff.init({ liffId: companyapp?.liffId })
-          .then(async () => {
-        //     console.log('LIFF init success');
+          .then(async () => { 
             if (!liff.isLoggedIn()) {
               liff.login(); 
             }
@@ -83,12 +82,13 @@ const Register=()=>{
  
       const profile:any = await liff.getProfile() 
 
-      const usr = await userLineid(profile?.userId)
-      console.log("userLineid usr ",usr)
+      const usr = await userLineid(profile?.userId)  
       if(usr.result ){
         // window.location.href = "/home"
-        setCookie("member", usr?.villager,{days:30})
-        setCookie("profile", profile ,{days:30})
+        // setCookie("member", usr?.villager,{days:30})
+        // setCookie("profile", profile ,{days:30})
+        setStorage("member", usr?.villager)
+        setStorage("profile", profile)
         localStorage.setItem("token", JSON.stringify(liff.getAccessToken()))  
         navigate("/home")
         setTimeout(()=>{
@@ -175,11 +175,15 @@ const Register=()=>{
         if( (typeof result == "string")){ 
           const usr = await userLineid(lineprofile?.userId)
           console.log("userLineid usr ",usr)
+          
+          setStorage("member", usr?.villager) 
           setCookie("member", usr?.villager,{days:30})
         }else{ 
+          setStorage("member", result?.villager) 
           setCookie("member", result?.villager,{days:30})
         }
         setCookie("profile", lineprofile ,{days:30})
+        setStorage("profile", lineprofile) 
         localStorage.setItem("token", JSON.stringify(liff.getAccessToken()))  
         navigate("/home")
         window.location.reload()

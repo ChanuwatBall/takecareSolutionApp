@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./css/Home.css"
 import   { SwiperSlide ,Swiper } from "swiper/react"; 
-import { companydetail, deleteCookie,  getCookie } from "../action"; 
+import { companydetail, deleteCookie, getStorage } from "../action"; 
 import { useNavigate } from "react-router-dom";
 import { BouceAnimation  } from "../components/Animations"; 
 import PullToRefreshComponent from "../components/PullToRefreshComponent";
@@ -40,13 +40,16 @@ const Home:React.FC=()=>{
         dispatch(setLoaing(true))
          const getCDetal=async ()=>{
             try {
-                const profile:any = await getCookie("profile")  
+                // const profile:any = await getCookie("profile")  
+                const profile:any = await getStorage("profile")  
+                console.log("profile ",profile)
 
                 // const profile:any = await  getStorage("profile")
                 if(profile != null && profile != undefined){
 
                     const result =await companydetail({  lineId: profile?.userId})
-                
+                    console.log("result ",result)
+                      
                     if(result?.name){
                         setCeoName(result?.ceoName)
                         setceonickname(result?.ceoNickName)
@@ -58,10 +61,11 @@ const Home:React.FC=()=>{
                         setCeoimages(result?.ceoImage)
                     }else{
                         // alert("profile no profile " )
-                        deleteCookie("member")
+                        deleteCookie("member") 
                         deleteCookie("profile")
-                        localStorage.removeItem("token")
-                         
+
+                        navigate("/") 
+                        localStorage.clear() 
                         window.location.reload()
                     }
                 }else{ 

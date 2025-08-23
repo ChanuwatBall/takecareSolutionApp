@@ -1,16 +1,130 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import PullToRefreshComponent from "../components/PullToRefreshComponent"
+import { useEffect, useState } from "react";
+import { complaintid, decodeBase64, getCookie } from "../action"; 
+ 
+
+const apiUrl = import.meta.env.VITE_API;
+
+interface Complaint {
+    "id": number
+    "phone": string
+    "supTitle": string
+    "detail": string
+    "status": string
+    "villager": number
+    "topicId": number
+    "topic": string
+    "imageIds": string[]
+    "admin":  string
+    "point": string[]
+}
+
+//@ts-ignore
+let L = window?.leaflet
+var map:any = null
+var marker:any = null
 
 const ComaplaintDetail=()=>{
-    const { complaintId } = useParams(); 
+    const { complaintId }: any = useParams(); 
+    const [comaplaint , setComplaints] = useState<Complaint | null>(null)
+    const navigate = useNavigate()
     
+    useEffect(()=>{
+        const id = decodeBase64(complaintId) 
+        const getComplaintDetail=async()=>{
+            const member:any = await getCookie("member") 
+            const complaint = await complaintid({body: member , id:id })
+            setComplaints(complaint)
+            if(complaint?.point){
+                const latlng = [Number(complaint?.point[0]) , Number(complaint?.point[1]) ]
+                createmap(latlng) 
+            }
+        }
+        getComplaintDetail()
+    }, [])
+
+     const createmap=async (latlng: number[])=>{
+        const mapel: Element | any = document.querySelector('#mapposition')
+        console.log("mapel ", mapel)
+         if (mapel != null && mapel?.innerHTML.length < 1) {
+                    map = L.map(mapel, {
+                        center: latlng ,
+                        zoom: 13 ,dragable : false
+                    });
+                    console.log("map ",map) ;
+                    
+                    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© Longdo Map' }).addTo(map);
+                    // await userlocation()
+                     if (marker == null) {
+                        marker = L.marker(latlng,{draggable:true}).bindPopup('จุดร้องเรียน');
+                        map?.setView(latlng, 16)  
+                        map?.addLayer(marker); 
+                    }
+                    map?.invalidateSize()
+ 
+                } 
+    }
+
+
     return(
     <PullToRefreshComponent >
-       <div id="page" className="page  " style={{ position: "relative" }} >
-        
+        <div id="page" className="page  " style={{ position: "relative",paddingBottom:"2rem" }} >
+           { comaplaint && <div>
+                <h4 className="text-xl font-semibold text-gray-900 text-black ">
+                    <button style={{padding:".5rem 1rem .5rem 1rem",background:"transparent"}} onClick={()=>{navigate(-1)}}> 
+                      <small> <img src={apiUrl+"/images/svg/arrow-back.svg"}  style={{width:".5em"}}/> </small> 
+                    </button>   ภาพรวมการแจ้งปัญหา
+                </h4><br /> 
+                    <div>
+                        <div className="row-input " style={{ margin: "0px" }}>
+                            <label className="title" >หัวข้อเรื่อง: </label>
+                            <div className="input" >
+                                {comaplaint?.topic}
+                            </div>
+                        </div>
+
+                        <div className="row-input row" style={{ margin: "0px" }} >
+                            <label className="title" >หัวข้อเรื่องย่อย: </label>
+                            <div className="input" >
+                                {comaplaint?.supTitle}
+                            </div>
+                        </div>
+                        <div className="row-input row" style={{ margin: "0px" }}>
+                            <label className="title" >เบอร์โทรที่สามารถติดต่อได้: </label>
+                            <div className="input" >
+                                {comaplaint?.phone}
+                            </div>
+                        </div>
+
+                        <div className=" row-input row " style={{ margin: "0px", flexDirection: "column", alignItems: "flex-start" }} >
+                            <label className="title" >รายละเอียด: </label>
+                            <textarea
+                                className="input"
+                                value={comaplaint?.detail} >
+                            </textarea>
+                        </div><br /> 
+                        <div className="grid grid-cols-3 gap-4  ">
+                            { comaplaint?.imageIds &&  comaplaint?.imageIds.map((image: any, index: any) =>
+                                image && <div key={index} className="relative">
+                                    {/* Image Display */}
+                                    <img
+                                        src={apiUrl+"/api/file/drive-image/"+image}
+                                        alt={`Image ${index}`}
+                                        className="w-full h-full object-cover rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105"
+                                    />
+ 
+                                </div>
+                            )}
+                        </div> 
+                    </div>
+            </div>} <br/>
+            <div id="mapposition"  style={{width:"100%" , height:"13rem",backgroundColor:"#eee",borderRadius:"10px"}} ></div>
         </div>
     </PullToRefreshComponent>
 
     )
 }
 export default ComaplaintDetail;
+
+ 
