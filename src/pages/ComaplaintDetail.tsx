@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import PullToRefreshComponent from "../components/PullToRefreshComponent"
 import { useEffect, useState } from "react";
-import { complaintid, decodeBase64, getCookie } from "../action"; 
+import { complaintid, decodeBase64,  getStorage } from "../action"; 
  
 
 const apiUrl = import.meta.env.VITE_API;
@@ -33,7 +33,7 @@ const ComaplaintDetail=()=>{
     useEffect(()=>{
         const id = decodeBase64(complaintId) 
         const getComplaintDetail=async()=>{
-            const member:any = await getCookie("member") 
+            const member:any = await getStorage("member") 
             const complaint = await complaintid({body: member , id:id })
             setComplaints(complaint)
             if(complaint?.point){

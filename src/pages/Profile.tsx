@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 import "./css/Profile.css"
-import {  complaintsumbyuser,   deleteCookie,   encodeBase64,   getCookie,   setCookie,   userLineid } from "../action";
+import {  complaintsumbyuser,   deleteCookie,   encodeBase64,   getStorage,   setCookie,   userLineid } from "../action";
 // import liff from "@line/liff";  
 import liff from "@line/liff";
 import { useNavigate } from "react-router-dom";
@@ -47,8 +47,8 @@ const Profile:React.FC=()=>{
 
     useEffect(()=>{
             const checkmemberregis=async ()=>{
-                const profilecookie:any = await getCookie("profile")
-                const usr = await userLineid(profilecookie?.userId)  
+                const profilecookie:any = await getStorage("profile")
+                const usr = await userLineid(profilecookie?.userId)
                 if(usr?.result &&( profilecookie === null || profilecookie === undefined)){
                      const profile:any = await liff.getProfile()
                      setCookie("profile",profile,{days:30})
@@ -63,7 +63,7 @@ const Profile:React.FC=()=>{
             }
             checkmemberregis()
         const getuservillager=async ()=>{ 
-            const member:any = await getCookie("member")
+            const member:any = await getStorage("member")
             console.log("member ",member)
             if(member ){
                 setFammember(member?.fammilyMember != undefined &&member?.fammilyMember !=null? member?.fammilyMember : 0 )
@@ -71,7 +71,7 @@ const Profile:React.FC=()=>{
             try {
                 
                 // const profile:any = await liff.getProfile() 
-                const profile:any = await getCookie("profile")
+                const profile:any = await getStorage("profile")
                 const usr:any = await userLineid(profile?.userId)
                 console.log(" usr ",usr)
                 setProfile(usr?.villager)

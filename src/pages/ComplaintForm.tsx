@@ -14,7 +14,7 @@ import "./css/ComplaintForm.css"
 import 'swiper/css';
 import type { Swiper as SwiperType } from "swiper/types";
 import { useAlert } from "../components/AlertContext";
-import { createComplaint, getCookie } from "../action";
+import { createComplaint,  getStorage } from "../action";
 import { Geolocation } from "@capacitor/geolocation"
 // import liff from "@line/liff"; 
 
@@ -229,7 +229,7 @@ const ComplaintForm = () => {
         if (isInSide) {
             dispatch(setLoaing(true))
             const formData = new FormData();
-            const villager: any = await getCookie("member")
+            const villager: any = await getStorage("member")
             console.log("villager ", villager)
             let files: any[] = []
             await Promise.all(await images.map(async (e, index) => {
@@ -240,7 +240,7 @@ const ComplaintForm = () => {
             )
             // const line = await liff.getProfile() 
             console.log('curlocation', curlocation);
-            const line: any = await getCookie("profile")
+            const line: any = await getStorage("profile")
             formData.append('curlocation', curlocation);
             formData.append("point",`${point[0]}#${point[1]}`)
             formData.append('topic', topic);

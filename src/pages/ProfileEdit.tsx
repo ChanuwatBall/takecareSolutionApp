@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { CircleImageUploader } from "./Register";
-import { getCookie, getDefaultCompay, getStorage, setCookie, updatevillager, userLineid, villageoption } from "../action";
+import { getDefaultCompay, getStorage, setCookie, updatevillager, userLineid, villageoption } from "../action";
  
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "../components/AlertContext";
@@ -38,7 +38,7 @@ const ProfileEdit=()=>{
     useEffect(()=>{
        headersize()
         const getlocalprofile=async ()=>{
-            const member:any = await getCookie("member")
+            const member:any = await getStorage("member")
             console.log("member ",member)
             if(member){ 
                const companyapp = await getDefaultCompay()  
