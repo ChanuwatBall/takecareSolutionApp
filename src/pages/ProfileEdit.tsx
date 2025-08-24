@@ -26,7 +26,7 @@ const ProfileEdit=()=>{
     const [gender , setGender] = useState("") 
     const [fammember , setFammember] = useState("0") 
     const [options , setOptions] = useState([])
-    const [vaillage , setVillage] = useState(0) 
+    const [vaillage , setVillage] = useState<any>(0) 
     const [selectedOption, setSelectedOption] = useState<any>(null);
     // const [loading,setLoading] = useState(false)
     
@@ -119,7 +119,7 @@ const ProfileEdit=()=>{
           formData.append('gender',gender);  
           formData.append('familyMember',fammember);  
           formData.append('id',member?.id);  
-          formData.append('villageId',vaillage.toString() );
+          formData.append('villageId',vaillage );
           formData.append('newVillage',selectedOption?.value);
           
           let lineUserId:any =profile?.userId 
