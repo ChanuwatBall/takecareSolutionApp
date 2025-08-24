@@ -69,7 +69,7 @@ const ComaplaintDetail=()=>{
 
     return(
     <PullToRefreshComponent >
-        <div id="page" className="page  " style={{ position: "relative",paddingBottom:"2rem" }} >
+        <div id="page" className="page  " style={{ position: "relative",paddingBottom:"6rem" }} >
            { comaplaint && <div>
                 <h4 className="text-xl font-semibold text-gray-900 text-black ">
                     <button style={{padding:".5rem 1rem .5rem 1rem",background:"transparent"}} onClick={()=>{navigate(-1)}}> 
