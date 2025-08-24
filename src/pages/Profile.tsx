@@ -57,9 +57,7 @@ const Profile:React.FC=()=>{
                 }
                 if(!usr?.result){ 
                     localStorage.removeItem("member")
-                    localStorage.removeItem("profile")
-                    // deleteCookie("member")
-                    // deleteCookie("profile")
+                    localStorage.removeItem("profile") 
                     localStorage.removeItem("token")
 
                     navigate("/")
@@ -72,9 +70,7 @@ const Profile:React.FC=()=>{
             if(member ){
                 setFammember(member?.fammilyMember != undefined &&member?.fammilyMember !=null? member?.fammilyMember : 0 )
             }
-            try {
-                
-                // const profile:any = await liff.getProfile() 
+            try { 
                 const profile:any = await getStorage("profile")
                 const usr:any = await userLineid(profile?.userId)
                 console.log(" usr ",usr)

@@ -89,7 +89,7 @@ const Home:React.FC=()=>{
 
     return(    
     <PullToRefreshComponent > 
-    <div id="page" className="page" style={{paddingTop:"0" }}> <br/> 
+    <div id="page" className="page" > <br/> 
         <BouceAnimation duration={0.1} className="card-executive" > 
             <div  className="name-container">  
                 <label className="executive-nickname" > {ceonickname} </label> <br/>
