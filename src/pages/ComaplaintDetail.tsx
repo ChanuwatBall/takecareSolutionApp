@@ -69,7 +69,7 @@ const ComaplaintDetail=()=>{
 
     return(
     <PullToRefreshComponent >
-        <div id="page" className="page  " style={{ position: "relative",paddingBottom:"6rem" }} >
+        <div id="page" className="page  " style={{ position: "relative" }} >
            { comaplaint && <div>
                 <h4 className="text-xl font-semibold text-gray-900 text-black ">
                     <button style={{padding:".5rem 1rem .5rem 1rem",background:"transparent"}} onClick={()=>{navigate(-1)}}> 
@@ -119,7 +119,7 @@ const ComaplaintDetail=()=>{
                         </div> 
                     </div>
             </div>} <br/>
-            <div id="mapposition"  style={{width:"100%" , height:"13rem",backgroundColor:"#eee",borderRadius:"10px"}} ></div>
+            <div id="mapposition"  style={{width:"100%" , height:"13rem",backgroundColor:"#eee",borderRadius:"10px", marginBottom:"5rem"}} ></div>
         </div>
     </PullToRefreshComponent>
 
