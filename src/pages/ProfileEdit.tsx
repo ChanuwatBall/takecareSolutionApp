@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { CircleImageUploader } from "./Register";
-import { getDefaultCompay, getStorage, setCookie, updatevillager, userLineid, villageoption } from "../action";
+import { getDefaultCompay, getStorage,  setStorage, updatevillager, userLineid, villageoption } from "../action";
  
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "../components/AlertContext";
@@ -26,6 +26,7 @@ const ProfileEdit=()=>{
     const [gender , setGender] = useState("") 
     const [fammember , setFammember] = useState("0") 
     const [options , setOptions] = useState([])
+    const [vaillage , setVillage] = useState(0) 
     const [selectedOption, setSelectedOption] = useState<any>(null);
     // const [loading,setLoading] = useState(false)
     
@@ -54,6 +55,7 @@ const ProfileEdit=()=>{
                 setAddress(member?.address)
                 setGender(member?.gender) 
                 setFammember(member?.fammilyMember)
+                setVillage(member?.villageId)
                 const villSelect = opts.find((e:any)=> e.value === member?.villageId)
                 console.log("villSelect ",villSelect)
                 setSelectedOption(villSelect)
@@ -95,8 +97,8 @@ const ProfileEdit=()=>{
 
   const updatevillagerdata=async ()=>{
       //  const profile:any = await getCookie("profile")
-         const profile:any = await getStorage("member")  
-         const member:any = await getStorage("profile")  
+         const profile:any = await getStorage("profile")  
+         const member:any = await getStorage("member")  
         //  const member:any = await getCookie("member")
          let fileprofile = null
          if(image.indexOf("profile.line-scdn.net") > -1 || image.indexOf("/api/file/drive-image/") > -1){
@@ -117,7 +119,8 @@ const ProfileEdit=()=>{
           formData.append('gender',gender);  
           formData.append('familyMember',fammember);  
           formData.append('id',member?.id);  
-          formData.append('villageId', selectedOption?.value );
+          formData.append('villageId',vaillage.toString() );
+          formData.append('newVillage',selectedOption?.value);
           
           let lineUserId:any =profile?.userId 
           formData.append('lineUserId', lineUserId ); 
@@ -128,9 +131,9 @@ const ProfileEdit=()=>{
           if(result?.result || (typeof result == "string"  && result.indexOf("result\":true,") > -1 ) ){ 
             if( (typeof result == "string")){  
                const usr = await userLineid(profile?.userId)
-              await setCookie("member", usr?.villager,{days:30})
+              await setStorage("member", usr?.villager)
             }else{ 
-              await setCookie("member", result?.villager,{days:30})
+              await setStorage("member", result?.villager)
             }  
             await showAlert( "แก้ไขข้อมูลโปรไฟล์สำเร็จ  ","success")
             navigate(-1)  

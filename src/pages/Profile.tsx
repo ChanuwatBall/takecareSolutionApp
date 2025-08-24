@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 import "./css/Profile.css"
-import {  complaintsumbyuser,   deleteCookie,   encodeBase64,   getStorage,   setCookie,   userLineid } from "../action";
+import {  complaintsumbyuser,   encodeBase64,   getStorage,  setStorage,   userLineid } from "../action";
 // import liff from "@line/liff";  
 import liff from "@line/liff";
 import { useNavigate } from "react-router-dom";
@@ -46,16 +46,20 @@ const Profile:React.FC=()=>{
     ])
 
     useEffect(()=>{
+        headersize()
             const checkmemberregis=async ()=>{
                 const profilecookie:any = await getStorage("profile")
                 const usr = await userLineid(profilecookie?.userId)
                 if(usr?.result &&( profilecookie === null || profilecookie === undefined)){
                      const profile:any = await liff.getProfile()
-                     setCookie("profile",profile,{days:30})
+                    //  setCookie("profile",profile,{days:30})
+                    setStorage("profile",profile)
                 }
-                if(!usr?.result){
-                    deleteCookie("member")
-                    deleteCookie("profile")
+                if(!usr?.result){ 
+                    localStorage.removeItem("member")
+                    localStorage.removeItem("profile")
+                    // deleteCookie("member")
+                    // deleteCookie("profile")
                     localStorage.removeItem("token")
 
                     navigate("/")

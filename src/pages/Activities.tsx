@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./css/Activities.css"
 import { useNavigate } from "react-router-dom"; 
-import { activity,  deleteCookie,  getStorage, setCookie, userLineid } from "../action";
+import { activity,   getStorage,  setStorage, userLineid } from "../action";
 import liff from "@line/liff";
 import PullToRefreshComponent from "../components/PullToRefreshComponent";
 import { BouceAnimation } from "../components/Animations";
@@ -23,11 +23,15 @@ const Activities=()=>{
             const usr = await userLineid(profilecookie?.userId) 
             if(usr?.result &&( profilecookie === null || profilecookie === undefined)){
                  const profile:any = await liff.getProfile()
-                 setCookie("profile",profile,{days:30})
+                //  setCookie("profile",profile,{days:30})
+                setStorage("profile",profile)
             }
             if(!usr?.result){
-                deleteCookie("member")
-                deleteCookie("profile")
+
+              localStorage.removeItem("member")
+              localStorage.removeItem("profile")
+                // deleteCookie("member")
+                // deleteCookie("profile")
                 localStorage.removeItem("token")
                       
                 navigate("/")

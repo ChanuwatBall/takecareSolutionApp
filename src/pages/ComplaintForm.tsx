@@ -20,8 +20,7 @@ import { Geolocation } from "@capacitor/geolocation"
 
 import PullToRefreshComponent from "../components/PullToRefreshComponent";
 import { BouceAnimation } from "../components/Animations";
-import { headersize } from "../components/PageHeader";
-import { areaInputToFeature, isLatLonInsideGeoJSON } from "../utils/geo-contains";
+import { headersize } from "../components/PageHeader"; 
 import { useDispatch } from "react-redux";
 import { setLoaing } from "../store/appSlice";
 import { useModal } from "../components/ModalContext";
@@ -34,8 +33,7 @@ const apiUrl = import.meta.env.VITE_API;
 //@ts-ignore
 let L = window?.leaflet
 var map: any = null
-let marker: any = null 
-let village: any = null
+let marker: any = null  
 
 const ComplaintForm = () => {
     const [showAlert] = useAlert();
@@ -48,8 +46,7 @@ const ComplaintForm = () => {
     const [complainTopic, setComplainTopic] = useState<any>("")
     const maxLengthImage = 5;
     const [curlocation, setCurLocation] = useState<any>(null)
-    const [point , setPoint] = useState([0,0])
-    const [isInSide, setIsInSide] = useState(true)
+    const [point , setPoint] = useState([0,0]) 
     const dispatch = useDispatch()
 
     const { openComponent } = useModal();
@@ -81,14 +78,7 @@ const ComplaintForm = () => {
                     
                 } else {
                     marker?.setLatLng([e.coords.latitude, e.coords.longitude], 16);
-                }
-
-                const feature = areaInputToFeature(village);
-                const inside = isLatLonInsideGeoJSON(e.coords.latitude, e.coords.longitude, feature);
-                setIsInSide(inside)
-                if (!inside) {
-                    showAlert("ไม่สามารถแจ้งปัญหา ท่านอยู่นอกพื้นที่ร้องเรียน ", "error")
-                }
+                } 
             }else{
                 navigator.geolocation.getCurrentPosition((e)=>{ 
                         console.log("geolocation ", e)
@@ -169,7 +159,7 @@ const ComplaintForm = () => {
 
             } catch (error) {
                 console.log("err ", error)
-                alert("err:  " + JSON.stringify(error))
+                // alert("err:  " + JSON.stringify(error))
             }
         } else {
 
@@ -226,7 +216,7 @@ const ComplaintForm = () => {
 
     const acceptform = async () => {
         // setOpen(false)
-        if (isInSide) {
+        // if (isInSide) {
             dispatch(setLoaing(true))
             const formData = new FormData();
             const villager: any = await getStorage("member")
@@ -239,7 +229,7 @@ const ComplaintForm = () => {
             })
             )
             // const line = await liff.getProfile() 
-            console.log('curlocation', curlocation);
+           
             const line: any = await getStorage("profile")
             formData.append('curlocation', curlocation);
             formData.append("point",`${point[0]}#${point[1]}`)
@@ -255,7 +245,7 @@ const ComplaintForm = () => {
 
             // console.log("form ",form) 
             const result = await createComplaint(formData)
-
+ console.log('result'+ result);
             // setLoading(false)
             if (result?.result) {
                 showAlert(result?.description + " สามรถติดตามสถานะเรื่องร้องเรียนได้ที่หน้าโปรไฟล์ของท่าน ", "success")
@@ -269,9 +259,9 @@ const ComplaintForm = () => {
                     dispatch(setLoaing(false))
                 }, 1000);
             }
-        }else{ 
-            showAlert("คุณอยู่นอกบริเวณ ไม่สามารถแจ้งปัญหาได้", "error")
-        }
+        // }else{ 
+        //     showAlert("คุณอยู่นอกบริเวณ ไม่สามารถแจ้งปัญหาได้", "error")
+        // }
     }
 
     const removeimage = (e: any) => {
@@ -299,7 +289,7 @@ const ComplaintForm = () => {
                     </div>
                 </BouceAnimation>
                 <BouceAnimation duration={0.3}>
-                    <div className="complaints-menu" >
+                    <div className="complaints-menu" style={{overflowY:"scroll"}} >
                         <Swiper
                             draggable={false}
                             allowTouchMove={false}
@@ -330,7 +320,7 @@ const ComplaintForm = () => {
                                     <label className="title" >เบอร์โทรที่สามารถติดต่อได้: </label>
                                     <div className="input" >
                                         <input
-                                            placeholder="09 0000000"
+                                            placeholder="09 0000000" type="tel"
                                             value={phone} maxLength={10}
                                             onFocus={() => { phone.length === 0 && setPhone("0") }}
                                             onChange={(e) => { setPhone(e.target.value) }}>
@@ -489,7 +479,7 @@ const ModalDialog = ({  complaint,  removeImage }: any) => {
                         </div>
                         <div className="row-input row" style={{ margin: "0px" }}>
                             <label className="title" >เบอร์โทรที่สามารถติดต่อได้: </label>
-                            <div className="input" >
+                            <div className="input"  >
                                 {complaint?.phone}
                             </div>
                         </div>

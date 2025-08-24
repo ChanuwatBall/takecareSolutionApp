@@ -77,11 +77,11 @@ button:focus-visible {
   padding-bottom: 3rem !important;
   /* margin-top: 19vh; */
   /* min-height: 110vh; */
-  overflow-y: scroll;
+  overflow-y: scroll !important;
   box-shadow: none;
   border: none !important;
   overflow-x: hidden;
   z-index: 1;
-  margin-top:  20vh;
+  padding-top:  20vh; 
 }
 .page.no-margin{ margin: 0;}

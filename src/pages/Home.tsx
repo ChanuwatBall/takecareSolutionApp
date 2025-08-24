@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./css/Home.css"
 import   { SwiperSlide ,Swiper } from "swiper/react"; 
-import { companydetail, deleteCookie, getStorage } from "../action"; 
+import { companydetail,  getStorage } from "../action"; 
 import { useNavigate } from "react-router-dom";
 import { BouceAnimation  } from "../components/Animations"; 
 import PullToRefreshComponent from "../components/PullToRefreshComponent";
@@ -61,8 +61,11 @@ const Home:React.FC=()=>{
                         setCeoimages(result?.ceoImage)
                     }else{
                         // alert("profile no profile " )
-                        deleteCookie("member") 
-                        deleteCookie("profile")
+                        // deleteCookie("member") 
+                        // deleteCookie("profile")
+
+                        localStorage.removeItem("member")
+                        localStorage.removeItem("profile")
 
                         navigate("/") 
                         localStorage.clear() 

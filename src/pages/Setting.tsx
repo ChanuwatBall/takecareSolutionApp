@@ -2,7 +2,7 @@
 import { useNavigate } from "react-router-dom";
 // import { ActionSheet } from "@capacitor/action-sheet";
 import { useEffect,  useState, type ReactNode } from "react";
-import { deleteCookie, getStorage, policyandterms, setCookie, userLineid } from "../action";
+import { deleteCookie, getStorage, policyandterms, setStorage, userLineid } from "../action";
 import "./css/Setting.css"
 
 import DOMPurify from 'dompurify';
@@ -28,9 +28,12 @@ const Setting=()=>{
           const usr = await userLineid(profilecookie?.userId) 
           if(usr?.result &&( profilecookie === null || profilecookie === undefined)){
                 const profile:any = await liff.getProfile()
-                setCookie("profile",profile,{days:30})
+                // setCookie("profile",profile,{days:30})
+                setStorage("profile",profile)
            }
            if(!usr?.result){
+              localStorage.removeItem("member")
+              localStorage.removeItem("profile")
                deleteCookie("member")
                deleteCookie("profile")
                localStorage.removeItem("token")
