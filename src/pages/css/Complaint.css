@@ -38,7 +38,7 @@
     min-height: 40vh;
     margin-bottom: 5rem;
     padding-bottom: 2rem;
-    z-index: 3;
+    z-index: 20;
 }
 .top-continue-complaint-menu{
     width: 27%;

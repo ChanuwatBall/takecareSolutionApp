@@ -140,7 +140,7 @@ const ComplaintForm = () => {
                 // const reqpermitt = await Camera.requestPermissions()
                 // console.log( "reqpermitt: ",JSON.stringify(reqpermitt))
                 const image: Photo = await Camera.getPhoto({
-                    quality: 70,
+                    quality: 50,
                     allowEditing: true,
                     resultType: CameraResultType.Uri,
                     source: CameraSource.Camera,
@@ -170,7 +170,7 @@ const ComplaintForm = () => {
         try {
             if (images.length < maxLengthImage) {
                 const image: GalleryPhotos = await Camera.pickImages({
-                    quality: 70,
+                    quality: 50,
                     presentationStyle: 'fullscreen',
                     limit: maxLengthImage - images.length
                 }).then(e => {
@@ -217,7 +217,8 @@ const ComplaintForm = () => {
     const acceptform = async () => {
         // setOpen(false)
         // if (isInSide) {
-            dispatch(setLoaing(true))
+        try{
+             dispatch(setLoaing(true))
             const formData = new FormData();
             const villager: any = await getStorage("member")
             console.log("villager ", villager)
@@ -245,7 +246,7 @@ const ComplaintForm = () => {
 
             // console.log("form ",form) 
             const result = await createComplaint(formData)
- console.log('result'+ result);
+            console.log('result'+ result);
             // setLoading(false)
             if (result?.result) {
                 showAlert(result?.description + " สามรถติดตามสถานะเรื่องร้องเรียนได้ที่หน้าโปรไฟล์ของท่าน ", "success")
@@ -258,10 +259,11 @@ const ComplaintForm = () => {
                 setTimeout(() => {
                     dispatch(setLoaing(false))
                 }, 1000);
-            }
-        // }else{ 
-        //     showAlert("คุณอยู่นอกบริเวณ ไม่สามารถแจ้งปัญหาได้", "error")
-        // }
+            } 
+        }catch(err){
+            alert(JSON.stringify(err))
+        }
+        
     }
 
     const removeimage = (e: any) => {
@@ -321,8 +323,7 @@ const ComplaintForm = () => {
                                     <div className="input" >
                                         <input
                                             placeholder="09 0000000" type="tel"
-                                            value={phone} maxLength={10}
-                                            onFocus={() => { phone.length === 0 && setPhone("0") }}
+                                            value={phone} maxLength={10} 
                                             onChange={(e) => { setPhone(e.target.value) }}>
                                         </input>
                                     </div>
