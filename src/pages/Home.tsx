@@ -8,6 +8,7 @@ import PullToRefreshComponent from "../components/PullToRefreshComponent";
 import { headersize } from "../components/PageHeader";
 import { useDispatch } from "react-redux";
 import { setLoaing } from "../store/appSlice";
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 const apiUrl = import.meta.env.VITE_API;
  
@@ -95,7 +96,7 @@ const Home:React.FC=()=>{
                 <label className="executive-nickname" > {ceonickname} </label> <br/>
                 <label className="full-name" >{ceoname}</label> 
             </div> 
-            <img src={apiUrl+"/api/file/drive-image/"+ceoImage} className="executive-profile" alt="executive-profile" /> 
+            <LazyLoadImage src={apiUrl+"/api/file/drive-image/"+ceoImage} className="executive-profile" alt="executive-profile" /> 
         </BouceAnimation>
         <BouceAnimation duration={0.4}> 
         <div className="card-executive-team  grid grid-cols-2 gap-2 ">
@@ -141,7 +142,7 @@ const Home:React.FC=()=>{
             <p></p>
         </div>
         </BouceAnimation>
-    </div> 
+    </div>  <br/><br/>
     </PullToRefreshComponent>
     )
 }

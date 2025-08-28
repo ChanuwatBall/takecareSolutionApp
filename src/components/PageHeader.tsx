@@ -2,6 +2,7 @@ import type React from "react";
 import "./css/PageHeader.css"
 import { useEffect, useState } from "react";
 import { getDefaultCompay } from "../action";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 const apiUrl = import.meta.env.VITE_API;
 
  export  const headersize=()=>{
@@ -50,7 +51,7 @@ const PageHeader:React.FC=()=>{
         <div className="tumbon-logo  " >  
             <div className="blue-tank">
             <div className="inner  "  >  
-                <img src={apiUrl+"/api/file/drive-image/"+logo}  alt="Logo" className="logo"  />
+                <LazyLoadImage  src={apiUrl+"/api/file/drive-image/"+logo}  alt="Logo" className="logo"  />
             </div>
             </div>
         </div>

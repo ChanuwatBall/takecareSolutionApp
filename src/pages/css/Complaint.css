@@ -56,7 +56,7 @@
     height: 50%;
     position: absolute;
     left: 1rem;
-    z-index: 1;
+    z-index: 0;
 }
 .complaint-menu img {
     width: 100%;

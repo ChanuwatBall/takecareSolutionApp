@@ -7,7 +7,8 @@ import { useNavigate } from "react-router-dom";
 import PullToRefreshComponent from "../components/PullToRefreshComponent";
 import { BouceAnimation } from "../components/Animations";
 import { headersize } from "../components/PageHeader"; 
-import { useModal } from "../components/ModalContext";
+import { useModal } from "../components/ModalContext"; 
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 const apiUrl = import.meta.env.VITE_API;
 
@@ -122,9 +123,9 @@ const Profile:React.FC=()=>{
                             </div>
                             
                         </div>
-                        <div  className="grid grid-cols-6">
+                        <div  className={`grid grid-cols-5 gap-[5px]`}>
                             {e?.imageIds.map((id:any  )=> 
-                            <img
+                            <LazyLoadImage
                                 src={apiUrl+"/api/file/drive-image/"+id}
                                 alt={`Image ${id}`}
                                 className="w-full h-full object-cover rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105"
@@ -141,16 +142,16 @@ const Profile:React.FC=()=>{
 
     return(
     <PullToRefreshComponent > 
-    <div  id="page" className="page"> 
+    <div  id="page" className="page">  <br/><br/>
         <BouceAnimation duration={0.1}> 
         <div className="card-profile  flex items-center " style={{position: "relative"}}>
             <div style={{position:"absolute",width:"1.5rem",color:"#FFF", top:"1rem", right:"1rem", opacity:"1"}}
             onClick={(()=>{navigate("/profile/edit")})}
-            > <img  src={apiUrl+"/images/svg/pencil.svg"} alt="edit" /> </div>
+            > <LazyLoadImage  src={apiUrl+"/images/svg/pencil.svg"} alt="edit" /> </div>
             <div className="profile-image flex items-center" style={{justifyContent:"center"}}> 
                 <div 
                     className="wrap-member-profile flex items-center justify-center ">
-                    <img 
+                    <LazyLoadImage 
                         src={apiUrl+"/api/file/drive-image/"+profile?.profile} 
                         alt="member-profile" 
                     />
@@ -166,7 +167,7 @@ const Profile:React.FC=()=>{
 
         <BouceAnimation duration={0.3}> 
         <div className="card-complaint-count flex  items-center justify-center " onClick={()=>{viewComplaint()}} >
-           <img src="../assets/images/complaint-alert.png" alt="" />
+           <LazyLoadImage src="../assets/images/complaint-alert.png" alt="" />
            <label>จำนวนเรื่องร้องเรียน: {complaintStatus && complaintStatus?.total} เรื่อง</label>
         </div>
         </BouceAnimation>
@@ -235,7 +236,7 @@ const Profile:React.FC=()=>{
            }  
         </div> 
         </BouceAnimation>
-    </div>
+    </div> <br/><br/> <br/><br/>
     </PullToRefreshComponent>
     )
 }

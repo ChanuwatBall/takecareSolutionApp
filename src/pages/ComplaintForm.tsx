@@ -170,7 +170,7 @@ const ComplaintForm = () => {
         try {
             if (images.length < maxLengthImage) {
                 const image: GalleryPhotos = await Camera.pickImages({
-                    quality: 50,
+                    quality: 40,
                     presentationStyle: 'fullscreen',
                     limit: maxLengthImage - images.length
                 }).then(e => {
@@ -245,7 +245,7 @@ const ComplaintForm = () => {
 
 
             // console.log("form ",form) 
-            const result = await createComplaint(formData)
+            const result = await createComplaint(formData , {userlocation: curlocation})
             console.log('result'+ result);
             // setLoading(false)
             if (result?.result) {
@@ -277,11 +277,9 @@ const ComplaintForm = () => {
     return (
         <PullToRefreshComponent >
             <div id="page" className="page  " style={{ position: "relative" }} >
-
                 
-
                 <BouceAnimation duration={0.1}>
-                    <div className="title-row set-row" style={{ flexDirection: "row-reverse" }} >
+                    <div className="title-row set-row mt-[2rem]" style={{ flexDirection: "row-reverse" }} >
                         <div className="complaint-button-title" style={{ justifyContent: "center" }}>
                             <label>รับเรื่องร้องทุกข์</label>
                         </div>
@@ -408,7 +406,7 @@ const ComplaintForm = () => {
                         </Swiper>
                     </div>
                 </BouceAnimation>
-            </div>
+            </div> <br/><br/>
         </PullToRefreshComponent>
     )
 }

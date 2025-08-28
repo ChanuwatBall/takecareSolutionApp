@@ -8,7 +8,8 @@ import { headersize } from "../components/PageHeader";
 import PullToRefreshComponent from "../components/PullToRefreshComponent";
 import { useDispatch } from "react-redux";
 import { setLoaing } from "../store/appSlice";
-import Select from 'react-select';
+import Select from 'react-select'; 
+import { BouceAnimation } from "../components/Animations";
 
 const apiUrl = import.meta.env.VITE_API;
 
@@ -157,12 +158,15 @@ const ProfileEdit=()=>{
     return(
     <PullToRefreshComponent > 
     <div  id="page" className="page">  
-    {/* <Loading open={loading} /> */}
+    {/* <Loading open={loading} /> */} 
      <div className="  flex justify-center column items-center pt-5"> 
             <label className="text-primary-light my-5 font-medium"> แก้ไขข้อมูล</label>
+          <BouceAnimation duration={0.1}> 
             <div className="profile-images" >
                 <CircleImageUploader onChange={imagesprofile} image={image} />
             </div>
+          </BouceAnimation>
+          <BouceAnimation duration={0.3}> 
              <div className="w-full max-w-md bg-white mt-4 p-4 rounded-xl shadow"  >
                 <label className="block mb-2 text-black">ชื่อ*
                   <input 
@@ -210,6 +214,8 @@ const ProfileEdit=()=>{
                  
                 </label> 
             </div>
+            </BouceAnimation>
+            
             <div className="w-full max-w-md bg-white mt-4 p-4 mb-4 rounded-xl shadow"> 
                 <div className="mb-2 text-black">เพศ*<div>
                 <label className="mr-4">
@@ -227,7 +233,7 @@ const ProfileEdit=()=>{
              <button type="submit" 
               onClick={handleSubmit}
               className="w-full bg-blue-600 bg-primary text-white py-2 rounded hover:bg-blue-700">บันทึก</button>
-            <br/><br/><br/>
+            <br/><br/><br/> 
         </div>
     </div>
     </PullToRefreshComponent>

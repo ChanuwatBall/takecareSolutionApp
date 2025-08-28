@@ -85,8 +85,10 @@ export const villageuser=async(form:any)=>{
     })
 }
 
-export const createComplaint=async(form:any)=>{
-    return await api.post("complaint/create",form).then((res)=>{
+export const createComplaint=async(form:any,header: any)=>{
+    return await api.post("complaint/create",form, { 
+      headers: header
+    }).then((res)=>{
         console.log("createComplaint res ",res)
         return res.data
     }).catch((err)=>{

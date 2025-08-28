@@ -9,6 +9,7 @@ import { isAuthenticated } from "../auth";
 import PullToRefreshComponent from "../components/PullToRefreshComponent";
 import { useDispatch } from "react-redux";
 import { setLoaing } from "../store/appSlice"; 
+import { LazyLoadImage } from 'react-lazy-load-image-component';
  
  
 interface LineProfile {
@@ -344,7 +345,7 @@ export const CircleImageUploader: React.FC<ImageUploaderProps> = ({ onChange  ,i
         onClick={handleImageClick}
       >
         {image ? (
-          <img src={image} alt="Uploaded" className="object-cover w-full h-full" />
+          <LazyLoadImage src={image} alt="Uploaded" className="object-cover w-full h-full" />
         ) : (
           <div className="w-full h-full bg-grey"></div>
         )}

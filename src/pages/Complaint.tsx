@@ -6,6 +6,7 @@ import {   getStorage,   setStorage, userLineid } from "../action";
 import PullToRefreshComponent from "../components/PullToRefreshComponent";
 import { BouceAnimation } from "../components/Animations";
 import { headersize } from "../components/PageHeader";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 // import { encodeBase64 } from "../action";
 
 const Complaint=()=>{
@@ -95,7 +96,7 @@ const Complaint=()=>{
 
     return(
         <PullToRefreshComponent > 
-    <div  id="page" className="page  " >
+    <div  id="page" className="page  " > <br/> 
         <BouceAnimation duration={0.1}>
         <div className="title-row set-row" >
             <div className="complaint-button-title">
@@ -120,7 +121,7 @@ const Complaint=()=>{
                         style={{flexDirection:"column" , justifyContent:"center" , alignItems:"center"}} 
                         onClick={()=>{navigate(`/complaint/add/${menu?.value}}`,{state:{complaintmenu:menu }})}}
                     >
-                        <img src={menu?.icon} alt={menu?.value} className="mt-4" style={{maxWidth:"7rem"}} />
+                        <LazyLoadImage  src={menu?.icon} alt={menu?.value} className="mt-4" style={{maxWidth:"7rem"}} />
                         <label className="text-sm text-black" >{menu?.label}</label>
                     </div>
                     </BouceAnimation>
@@ -129,7 +130,7 @@ const Complaint=()=>{
             </div>
         </div>
         </BouceAnimation>
-    </div>
+    </div> <br/>  <br/> 
     </PullToRefreshComponent>
     )
 }

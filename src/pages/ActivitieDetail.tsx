@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import PullToRefreshComponent from "../components/PullToRefreshComponent";
 import { BouceAnimation } from "../components/Animations";
 import { headersize } from "../components/PageHeader";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 const apiUrl = import.meta.env.VITE_API;
 
 
@@ -32,7 +33,7 @@ const ActivitieDetail=()=>{
 
         <div className="card-activity p-0 "  >
             <BouceAnimation duration={0.6}>
-              <img src={`${apiUrl}/api/file/drive-image/${activity?.coverImagePath}` } alt="activity-cover" className="w-100"   />
+              <LazyLoadImage src={`${apiUrl}/api/file/drive-image/${activity?.coverImagePath}` } alt="activity-cover" className="w-100"   />
             </BouceAnimation>
             <br/>
             <BouceAnimation duration={0.2}> 
@@ -55,6 +56,8 @@ const ActivitieDetail=()=>{
                 </BouceAnimation>
             </div>
         </div>
+
+        <br/><br/>
     </div>  
     </PullToRefreshComponent>
     )

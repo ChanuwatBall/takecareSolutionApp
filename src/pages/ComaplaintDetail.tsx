@@ -2,6 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import PullToRefreshComponent from "../components/PullToRefreshComponent"
 import { useEffect, useState } from "react";
 import { complaintid, decodeBase64,  getStorage } from "../action"; 
+import { LazyLoadImage } from 'react-lazy-load-image-component';
  
 
 const apiUrl = import.meta.env.VITE_API;
@@ -60,6 +61,8 @@ const ComaplaintDetail=()=>{
                         marker = L.marker(latlng,{draggable:true}).bindPopup('จุดร้องเรียน');
                         map?.setView(latlng, 16)  
                         map?.addLayer(marker); 
+                    }else{ 
+                        marker?.setLatLng(latlng); 
                     }
                     map?.invalidateSize()
  
@@ -69,7 +72,7 @@ const ComaplaintDetail=()=>{
 
     return(
     <PullToRefreshComponent >
-        <div id="page" className="page  " style={{ position: "relative" }} >
+        <div id="page" className="page  " style={{ position: "relative" }} > <br/><br/>
            { comaplaint && <div>
                 <h4 className="text-xl font-semibold text-gray-900 text-black ">
                     <button style={{padding:".5rem 1rem .5rem 1rem",background:"transparent"}} onClick={()=>{navigate(-1)}}> 
@@ -79,36 +82,34 @@ const ComaplaintDetail=()=>{
                     <div>
                         <div className="row-input " style={{ margin: "0px" }}>
                             <label className="title" >หัวข้อเรื่อง: </label>
-                            <div className="input" >
+                            <div className="input text-black" >
                                 {comaplaint?.topic}
                             </div>
                         </div>
 
                         <div className="row-input row" style={{ margin: "0px" }} >
                             <label className="title" >หัวข้อเรื่องย่อย: </label>
-                            <div className="input" >
+                            <div className="input text-black" >
                                 {comaplaint?.supTitle}
                             </div>
                         </div>
                         <div className="row-input row" style={{ margin: "0px" }}>
                             <label className="title" >เบอร์โทรที่สามารถติดต่อได้: </label>
-                            <div className="input" >
+                            <div className="input text-black" >
                                 {comaplaint?.phone}
                             </div>
                         </div>
 
                         <div className=" row-input row " style={{ margin: "0px", flexDirection: "column", alignItems: "flex-start" }} >
                             <label className="title" >รายละเอียด: </label>
-                            <textarea
-                                className="input"
-                                value={comaplaint?.detail} >
-                            </textarea>
+                            <label className="input text-black" > {comaplaint?.detail} </label>
+                            
                         </div><br /> 
                         <div className="grid grid-cols-3 gap-4  ">
                             { comaplaint?.imageIds &&  comaplaint?.imageIds.map((image: any, index: any) =>
                                 image && <div key={index} className="relative">
                                     {/* Image Display */}
-                                    <img
+                                    <LazyLoadImage
                                         src={apiUrl+"/api/file/drive-image/"+image}
                                         alt={`Image ${index}`}
                                         className="w-full h-full object-cover rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105"
@@ -119,7 +120,7 @@ const ComaplaintDetail=()=>{
                         </div> 
                     </div>
             </div>} <br/>
-            <div id="mapposition"  style={{width:"100%" , height:"13rem",backgroundColor:"#eee",borderRadius:"10px", marginBottom:"5rem"}} ></div>
+            <div id="mapposition"  style={{width:"100%" , height:"13rem",backgroundColor:"#eee",borderRadius:"10px", marginBottom:"5rem"}} ></div> <br/><br/>
         </div>
     </PullToRefreshComponent>
 

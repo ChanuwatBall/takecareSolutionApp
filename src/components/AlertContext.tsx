@@ -24,7 +24,7 @@ export const AlertProvider = ({ children }: { children: ReactNode }) => {
 
   const showAlert = (message: string, type: AlertState['type'] = 'info') => {
     setAlert({ message, type });
-    setTimeout(() => setAlert(null), 3000); // auto-dismiss
+    setTimeout(() => setAlert(null), 5000); // auto-dismiss
   };
 
   const dismissAlert = () => setAlert(null);
