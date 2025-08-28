@@ -32,8 +32,6 @@ const apiUrl = import.meta.env.VITE_API;
 
 //@ts-ignore
 let L = window?.leaflet
-var map: any = null
-let marker: any = null  
 
 const ComplaintForm = () => {
     const [showAlert] = useAlert();
@@ -52,29 +50,53 @@ const ComplaintForm = () => {
     const { openComponent } = useModal();
     const location = useLocation();
     const comaplaintmenu = location.state?.complaintmenu
+    const [map ,setMap] = useState<any>(null)
+    const [markerref , setMarkerRef] = useState(null)
+    
+    // let map: any = null
+    // let marker: any = null  
 
 
     const navigate = useNavigate();
     const [swiperref, setSwiperRef] = useState<SwiperType | any>(null)
     const [openmodal, setOpen] = useState(false)
 
-    const userlocation = async () => {
-            console.log("กำลังระบุตำแหน่งของคุณ " )
+    const requestPermisstion=async()=>{
+        const permistate =  await  Geolocation.checkPermissions()
+        if(permistate.location != "granted"){
+             await  Geolocation.requestPermissions().then(async (res)=>{
+                console.log("res ",res)
+                 await Geolocation.getCurrentPosition({ enableHighAccuracy: true }).then((e) => {
+                console.log("coord ", e?.coords)
+                if (e.coords != null) {
+                 setCurLocation(e.coords.latitude+"#"+e.coords.longitude)
+                }
+           })
+        })
+        }
+    }
+    const userlocation = async (mapref:any) => {
+        console.log("กำลังระบุตำแหน่งของคุณ " )
+     
         await Geolocation.getCurrentPosition({ enableHighAccuracy: true }).then((e) => {
             console.log("coord ", e?.coords)
             if (e.coords != null) {
                 setCurLocation(e.coords.latitude+"#"+e.coords.longitude)
+                let marker:any = markerref
                 console.log("marker ", marker)
                 if (marker == null) {
                     marker = L.marker([e.coords.latitude, e.coords.longitude],{draggable:true}).bindPopup('จุดเกิดเหตุ');
-                    map?.setView([e.coords.latitude, e.coords.longitude], 16)
+                    mapref?.setView([e.coords.latitude, e.coords.longitude], 16)
                     setPoint([e.coords.latitude, e.coords.longitude])
                     marker?.on("dragend",(e:any)=>{
                         console.log("drag marker ",e)
                         setPoint([e.target._latlng.lat ,e.target._latlng.lng])
                         marker?.setLatLng([e.target._latlng.lat ,e.target._latlng.lng]);
                     })
-                    map?.addLayer(marker);
+                    mapref?.addLayer(marker);
+                    setMarkerRef(marker)
+                  console.log("new marker ", marker)
+                  console.log("new map ", mapref)
                     
                 } else {
                     marker?.setLatLng([e.coords.latitude, e.coords.longitude], 16);
@@ -113,6 +135,7 @@ const ComplaintForm = () => {
     }
 
     useEffect(() => {
+        requestPermisstion()
         headersize()
         setTopic(comaplaintmenu?.label)
         setComplainTopic(comaplaintmenu?.value)
@@ -218,6 +241,9 @@ const ComplaintForm = () => {
         // setOpen(false)
         // if (isInSide) {
         try{
+            if(curlocation === null){
+                await requestPermisstion()
+            }
              dispatch(setLoaing(true))
             const formData = new FormData();
             const villager: any = await getStorage("member")
@@ -262,6 +288,7 @@ const ComplaintForm = () => {
             } 
         }catch(err){
             alert(JSON.stringify(err))
+             dispatch(setLoaing(false))
         }
         
     }
@@ -382,10 +409,11 @@ const ComplaintForm = () => {
                             </SwiperSlide>
                             <SwiperSlide>
                                 <BouceAnimation duration={0.3}>
-                                    <MapPosition userlocation={userlocation} />
+                                    <MapPosition userlocation={userlocation} map={map}  
+                                    updatemap={(newmap:any)=>{console.log("updatemap ",newmap ); setMap(newmap);userlocation(newmap)}}/>
                                 </BouceAnimation>
                                 <BouceAnimation duration={0.4}>
-                                    <button className="find-my-loaction text-primary" style={{background:"transparent"}} onClick={() => { userlocation() }} >
+                                    <button className="find-my-loaction text-primary" style={{background:"transparent"}} onClick={() => { userlocation(map) }} >
                                         <img src={apiUrl + "/images/pin-locatiion.png"} />
                                         ตำแหน่งของฉัน
                                     </button>
@@ -413,7 +441,7 @@ const ComplaintForm = () => {
 
 export default ComplaintForm;
 
-const MapPosition = ({ userlocation }: any) => {
+const MapPosition = ({   map ,updatemap}: any) => {
     useEffect(() => {
         createMap()
     }, [])
@@ -424,7 +452,7 @@ const MapPosition = ({ userlocation }: any) => {
             if (e.coords) {
                 const mapel: Element | any = document.querySelector('#mapposition')
                 if (mapel != null && mapel?.innerHTML.length < 1) {
-                    map = L.map(mapel, {
+                     map = L.map(mapel, {
                         center: [e?.coords?.latitude, e?.coords?.longitude],
                         zoom: 13
                     });
@@ -435,7 +463,8 @@ const MapPosition = ({ userlocation }: any) => {
                             map.setView([e.latitude, e.longitude], 16)
                         })
                     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© Longdo Map' }).addTo(map);
-                    await userlocation()
+                    // await userlocation()
+                    return updatemap(map)
                 }
             }
         })
