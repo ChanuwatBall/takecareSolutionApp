@@ -176,8 +176,12 @@ const ComplaintForm = () => {
                 })
 
                 // let imageUrl = image.webPath; 
-                const addimg = [...images, image]
+                let addimg = [...images, image]
                 console.log("addimg ", addimg)
+                if(addimg.length > maxLengthImage){
+                    addimg = addimg.slice(0,5)
+                    showAlert("จำนวนรูปเกินกำหนด กรุณานำรูปเดิมออกก่อน..", "warning")
+                }
                 setImages(addimg)
 
             } catch (error) {
@@ -211,8 +215,12 @@ const ComplaintForm = () => {
                 console.log("addimg ", imageUrl)
 
                 const imagesall = [...images, imageUrl]
-                const flatimg = imagesall.flat()
+                let flatimg = imagesall.flat()
                 console.log("flatimg ", flatimg)
+                if(flatimg.length > maxLengthImage){
+                    flatimg = flatimg.slice(0,5)
+                     showAlert("จำนวนรูปเกินกำหนด กรุณานำรูปเดิมออกก่อน..", "warning")
+                }
                 setImages(flatimg)
             }
         } catch (error) {
@@ -246,10 +254,10 @@ const ComplaintForm = () => {
                 await requestPermisstion()
             }
              dispatch(setLoaing(true))
-            if(images.length > maxLengthImage){
-                showAlert("จำนวนรูปเกินกำหนด..", "warning")
-                return ""
-            }
+            // if(images.length > maxLengthImage){
+            //     showAlert("จำนวนรูปเกินกำหนด..", "warning")
+            //     return ""
+            // }
             const formData = new FormData();
             const villager: any = await getStorage("member")
             console.log("villager ", villager)
