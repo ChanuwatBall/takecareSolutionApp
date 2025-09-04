@@ -21,12 +21,12 @@ interface Complaint {
     "point": string[]
 }
 
-//@ts-ignore
-let L = window?.leaflet
-var map:any = null
-var marker:any = null
 
 const ComaplaintDetail=()=>{
+    //@ts-ignore
+    let L = window?.leaflet
+    var map:any = null
+    var marker:any = null
     const { complaintId }: any = useParams(); 
     const [comaplaint , setComplaints] = useState<Complaint | null>(null)
     const navigate = useNavigate()
@@ -48,6 +48,7 @@ const ComaplaintDetail=()=>{
      const createmap=async (latlng: number[])=>{
         const mapel: Element | any = document.querySelector('#mapposition')
         console.log("mapel ", mapel)
+        console.log("createmap latlng", latlng)
          if (mapel != null && mapel?.innerHTML.length < 1) {
                     map = L.map(mapel, {
                         center: latlng ,
@@ -57,14 +58,17 @@ const ComaplaintDetail=()=>{
                     
                     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© Longdo Map' }).addTo(map);
                     // await userlocation()
-                     if (marker == null) {
-                        marker = L.marker(latlng,{draggable:true}).bindPopup('จุดร้องเรียน');
-                        map?.setView(latlng, 16)  
-                        map?.addLayer(marker); 
-                    }else{ 
-                        marker?.setLatLng(latlng); 
-                    }
+                    
                     map?.invalidateSize()
+                    setTimeout(()=>{
+                        if (marker == null) {
+                            marker = L.marker(latlng,{draggable:true}).bindPopup('จุดร้องเรียน');
+                            map?.setView(latlng, 16)  
+                            map?.addLayer(marker); 
+                        }else{ 
+                            marker?.setLatLng(latlng); 
+                        }
+                    },300)
  
                 } 
     }
