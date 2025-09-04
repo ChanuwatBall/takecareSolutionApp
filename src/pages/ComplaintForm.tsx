@@ -179,10 +179,13 @@ const ComplaintForm = () => {
                 let addimg = [...images, image]
                 console.log("addimg ", addimg)
                 if(addimg.length > maxLengthImage){
-                    addimg = addimg.slice(0,5)
-                    showAlert("จำนวนรูปเกินกำหนด กรุณานำรูปเดิมออกก่อน..", "warning")
+                    let sliced  = addimg.slice(0,5)
+                    showAlert("จำนวนรูปอัปโหลดได้ไม่เกิน 5 รูป...", "warning")
+                    setImages(sliced)
+                }else{
+                    setImages(addimg)
                 }
-                setImages(addimg)
+               
 
             } catch (error) {
                 console.log("err ", error)
@@ -217,11 +220,17 @@ const ComplaintForm = () => {
                 const imagesall = [...images, imageUrl]
                 let flatimg = imagesall.flat()
                 console.log("flatimg ", flatimg)
+                // alert("flatimg "+flatimg.length+" maxLengthImage "+maxLengthImage)
                 if(flatimg.length > maxLengthImage){
-                    flatimg = flatimg.slice(0,5)
-                     showAlert("จำนวนรูปเกินกำหนด กรุณานำรูปเดิมออกก่อน..", "warning")
+                    let removed = flatimg.slice(0,5)
+                    setImages(removed)
+                     showAlert("จำนวนรูปอัปโหลดได้ไม่เกิน 5 รูป...", "warning")
+                    // alert("slice flatimg " )
+                }else{
+
+                    setImages(flatimg)
                 }
-                setImages(flatimg)
+                // alert("flatimg "+ flatimg.length)
             }
         } catch (error) {
             console.log("err ", error)
