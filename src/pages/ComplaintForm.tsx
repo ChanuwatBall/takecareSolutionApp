@@ -169,10 +169,11 @@ const ComplaintForm = () => {
     const pickImages = async () => {
         try {
             if (images.length < maxLengthImage) {
+                const limit = maxLengthImage - images.length
                 const image: GalleryPhotos = await Camera.pickImages({
                     quality: 40,
                     presentationStyle: 'fullscreen',
-                    limit: maxLengthImage - images.length
+                    limit: limit <= 0 ? 5  : limit
                 }).then(e => {
                     console.log(" image ", e)
                     return e
@@ -219,6 +220,10 @@ const ComplaintForm = () => {
         // if (isInSide) {
         try{
              dispatch(setLoaing(true))
+            if(images.length > maxLengthImage){
+                showAlert("จำนวนรูปเกินกำหนด..", "warning")
+                return ""
+            }
             const formData = new FormData();
             const villager: any = await getStorage("member")
             console.log("villager ", villager)
