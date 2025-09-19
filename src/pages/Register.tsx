@@ -22,7 +22,7 @@ interface LineProfile {
 const Register=()=>{
     const navigate = useNavigate(); 
     const dispatch = useDispatch()
-    const [company,setCompany] = useState<any>({id:1 , name:"เทศบาลตำบลบางหมาก"})
+    const [company,setCompany] = useState<any>({id:1 , name:""})
     const [isimage ,setIsImage] = useState(false)
     const [selectedOption, setSelectedOption] = useState<any>(null);
     const [options , setOptions] = useState([])
@@ -201,7 +201,7 @@ const Register=()=>{
 
     return(
     <PullToRefreshComponent > 
-    <div className="page no-margin" style={{background:"#F7F7F9"}}> 
+    <div className="page no-margin" style={{background:"#F7F7F9",paddingTop:"3rem"}}> 
         <div className=" flex justify-center column items-center pt-5">
             <div className="bg-primary w-fit text-2xl text-white px-4 py-1 rounded-lg" >{company?.name}</div>
             <label className="text-primary-light my-5 font-medium">สมัครสมาชิก</label>
