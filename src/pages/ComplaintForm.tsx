@@ -24,10 +24,25 @@ import { headersize } from "../components/PageHeader";
 import { useDispatch } from "react-redux";
 import { setLoaing } from "../store/appSlice";
 import { useModal } from "../components/ModalContext";
+ import Resizer from "react-image-file-resizer";
 // import L from "leaflet"
 const apiUrl = import.meta.env.VITE_API;
 
-
+const resizeFile = (file:any) =>
+  new Promise((resolve) => {
+    Resizer.imageFileResizer(
+      file,
+      300,
+      300,
+      "JPEG",
+      60,
+      0,
+      (uri) => {
+        resolve(uri);
+      },
+      "blob"
+    );
+  });
 
 
 //@ts-ignore
@@ -249,9 +264,20 @@ const ComplaintForm = () => {
 
     const blobUrlToFile = async (blobUrl: string, filename: string): Promise<File> => {
         const response = await fetch(blobUrl);  // Fetch the blob data
-        const blob = await response.blob();     // Get the blob from the response
-        const file = new File([blob], filename, { type: blob.type }); // Convert blob to file
-        return file;
+        const blob = await response.blob();     // Get the blob from the response  
+
+        const originalFile = new File([blob], filename+'.jpg', { type: blob.type });
+
+        // Resize (resizeFile should return Blob or File)
+        const resizedBlob:any = await resizeFile(originalFile);
+
+        // Keep the correct type
+        const type = resizedBlob.type || blob.type || 'image/jpeg';
+        const resizedFile = new File([resizedBlob], filename+'.jpg', {
+            type,
+            lastModified: Date.now(),
+        }); 
+        return resizedFile;
     };
 
 
