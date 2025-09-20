@@ -163,7 +163,7 @@ const ComplaintForm = () => {
                 // const reqpermitt = await Camera.requestPermissions()
                 // console.log( "reqpermitt: ",JSON.stringify(reqpermitt))
                 const image: Photo = await Camera.getPhoto({
-                    quality: 50,
+                    quality: 30,
                     allowEditing: true,
                     resultType: CameraResultType.Uri,
                     source: CameraSource.Camera,
@@ -201,7 +201,7 @@ const ComplaintForm = () => {
             if (images.length < maxLengthImage) {
                 const limit = maxLengthImage - images.length
                 const image: GalleryPhotos = await Camera.pickImages({
-                    quality: 40,
+                    quality: 30,
                     presentationStyle: 'fullscreen',
                     limit: limit <= 0 ? 5  : limit
                 }).then(e => {

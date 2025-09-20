@@ -10,7 +10,7 @@ import PullToRefreshComponent from "../components/PullToRefreshComponent";
 import { useDispatch } from "react-redux";
 import { setLoaing } from "../store/appSlice"; 
 import { LazyLoadImage } from 'react-lazy-load-image-component';
- 
+ import Resizer from "react-image-file-resizer";
  
 interface LineProfile {
     userId: String
@@ -19,6 +19,37 @@ interface LineProfile {
     pictureUrl:  String
 }
 
+const resizeFile = (file:any) =>
+  new Promise((resolve) => {
+    Resizer.imageFileResizer(
+      file,
+      300,
+      300,
+      "JPEG",
+      70,
+      0,
+      (uri) => {
+        resolve(uri);
+      },
+      "blob"
+    );
+  });
+  const resizeBase64 = (file:any) =>
+  new Promise((resolve) => {
+    Resizer.imageFileResizer(
+      file,
+      300,
+      300,
+      "JPEG",
+      50,
+      0,
+      (uri) => {
+        resolve(uri);
+      },
+      "base64"
+    );
+  });
+  
 const Register=()=>{
     const navigate = useNavigate(); 
     const dispatch = useDispatch()
@@ -102,18 +133,41 @@ const Register=()=>{
 
       setLineProfile(profile)
       console.log("profile ",profile)
-      setImage(profile?.pictureUrl)
-
+      // setImage(profile?.pictureUrl)
+      const base64 =   await fetchImageAsBse(profile?.pictureUrl)
+      setImage(base64)
     }
   },[])
 
-  const fetchImage = async (imageUrl:any) => { 
-        const response = await fetch(imageUrl);
-        const blob = await response.blob();
-        const file = new File([blob], 'image.jpg', { type: blob.type });
- 
-        return await file //mageUrlFromFile 
+  const fetchImageAsBse = async (imageUrl: string): Promise<File> => {
+    const response = await fetch(imageUrl);
+    const blob = await response.blob();
+    const originalFile = new File([blob], 'image.jpg', { type: blob.type });
+
+    // Resize (resizeFile should return Blob or File)
+    const resizedBase64:any = await resizeBase64(originalFile);
+    return resizedBase64
   }
+  // assuming resizeFile returns a Blob
+  const fetchImage = async (imageUrl: string): Promise<File> => {
+    const response = await fetch(imageUrl);
+    const blob = await response.blob();
+
+    // Original file
+    const originalFile = new File([blob], 'image.jpg', { type: blob.type });
+
+    // Resize (resizeFile should return Blob or File)
+    const resizedBlob:any = await resizeFile(originalFile);
+
+    // Keep the correct type
+    const type = resizedBlob.type || blob.type || 'image/jpeg';
+    const resizedFile = new File([resizedBlob], 'image_resized.jpg', {
+      type,
+      lastModified: Date.now(),
+    });
+
+    return resizedFile;
+  };
 
   const dataURLToFile = (dataUrl: string, filename: string): File => {
     // Split the dataURL into the base64 part and the metadata part
@@ -142,7 +196,7 @@ const Register=()=>{
       console.log("profile ",lineprofile)
       console.log('Form submitted:', isimage);  
      console.log("village  ", selectedOption)
-     let fileprofile = null
+     let fileprofile:any = null
      if(image.indexOf("profile.line-scdn.net") > -1 ){
       fileprofile = await fetchImage(image)
       console.log("file ",fileprofile)
@@ -169,27 +223,29 @@ const Register=()=>{
       formData.append('companyId', company?.id );
       formData.append('familyMember',fammember);  
       
-      const result = await registerNewMember(formData)
-      console.log(" registerNewMember result ",result)
-      console.log(" registerNewMember result type ", typeof result)
+      const result = await registerNewMember(formData) 
       if(result?.result || (typeof result == "string"  && result.indexOf("result\":true,") > -1 ) ){ 
         if( (typeof result == "string")){ 
           const usr = await userLineid(lineprofile?.userId)
           console.log("userLineid usr ",usr)
           
-          setStorage("member", usr?.villager) 
-          // setCookie("member", usr?.villager,{days:30})
+          setStorage("member", usr?.villager)  
         }else{ 
-          setStorage("member", result?.villager) 
-          // setCookie("member", result?.villager,{days:30})
-        }
-        // setCookie("profile", lineprofile ,{days:30})
+          setStorage("member", result?.villager)  
+        } 
         setStorage("profile", lineprofile) 
         localStorage.setItem("token", JSON.stringify(liff.getAccessToken()))  
         navigate("/home")
         window.location.reload()
       }else{
-
+          const usr = await userLineid(lineprofile?.userId)
+          console.log("userLineid usr ",usr)
+          
+          setStorage("member", usr?.villager) 
+          setStorage("profile", lineprofile) 
+          localStorage.setItem("token", JSON.stringify(liff.getAccessToken()))  
+          navigate("/home")
+          window.location.reload() 
       } 
       dispatch(setLoaing(true))
               
