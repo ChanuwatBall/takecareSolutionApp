@@ -6,12 +6,15 @@ import PullToRefreshComponent from "../components/PullToRefreshComponent";
 import { BouceAnimation } from "../components/Animations";
 import { headersize } from "../components/PageHeader";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import { Swiper, SwiperSlide } from "swiper/react";
+// import type { Swiper as SwiperType } from "swiper/types";
 const apiUrl = import.meta.env.VITE_API;
 
 
 const ActivitieDetail=()=>{
     const location = useLocation(); 
     const navigate = useNavigate()
+    // const [swiperRef,setSwiperRef] = useState<SwiperType|null>(null)
     const activity =  location.state?.activity
  
     useEffect(()=>{
@@ -33,7 +36,7 @@ const ActivitieDetail=()=>{
 
         <div className="card-activity p-0 "  >
             <BouceAnimation duration={0.6}>
-              <LazyLoadImage src={`${apiUrl}/api/file/drive-image/${activity?.coverImagePath}` } alt="activity-cover" className="w-100"   />
+              <LazyLoadImage src={`${apiUrl}/api/file/drive-image/${activity?.coverImagePath !== null ? activity?.coverImagePath : activity?.imagePaths.length > 0 ?  activity?.imagePaths[0]:""}` } alt="activity-cover" className="w-100"   />
             </BouceAnimation>
             <br/>
             <BouceAnimation duration={0.2}> 
@@ -55,6 +58,18 @@ const ActivitieDetail=()=>{
                     </div>
                 </BouceAnimation>
             </div>
+
+            <Swiper  
+                spaceBetween={5}
+                slidesPerView={2}
+                onSlideChange={() => console.log('slide change')}
+                // onSwiper={(swiper) => { setSwiperRef(swiper); console.log(swiper) }}
+                style={{ width: "100%" }}
+            >
+                {activity?.imagePaths.map((imd:any,i:any)=><SwiperSlide key={i}>
+                     <LazyLoadImage src={`${apiUrl}/api/file/drive-image/${imd}` } alt="activity-cover" className="w-100"   />
+                </SwiperSlide>)}
+            </Swiper>
         </div>
 
         <br/><br/>

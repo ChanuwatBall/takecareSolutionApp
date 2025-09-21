@@ -65,8 +65,8 @@ const Activities=()=>{
                  <BouceAnimation duration={0.3 + (inx/100)}><div  
                     className={`card-activity ${inx%2==0?"left":"right"} grid grid-cols-3  `}  style={{ height:"9rem"}} 
                     onClick={()=>{navigate("/activities/detail", { state: { activity: act } })}}>
-                    <div><LazyLoadImage className="act-img col-span-1 my-1 mx-1" src={`${apiUrl}/api/file/drive-image/${act?.coverImagePath}`}/>
-                        {/* <div className="act-img my-1 mx-1" style={{backgroundImage:`url(${apiUrl}/api/file/drive-image/${act?.coverImagePath})`}} ></div> */}
+                    <div><LazyLoadImage className="act-img col-span-1 my-1 mx-1" src={`${apiUrl}/api/file/drive-image/${act?.coverImagePath !== null ? act?.coverImagePath : act?.imagePaths.length > 0 ?  act?.imagePaths[0]:""}`}/>
+                        {/* <div className="act-img my-1 mx-1" style={{backgroundImage:`url(${apiUrl}/api/file/drive-image/${act?.coverImagePath !== null ? act?.coverImagePath : act?.imagePaths.length > 0 ?  act?.imagePaths[0]:""})`}} ></div> */}
                     </div>
                     <div className={`col-span-2 px-2 pl-3 flex column justify-center`}>
                         <label className="date">{act?.dateActivity}</label>
@@ -80,7 +80,7 @@ const Activities=()=>{
                         <label className="description">{act?.name}</label>
                     </div>
                     <div className="flex  justify-end items-end"> 
-                        <LazyLoadImage className="act-img col-span-1 my-1 mx-1" src={`${apiUrl}/api/file/drive-image/${act?.coverImagePath}`}/>
+                        <LazyLoadImage className="act-img col-span-1 my-1 mx-1" src={`${apiUrl}/api/file/drive-image/${act?.coverImagePath !== null ? act?.coverImagePath : act?.imagePaths.length > 0 ?  act?.imagePaths[0]:""}`}/>
                        {/* <div className="act-img col-span-1 my-1 mx-1" style={{backgroundImage:`url(${apiUrl}/api/file/drive-image/${act?.coverImagePath})`}} ></div> */}
                     </div> 
                 </div></BouceAnimation>
