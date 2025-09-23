@@ -18,9 +18,7 @@ export function encodeBase64(str: string): string {
 export function decodeBase64(base64: string): string {
   return decodeURIComponent(escape(atob(base64)));
 }
-
-
-
+ 
 export const getDefaultCompay=async()=>{
         console.log("apiUrl   ",apiUrl)
         console.log("token   ",token) 
@@ -29,6 +27,18 @@ export const getDefaultCompay=async()=>{
         return res.data
     }).catch((err)=>{
         console.log("getDefaultCompay err ",err)
+        return null
+    })
+}
+
+export const getComplaintmenu=async()=>{
+        console.log("apiUrl   ",apiUrl)
+        console.log("token   ",token) 
+    return await api.get("complaintmenu").then((res)=>{
+        console.log("complaintmenu res ",res)
+        return res.data
+    }).catch((err)=>{
+        console.log("complaintmenu err ",err)
         return null
     })
 }

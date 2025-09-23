@@ -9,6 +9,7 @@ import { headersize } from "../components/PageHeader";
 import { useDispatch } from "react-redux";
 import { setLoaing } from "../store/appSlice";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { useNavigate } from "react-router-dom";
 
 const apiUrl = import.meta.env.VITE_API;
  
@@ -21,7 +22,7 @@ const Home:React.FC=()=>{
     const [slogan , setSlogan] = useState("")
     const [history,setHistory] = useState([])
     const [comname , setComname] = useState("")
-    // const navigate = useNavigate()
+    const navigate = useNavigate()
      
 
     const [teamleft, setTeamLeft] = useState([
@@ -65,12 +66,13 @@ const Home:React.FC=()=>{
                         // deleteCookie("member") 
                         // deleteCookie("profile")
 
-                        // localStorage.removeItem("member")
-                        // localStorage.removeItem("profile")
+                        localStorage.removeItem("member")
+                        localStorage.removeItem("profile")
+                        localStorage.removeItem("token")
 
-                        // navigate("/") 
-                        // localStorage.clear() 
-                        // window.location.reload()
+                        navigate("/") 
+                        localStorage.clear() 
+                        window.location.reload()
                     }
                 }else{ 
                         // navigate("/") 

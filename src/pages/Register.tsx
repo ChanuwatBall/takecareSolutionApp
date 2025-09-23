@@ -115,6 +115,7 @@ const Register=()=>{
       const profile:any = await liff.getProfile() 
 
       const usr = await userLineid(profile?.userId)  
+      console.log("user found ", usr)
       if(usr.result ){
         // window.location.href = "/home"
         // setCookie("member", usr?.villager,{days:30})
