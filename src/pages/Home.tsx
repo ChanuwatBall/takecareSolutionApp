@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./css/Home.css"
 import   { SwiperSlide ,Swiper } from "swiper/react"; 
 import { companydetail,  getStorage } from "../action"; 
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { BouceAnimation  } from "../components/Animations"; 
 import PullToRefreshComponent from "../components/PullToRefreshComponent";
 import { headersize } from "../components/PageHeader";
@@ -21,7 +21,7 @@ const Home:React.FC=()=>{
     const [slogan , setSlogan] = useState("")
     const [history,setHistory] = useState([])
     const [comname , setComname] = useState("")
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
      
 
     const [teamleft, setTeamLeft] = useState([
@@ -65,15 +65,15 @@ const Home:React.FC=()=>{
                         // deleteCookie("member") 
                         // deleteCookie("profile")
 
-                        localStorage.removeItem("member")
-                        localStorage.removeItem("profile")
+                        // localStorage.removeItem("member")
+                        // localStorage.removeItem("profile")
 
-                        navigate("/") 
-                        localStorage.clear() 
-                        window.location.reload()
+                        // navigate("/") 
+                        // localStorage.clear() 
+                        // window.location.reload()
                     }
                 }else{ 
-                        navigate("/") 
+                        // navigate("/") 
                     }
             } catch (error) {
                  
