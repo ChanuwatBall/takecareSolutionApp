@@ -1,6 +1,6 @@
  
 /* styles.css */
-.bottom-nav {
+/* .bottom-nav {
   position: fixed;
   bottom: 20px;
   left: 50%;
@@ -17,8 +17,32 @@
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
   z-index:  10;
   height: 4rem;
+} */
+.bottom-nav {
+  position: absolute; /* <— สำคัญ: อิงกับ .app-shell แทน viewport */
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+
+  background: linear-gradient(90deg, #007BFF, #003399);
+  color: #fff;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  width: min(94%, 800px);
+  height: 4rem;
+  padding: 4px;
+  border-radius: 20px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.2);
+  z-index: 1000;
 }
 
+/* (ตัวเลือก) ซ่อนบาร์เวลาคีย์บอร์ดเปิด เพื่อไม่บัง input ใน LIFF */
+.keyboard-open .bottom-nav {
+  transform: translate(-50%, 120%);
+  transition: transform .2s ease;
+}
 .nav-item {
   display: flex;
   flex-direction: column;
