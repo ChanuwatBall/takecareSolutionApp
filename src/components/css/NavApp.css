@@ -42,6 +42,7 @@
 .keyboard-open .bottom-nav {
   transform: translate(-50%, 120%);
   transition: transform .2s ease;
+  display: none;
 }
 .nav-item {
   display: flex;

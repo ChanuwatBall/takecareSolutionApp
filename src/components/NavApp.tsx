@@ -47,7 +47,7 @@ const NavApp=()=>{
     
     return( 
    <BouceAnimation duration={0.44}> 
-  <div ref={ref} className="set-column bottom-nav noselect" >
+  <div className="set-column bottom-nav noselect" >
    <div className="wrapper-bottom-nav set-column" >
     <div className="left-wrapper-bottom-nav" >
         <div 

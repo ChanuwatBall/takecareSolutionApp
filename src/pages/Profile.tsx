@@ -188,7 +188,7 @@ const Profile:React.FC=()=>{
                 </div>
                 <div  style={{margin:"0px",paddingLeft:".3rem"}}>
                     <div className="complaint-status-name  rounded-md flex  items-center justify-center hilight  " style={{padding:".67rem 0 .67rem",margin:"0"}}>
-                        เสรร็จเรียบร้อย
+                        เสร็จเรียบร้อย
                     </div> 
                 </div>
              </div>

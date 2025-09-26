@@ -12,18 +12,7 @@
     --svh: 1vh ;
   -webkit-tap-highlight-color: transparent;
 }
-.app-shell {
-  min-height: 100svh;              /* stable viewport (สำคัญกับ LIFF) */
-  min-height: calc(var(--svh) * 100); /* fallback */
-  position: relative;               /* ให้ลูก absolute อ้างอิงได้ */
-  display: flex;
-  flex-direction: column;
-}
-.main-content {
-  flex: 1 1 auto;
-  padding-bottom: calc(4rem + 12px + env(safe-area-inset-bottom, 0px)); /* กันโดนบาร์ทับ */
-  overflow: auto;
-}
+
 .logo {
   height: 6em;
   padding: 1.5em;
