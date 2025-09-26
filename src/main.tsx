@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client' 
 import { BrowserRouter } from 'react-router-dom';
 import './index.css'
-import App from './App.tsx'
+import {AppRoot} from './App.tsx'
 
 import { defineCustomElements } from '@ionic/pwa-elements/loader';
 import { AlertProvider } from './components/AlertContext.tsx';
@@ -16,7 +16,7 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter> 
       <Provider store={store}> 
         <AlertProvider> 
-          <App />
+          <AppRoot />
         </AlertProvider>
       </Provider>
     </BrowserRouter>
