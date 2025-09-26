@@ -1,13 +1,37 @@
  
 import { useNavigate } from 'react-router-dom';
 import "./css/NavApp.css"
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getDefaultCompay } from '../action';
 import { BouceAnimation } from './Animations';
 const apiUrl = import.meta.env.VITE_API;
 
+function useLockBottomBar(ref: React.RefObject<HTMLElement>) {
+  useEffect(() => {
+    const vv = (window as any).visualViewport;
+    if (!vv || !ref.current) return;
+
+    const onResize = () => {
+      // ส่วนที่ถูกกินไปด้านล่างของ layout viewport
+      const eaten = window.innerHeight - (vv.height + vv.offsetTop);
+      // ตั้ง bottom ให้ติดลบเท่าพื้นที่ที่ถูกกิน → ดูเหมือนบาร์ “ไม่ขยับ”
+      ref.current!.style.bottom = `calc(${Math.min(8, 8)}px + env(safe-area-inset-bottom, 0px) - ${Math.max(0, eaten)}px)`;
+    };
+
+    onResize();
+    vv.addEventListener("resize", onResize);
+    vv.addEventListener("scroll", onResize);
+    return () => {
+      vv.removeEventListener("resize", onResize);
+      vv.removeEventListener("scroll", onResize);
+    };
+  }, [ref]);
+}
+
 
 const NavApp=()=>{
+  const ref:any = useRef<HTMLDivElement>(null);
+  useLockBottomBar(ref);
   const navigate = useNavigate();
   const [name,setName] = useState("")
 
@@ -23,7 +47,7 @@ const NavApp=()=>{
     
     return( 
    <BouceAnimation duration={0.44}> 
-  <div className="set-column bottom-nav noselect" >
+  <div ref={ref} className="set-column bottom-nav noselect" >
    <div className="wrapper-bottom-nav set-column" >
     <div className="left-wrapper-bottom-nav" >
         <div 
