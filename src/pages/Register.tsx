@@ -85,15 +85,16 @@ const Register=()=>{
         const companyapp = await getDefaultCompay() 
         console.log("companyapp ",companyapp)
           if(companyapp && companyapp?.liffId){
-          liff.init({ liffId: companyapp?.liffId })
+          await liff.init({ liffId: companyapp?.liffId })
           .then(async () => { 
             if (!liff.isLoggedIn()) {
-              liff.login(); 
+              await liff.login(); 
             }
-            getvillage()
+           await getvillage()
           
           })
-          .catch((err) => {
+          .catch(async (err) => {
+           await getvillage()
             console.log("error ", err)
         }); 
         } 
@@ -391,9 +392,7 @@ export const CircleImageUploader: React.FC<ImageUploaderProps> = ({ onChange  ,i
       pickImage();
     }
   };
-
-  useEffect(()=>{
-  },[image])
+ 
 
   return (
     <div className="flex justify-center items-center mt-4">

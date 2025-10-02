@@ -10,6 +10,8 @@ import { useDispatch } from "react-redux";
 import { setLoaing } from "../store/appSlice";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { useNavigate } from "react-router-dom";
+import { Geolocation } from "@capacitor/geolocation"
+import { Camera } from "@capacitor/camera";
 
 const apiUrl = import.meta.env.VITE_API;
  
@@ -36,7 +38,22 @@ const Home:React.FC=()=>{
         "../assets/images/executive-team-right.jpg"
     ])
  
-
+    const requestPermisstion=async()=>{
+        const permistate =  await  Geolocation.checkPermissions()
+        if(permistate.location != "granted"){
+             await  Geolocation.requestPermissions().then(async (res)=>{
+                console.log("res ",res) 
+            })
+        }
+       
+        const reqpermitt = await Camera.requestPermissions()
+        if(reqpermitt.camera != "granted"){
+            await Camera.requestPermissions().then(async (res)=>{
+                console.log("res camera ",res) 
+            })
+        }
+    }
+     
     useEffect(()=>{
         headersize()
         dispatch(setLoaing(true))
@@ -83,6 +100,7 @@ const Home:React.FC=()=>{
             
             }
          getCDetal() 
+         requestPermisstion()
          setTimeout(()=>{ 
             dispatch(setLoaing(false))
         },2000) 
