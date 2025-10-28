@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import "./css/Home.css"
-import   { SwiperSlide ,Swiper } from "swiper/react"; 
+import "./css/Home.css" 
 import { companydetail,  getStorage } from "../action"; 
 // import { useNavigate } from "react-router-dom";
 import { BouceAnimation  } from "../components/Animations"; 
@@ -27,16 +26,16 @@ const Home:React.FC=()=>{
     const navigate = useNavigate()
      
 
-    const [teamleft, setTeamLeft] = useState([
-        "../assets/images/executive-team-left.jpg",
-        "../assets/images/executive-team-left.jpg",
-        "../assets/images/executive-team-left.jpg"
-    ])
-    const [teamright, setTeamRight] = useState([ 
-        "../assets/images/executive-team-right.jpg",
-        "../assets/images/executive-team-right.jpg",
-        "../assets/images/executive-team-right.jpg"
-    ])
+    // const [teamleft, setTeamLeft] = useState([
+    //     "../assets/images/executive-team-left.jpg",
+    //     "../assets/images/executive-team-left.jpg",
+    //     "../assets/images/executive-team-left.jpg"
+    // ])
+    // const [teamright, setTeamRight] = useState([ 
+    //     "../assets/images/executive-team-right.jpg",
+    //     "../assets/images/executive-team-right.jpg",
+    //     "../assets/images/executive-team-right.jpg"
+    // ])
  
     const requestPermisstion=async()=>{
         const permistate =  await  Geolocation.checkPermissions()
@@ -75,8 +74,8 @@ const Home:React.FC=()=>{
                         setHistory(result?.history)
                         setSlogan(result?.slogan)
                         setComname(result?.name)
-                        setTeamLeft(result?.teamMembers)
-                        setTeamRight(result?.managementTeam)
+                        // setTeamLeft(result?.teamMembers)
+                        // setTeamRight(result?.managementTeam)
                         setCeoimages(result?.ceoImage)
                     }else{
                         // alert("profile no profile " )
@@ -110,15 +109,15 @@ const Home:React.FC=()=>{
 
     return(    
     <PullToRefreshComponent > 
-    <div id="page" className="page" > <br/> 
+    <div id="page" className="page" style={{minHeight:"100vh"}} > <br/> 
         <BouceAnimation duration={0.1} className="card-executive" > 
             <div  className="name-container">  
                 <label className="executive-nickname" > {ceonickname} </label> <br/>
                 <label className="full-name" >{ceoname}</label> 
             </div> 
             <LazyLoadImage src={apiUrl+"/api/file/drive-image/"+ceoImage} className="executive-profile" alt="executive-profile" /> 
-        </BouceAnimation>
-        <BouceAnimation duration={0.4}> 
+        </BouceAnimation> <br/>
+        {/* <BouceAnimation duration={0.4}> 
         <div className="card-executive-team  grid grid-cols-2 gap-2 ">
             <div className="executive-team" > 
                 <Swiper
@@ -154,7 +153,7 @@ const Home:React.FC=()=>{
                 <div className="executive-team-name" > ทีมบริหาร </div>
             </div>
         </div>
-        </BouceAnimation>
+        </BouceAnimation> */}
         <BouceAnimation duration={0.3}>
         <div className="card-team-description" >
             <h6> {comname} <br/> {slogan} </h6> 

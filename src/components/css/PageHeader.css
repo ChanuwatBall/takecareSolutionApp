@@ -72,3 +72,15 @@
 -webkit-box-shadow: 1px 6px 21px -3px rgba(16, 46, 12,0.3);
 -moz-box-shadow: 1px 6px 21px -3px rgba(16, 46, 12,0.3);
 }
+
+@media screen and (max-width: 375px) {
+  
+.tumbon-name .name{
+    font-size: 2.7em;
+  }
+}
+@media screen and (max-width: 320px) { 
+.tumbon-name .name{
+    font-size: 2.2em; 
+  }
+}
